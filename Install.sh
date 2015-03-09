@@ -395,3 +395,4 @@ if [ "$?" = "0" ]
 then
     echo $locale > /etc/locale.conf
 fi
+#Testing
