@@ -1,0 +1,13 @@
+wifi-menu al principio para configurar la red
+Seleccionar shell por defecto
+Easter egg de jontron cuando pongamos 123help Salga jontron en ASCII
+Convertir el instalador en modular
+Enbellecer el instalador
+Hacer el script traducible
+
+Intentar hacer un instalador grafico con entorno de escritorio
+Script dentro de chroot:   chroot /mnt/ ./chroot.sh
+Eliminar linea conteniendo un texto especifico: sed -i '/pattern to match/d' ./infile
+Descomantar sed -i "/${line}/ s/# *//" /etc/locale.gen
+
+https://github.com/calamares/calamares-todos/issues/8
