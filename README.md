@@ -1,3 +1,3 @@
 arch-installer
 ==============
-ArchLinux distribution installer
+ArchLinux distribution installer (Git test)
