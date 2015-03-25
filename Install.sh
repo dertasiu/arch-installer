@@ -116,10 +116,11 @@ do
         "/boot")
             fdisk -l "$disk"
             echo "You can press Shift + PageUp/PageDown to scroll"
-            read -p "Press Return to continue..."
-            fdisk -l "$disk" > /tmp/partitions
-            partitions="$(cat /tmp/partitions | grep sd | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
-            p="$(echo "$partitions")"
+            read -p "Press Return to continue..." 
+            fdisk -l "$disk" > /tmp/partitions 
+            partitions="$(cat /tmp/partitions | grep sd | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')" 
+            p=$(echo $partitions)
+
             dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
                    --menu "Choose the partition type that you want to use for: boot" 20 30 7 \
                    ${p} 2> temp
@@ -150,7 +151,7 @@ do
             read -p "Press Return to continue..."
             fdisk -l "$disk" > /tmp/partitions
             partitions="$(cat /tmp/partitions | grep sd | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
-            p="$(echo "$partitions")"
+            p=$(echo $partitions)
             dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
                    --menu "Choose the partition type that you want to use for: home" 20 30 7 \
                    ${p} 2> temp
@@ -181,7 +182,7 @@ do
             read -p "Press Return to continue..."
             fdisk -l "$disk" > /tmp/partitions
             partitions="$(cat /tmp/partitions | grep sd | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
-            p="$(echo "$partitions")"
+            p=$(echo $partitions)
             dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
                    --menu "Choose the partition type that you want to use for: tmp" 20 30 7 \
                    ${p} 2> temp
@@ -212,7 +213,7 @@ do
             read -p "Press Return to continue..."
             fdisk -l "$disk" > /tmp/partitions
             partitions="$(cat /tmp/partitions | grep sd | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
-            p="$(echo "$partitions")"
+            p=$(echo $partitions)
             dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
                    --menu "Choose the partition type that you want to use for: usr" 20 30 7 \
                    ${p} 2> temp
@@ -243,7 +244,7 @@ do
             read -p "Press Return to continue..."
             fdisk -l "$disk" > /tmp/partitions
             partitions="$(cat /tmp/partitions | grep sd | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
-            p="$(echo "$partitions")"
+            p=$(echo $partitions)
             dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
                    --menu "Choose the partition type that you want to use for: var" 20 30 7 \
                    ${p} 2> temp
@@ -274,7 +275,7 @@ do
             read -p "Press Return to continue..."
             fdisk -l "$disk" > /tmp/partitions
             partitions="$(cat /tmp/partitions | grep sd | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
-            p="$(echo "$partitions")"
+            p=$(echo $partitions)
             dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
                    --menu "Choose the partition type that you want to use for: srv" 20 30 7 \
                    ${p} 2> temp
@@ -305,7 +306,7 @@ do
             read -p "Press Return to continue..."
             fdisk -l "$disk" > /tmp/partitions
             partitions="$(cat /tmp/partitions | grep sd | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
-            p="$(echo "$partitions")"
+            p=$(echo $partitions)
             dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
                    --menu "Choose the partition type that you want to use for: opt" 20 30 7 \
                    ${p} 2> temp
@@ -336,7 +337,7 @@ do
             read -p "Press Return to continue..."
             fdisk -l "$disk" > /tmp/partitions
             partitions="$(cat /tmp/partitions | grep sd | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
-            p="$(echo "$partitions")"
+            p=$(echo $partitions)
             dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
                    --menu "Choose the partition type that you want to use for: swap" 20 30 7 \
                    ${p} 2> temp
@@ -395,4 +396,4 @@ if [ "$?" = "0" ]
 then
     echo $locale > /etc/locale.conf
 fi
-#No lo comprendo
+
