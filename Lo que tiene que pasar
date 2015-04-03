@@ -6,4 +6,4 @@ Pedirme las particiones que quiero formatear y en que particion
 Particion SWAP
 Montar particiones
 Instalar sistema base
-Generar 
+Generar fstab

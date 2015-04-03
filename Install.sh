@@ -355,6 +355,7 @@ done
 parts="$(echo $parts | sed 's/^..//')"
 
 ##Mounts
+#First mount the root partition because later we are going to create the folders to mount the partitions there
 mount $rootfs /mnt
 mkdir -p /mnt/{$bootfs,$homefs,$tmpfs,$usrfs,$varfs,$srvfs,$optfs}
 mount $bootfs /mnt/boot
@@ -365,13 +366,14 @@ mount $varfs /mnt/var
 mount $srvfs /mnt/srv
 mount $optfs /mnt/opt
 
-##Install basic system
+##Install basic system with: The base and the development system (We will want this to compile the majority of packets from AUR), grub, networkmanager and a packet that is useful if we use another OS' grub: os-prober
 pacstrap /mnt base base-devel grub-bios networkmanager os-prober
 
 ##Generate the fstab file
 genfstab /mnt > /mnt/etc/fstab
 
-##Generate the chroot script
+###Second phase: Configure the operating system
+##Languages and keymaps
 #Select the locale
 locales="$(cat /mnt/etc/locale.gen | grep _ | sed '1,4d' | sed 's/\(.\{1\}\)//')"
 
@@ -382,7 +384,7 @@ locale="$(cat temp)"
 rm temp
 if [ "$?" = "0" ]
 then
-		sed -i "/${locale}/ s/# *//" /etc/locale.gen
+		sed -i "/${locale}/ s/# *//" /mnt/etc/locale.gen
 fi
 
 #Select and generate the locale
@@ -394,7 +396,7 @@ locale="$(cat temp)"
 rm temp
 if [ "$?" = "0" ]
 then
-		echo $locale > /etc/locale.conf
+		echo $locale > /mnt/etc/locale.conf
 fi
 
 #Select the timezone
