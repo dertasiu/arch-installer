@@ -9,7 +9,7 @@ trap "rm -f $tempfile" 0 1 2 5 15
 localectl list-keymaps > /tmp/original
 locales2="$(awk '$locales=$locales" Keyboard"' /tmp/original)" #Save a list of all keymap files available to locales2 variable processing a 2ª column to make the menu
 dialog --backtitle "ArchLinux Installation" --clear --title "Choose your keymap: " \
-	 --menu "Hi! Choose your favorite keymap:" 20 51 7  ${locales2} 2> $tempfile
+	--menu "Hi! Choose your favorite keymap:" 20 51 7  ${locales2} 2> $tempfile
 retval=$?
 choice=`cat $tempfile`
 case $retval in
@@ -31,7 +31,7 @@ read -p "Press Return to continue..."
 tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
 trap "rm -f $tempfile" 0 1 2 5 15
 echo "print devices" > /tmp/parted.p #Save avaiable disks in a temporary file
-part="$(parted < /tmp/parted.p | grep sd | awk '{if (NR!=1) {print}}')" #Process the temporary file. Display line only whith a "sd" and exclude the first line 
+part="$(parted < /tmp/parted.p | grep sd | awk '{if (NR!=1) {print}}')" #Process the temporary file. Display line only whith a "sd" and exclude the first line
 rm /tmp/parted.p
 dialog --backtitle "ArchLinux Installation" --clear --title "Disk Select: " \
 	 --menu "Choose the Hard Drive that you want to use" 20 30 7 ${part} 2> $tempfile
@@ -112,9 +112,9 @@ do
 		"/boot")
 			fdisk -l "$disk"
 			echo "You can press Shift + PageUp/PageDown to scroll"
-			read -p "Press Return to continue..." 
-			fdisk -l "$disk" > /tmp/partitions 
-			partitions="$(cat /tmp/partitions | grep sd | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')" 
+			read -p "Press Return to continue..."
+			fdisk -l "$disk" > /tmp/partitions
+			partitions="$(cat /tmp/partitions | grep sd | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
 			p=$(echo $partitions)
 
 			dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
