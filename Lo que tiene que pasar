@@ -1,9 +1,17 @@
-Introduccion
-Mapa de teclado
-Seleccionar disco duro (/dev/sdX)
-Seleccionar programa de particionado y particionar
-Pedirme las particiones que quiero formatear y en que particion
-Particion SWAP
-Montar particiones
-Instalar sistema base
-Generar fstab
+[ ] Introduccion
+[ ] Mapa de teclado
+[ ] Seleccionar disco duro (/dev/sdX)
+[ ] Seleccionar programa de particionado y particionar
+[ ] Pedirme las particiones que quiero formatear y en que particion
+[ ] Particion SWAP
+[ ] Montar particiones
+[ ] Instalar sistema base
+[ ] Generar fstab
+[ ] Seleccionar el locale y generarlo
+[ ] Configurar el teclado en el sistema recién instalado
+[ ] Preguntar y establecer el hostname
+[ ] Instalar el GRUB en el disco seleccionado al principio
+[ ] Añadir el ususario
+[ ] Preguntar por su contraseña
+[ ] Habilitar el grupo wheel en /etc/sudoers
+[ ] Instalar y actualizar yaourt
