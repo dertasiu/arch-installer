@@ -376,19 +376,66 @@ rm temp
 if [ "$?" = "0" ]
 then
 	echo $locale > /mnt/etc/locale.conf
+	arch-chroot /mnt /bin/bash -c "locale-gen"
 fi
 
+##TODO
 #Select the timezone
-timezones="$(ls -l /usr/share/zoneinfo | grep -v .tab | awk -F " " '{print $9}' | awk '$fs=$fs" Time"')"
-dialog --backtitle "ArchLinux Installation" --clear --title "Timezone selection: " \
-	--menu "Choose your timezone" 20 30 7 ${timezones} 2> temp
-timezone="$(cat temp)"
+# timezones="$(ls -l /usr/share/zoneinfo | grep -v .tab | awk -F " " '{print $9}' | awk '$fs=$fs" Time"')"
+# dialog --backtitle "ArchLinux Installation" --clear --title "Timezone selection: " \
+# 	--menu "Choose your timezone" 20 30 7 ${timezones} 2> temp
+# timezone="$(cat temp)"
+# rm temp
+# if [ "$?" = "0" ]
+# then
+# 	if test -f $timezone; then
+# 		ln -s $timezone timezone >&2
+# 	else
+# 	echo "Yuck! Where is it??" >&2
+# 	fi
+# fi
+
+#Enter the name of the machine (hostname)
+dialog --inputbox "Enter the machine's name:" 8 40 2>temp
+hostname=$(echo temp)
 rm temp
-if [ "$?" = "0" ]
+if [ "$?" = "0"]
 then
-	if test -f $timezone; then
-		ln -s $timezone timezone >&2
-	else
-	echo "Yuck! Where is it??" >&2
-	fi
+	echo "$hostname" > /mnt/etc/hostname
 fi
+
+#Grub instalation question, It will install grub to the previously selected disk stored in the variable $disk 
+dialog --backtitle "ArchLinux Installation" --title "Grub instalation" \
+		--yesno "Do you want to install grub in the previous selected hard drive" 7 60 
+response=$?
+case $response in
+   0) arch-chroot /mnt /bin/bash -c "grub-install $disk && grub-mkconfig -o /boot/grub/grub.cfg";;
+   1) echo "Grub not installed";;
+esac
+
+#Add the main user
+dialog --backtitle "Archlinux Installation" --title "User creation" \
+        --form "\nPlease, enter the user configuration" 25 60 16 \
+        "Username :" 1 1 "user" 1 25 25 30 \
+        "Real name:" 2 1 "Human Foo Bar" 2 25 25 30 2>temp
+user=$(cat temp | sed -n 1p)
+realname=$(cat temp | sed -n 2p)
+rm temp
+if [ "$?" = "0"]
+then
+	arch-chroot /mnt /bin/bash -c "useradd -c "$realname" -m -g users -G video,audio,lp,optical,games,power,wheel,storage -s /bin/bash $user"
+	clear
+	echo "Please, enter the password that the user will use:\n"
+	arch-chroot /mnt /bin/bash -c "passwd $user"
+fi
+
+#Enable the wheel group in the sudoers file
+sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /mnt/etc/sudoers
+
+#Enable AUR
+architechture=$(uname -m)
+echo "[archlinuxfr]\nServer = http://repo.archlinux.fr/$architechture\nSigLevel = Optional TrustAll" >>/mnt/etc/pacman.conf
+arch-chroot /mnt /bin/bash -c "pacman -Syy --noconfirm yaourt"
+#Update yaourt's database
+clear
+arch-chroot /mnt /bin/bash -c "yaourt -Syy"
