@@ -385,19 +385,26 @@ echo "KEYMAP=$keymap" > /mnt/etc/vconsole
 
 ##TODO
 #Select the timezone
-# timezones="$(ls -l /usr/share/zoneinfo | grep -v .tab | awk -F " " '{print $9}' | awk '$fs=$fs" Time"')"
-# dialog --backtitle "ArchLinux Installation" --clear --title "Timezone selection: " \
-# 	--menu "Choose your timezone" 20 30 7 ${timezones} 2> temp
-# timezone="$(cat temp)"
-# rm temp
-# if [ "$?" = "0" ]
-# then
-# 	if test -f $timezone; then
-# 		ln -s $timezone timezone >&2
-# 	else
-# 	echo "Yuck! Where is it??" >&2
-# 	fi
-# fi
+# selected=0
+# timezonedir="/usr/share/zoneinfo"
+# while [ "$selected" = "0" ]
+# do
+# 		timezones="$(ls -l ${timezonedir} | grep -v .tab | awk -F " " '{print $9}' | awk '$fs=$fs" Time"' | awk '{if (NR!=1) {print}}')"
+# 		dialog --backtitle "ArchLinux Installation" --clear --title "Timezone selection: " \
+# 				--menu "Choose your timezone" 20 51 7 ${timezones} 2> temp
+# 		timezone="$(cat temp)"
+# 		rm temp
+
+# 		if [ "$?" = "0" ]
+# 			then
+# 				if [[ $timezone == *"/"* ]]; then
+# 					timezonedir=$timezonedir$timezone
+# 				else
+# 					ln -s ${timezone} timezone
+# 					selected=1
+# 				fi
+# 		fi
+# done
 
 #Enter the name of the machine (hostname)
 dialog --inputbox "Enter the machine's name:" 8 40 2>temp
