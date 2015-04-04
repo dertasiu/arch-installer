@@ -15,6 +15,7 @@ choice=`cat $tempfile`
 case $retval in
 	0)
 		loadkeys $choice #Loads the selected keymap
+		keymap=$choice
 		rm /tmp/original;;
 esac
 
@@ -379,6 +380,9 @@ then
 	arch-chroot /mnt /bin/bash -c "locale-gen"
 fi
 
+#Keyboard type configuration
+echo "KEYMAP=$keymap" > /mnt/etc/vconsole
+
 ##TODO
 #Select the timezone
 # timezones="$(ls -l /usr/share/zoneinfo | grep -v .tab | awk -F " " '{print $9}' | awk '$fs=$fs" Time"')"
@@ -399,7 +403,7 @@ fi
 dialog --inputbox "Enter the machine's name:" 8 40 2>temp
 hostname=$(echo temp)
 rm temp
-if [ "$?" = "0"]
+if [ "$?" = "0" ]
 then
 	echo "$hostname" > /mnt/etc/hostname
 fi
@@ -432,7 +436,7 @@ fi
 #Enable the wheel group in the sudoers file
 sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /mnt/etc/sudoers
 
-#Enable AUR
+#Install Yaourt
 architechture=$(uname -m)
 echo "[archlinuxfr]\nServer = http://repo.archlinux.fr/$architechture\nSigLevel = Optional TrustAll" >>/mnt/etc/pacman.conf
 arch-chroot /mnt /bin/bash -c "pacman -Syy --noconfirm yaourt"
