@@ -386,11 +386,9 @@ timezone="$(cat temp)"
 rm temp
 if [ "$?" = "0" ]
 then
-	while [ $eleccion = "0" ]
-	do
-		if test -f $timezone; then
-			ln -s $timezone timezone >&2
-		else
-			cd $timezone >&2
-		fi
+	if test -f $timezone; then
+		ln -s $timezone timezone >&2
+	else
+	echo "Yuck! Where is it??" >&2
+	fi
 fi
