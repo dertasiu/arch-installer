@@ -15,7 +15,7 @@ arch-chroot /mnt
 	ln -s /usr/share/zoneinfo/Europe/Madrid /etc/localtime
 	grub-install /dev/sdc
 	grub-mkconfig -o /boot/grub/grub.cfg
-	echo "ArchLinux" > /etc/localhost
+	echo "ArchLinux" > /etc/hostname
 	exit
 umount /dev/sdc1
 swapoff /dev/sdb6
