@@ -349,7 +349,7 @@ parts="$(echo $parts | sed 's/^..//')"
 ##Mounts
 #First mount the root partition because later we are going to create the folders to mount the partitions there
 mount $rootfs /mnt
-mkdir -p /mnt/{$bootfs,$homefs,$tmpfs,$usrfs,$varfs,$srvfs,$optfs}
+mkdir -p /mnt/{$bootdir,$homedir,$tmpdir,$usrdir,$vardir,$srvdir,$optdir}
 mount $bootfs /mnt/boot
 mount $homefs /mnt/home
 mount $tmpfs /mnt/tmp
@@ -359,7 +359,7 @@ mount $srvfs /mnt/srv
 mount $optfs /mnt/opt
 
 ##Install basic system with: The base and the development system (We will want this to compile the majority of packets from AUR), grub, networkmanager and a packet that is useful if we use another OS' grub: os-prober
-pacstrap /mnt base base-devel grub-bios networkmanager os-prober
+pacstrap /mnt base base-devel grub-bios networkmanager os-prober sudo
 
 ##Generate the fstab file
 genfstab /mnt > /mnt/etc/fstab
@@ -386,12 +386,12 @@ locale="$(cat temp)"
 rm temp
 if [ "$?" = "0" ]
 then
-	echo $locale > /mnt/etc/locale.conf
+	echo "LANG=$locale" > /mnt/etc/locale.conf
 	arch-chroot /mnt /bin/bash -c "locale-gen"
 fi
 
 #Keyboard type configuration
-echo "KEYMAP=$keymap" > /mnt/etc/vconsole
+echo "KEYMAP=$keymap" > /mnt/etc/vconsole.conf
 
 #Select the timezone
 selected=0
@@ -411,7 +411,7 @@ do
 		if [[ $timezone == *"/"* ]]; then
 			timezonedir=$timezonedir/$timezone
 		else
-			ln -s $timezonedir${timezone} timezone
+			ln -s $timezonedir${timezone} /mnt/etc/timezone
 			selected=1
 		fi
 	fi
@@ -419,7 +419,7 @@ done
 
 #Enter the name of the machine (hostname)
 dialog --inputbox "Enter the machine's name:" 8 40 2>temp
-hostname=$(echo temp)
+hostname=$(cat temp)
 rm temp
 if [ "$?" = "0" ]
 then
@@ -443,7 +443,7 @@ dialog --backtitle "Archlinux Installation" --title "User creation" \
 user=$(cat temp | sed -n 1p)
 realname=$(cat temp | sed -n 2p)
 rm temp
-if [ "$?" = "0"]
+if [ "$?" = "0" ]
 then
 	arch-chroot /mnt /bin/bash -c "useradd -c "$realname" -m -g users -G video,audio,lp,optical,games,power,wheel,storage -s /bin/bash $user"
 	clear
@@ -457,7 +457,8 @@ sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /mnt/etc/sudoers
 #Install Yaourt
 architechture=$(uname -m)
 echo "[archlinuxfr]\nServer = http://repo.archlinux.fr/$architechture\nSigLevel = Optional TrustAll" >>/mnt/etc/pacman.conf
-arch-chroot /mnt /bin/bash -c "pacman -Syy --noconfirm yaourt"
+arch-chroot /mnt /bin/bash -c "pacman -Syy"
+arch-chroot /mnt /bin/bash -c "pacman -S --noconfirm yaourt"
 #Update yaourt's database
 clear
 arch-chroot /mnt /bin/bash -c "yaourt -Syy"
