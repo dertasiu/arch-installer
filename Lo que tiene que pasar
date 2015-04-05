@@ -1,21 +1,21 @@
 32  64
 [ ] [X] Introduccion
-[ ] [?] Preguntar por las conexiones wifi (No se ha podido testear ya que no hay una tarjeta wifi)
+[ ] [X] Preguntar por las conexiones wifi
 [ ] [X] Mapa de teclado
-[ ] [X] Seleccionar disco duro (/dev/sdX)
-[ ] [X] Seleccionar programa de particionado y particionar
-[ ] [X] Pedirme las particiones que quiero formatear y en que particion
-[ ] [X] Particion SWAP
-[ ] [X] Montar particiones
+[ ] [ ] Seleccionar disco duro (/dev/sdX) Comprobar todo ya que se reescribió parte del particionado
+[ ] [ ] Seleccionar programa de particionado y particionar
+[ ] [ ] Pedirme las particiones que quiero formatear y en que particion
+[ ] [ ] Particion SWAP
+[ ] [ ] Montar particiones
 [ ] [X] Instalar sistema base
-[ ] [X] Generar fstab
+[ ] [ ] Generar fstab
 [ ] [X] Seleccionar el locale y generarlo
 [ ] [X] Configurar el teclado en el sistema recién instalado
 [ ] [X] Configurar correctamente la zona horaria
 [ ] [X] Preguntar y establecer el hostname
 [ ] [X] Instalar el GRUB en el disco seleccionado al principio
-[ ] [C] Añadir el usuario (Error de sintaxis de useradd. No lo añade)
-[ ] [C] Preguntar por su contraseña (No la pregunta, ya que el usuario no existe)
+[ ] [X] Añadir el usuario (Error de sintaxis de useradd. No lo añade)
+[ ] [X] Preguntar por su contraseña (No la pregunta, ya que el usuario no existe)
 [ ] [X] Habilitar el grupo wheel en /etc/sudoers
 [ ] [X] Meter a archlinuxfr en /etc/pacman.conf 
 [ ] [X] Instalar y actualizar yaourt (Comando no conocido)
