@@ -3,6 +3,16 @@
 ##Basic welcome message
 dialog --backtitle "ArchLinux Installation" --title "Welcome" --msgbox 'Proceed to the installation:' 6 30
 
+##Select the wifi network in the case
+dialog --backtitle "ArchLinux Installation" --title "Grub instalation" \
+		--yesno "Do you want to connect through a wifi network?" 7 60 
+response=$?
+case $response in
+	0) wifi-menu;;
+	1) echo "Continuing!";;
+esac
+
+
 ##Keyboard type selection
 tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
 trap "rm -f $tempfile" 0 1 2 5 15
@@ -421,15 +431,15 @@ dialog --backtitle "ArchLinux Installation" --title "Grub instalation" \
 		--yesno "Do you want to install grub in the previous selected hard drive" 7 60 
 response=$?
 case $response in
-   0) arch-chroot /mnt /bin/bash -c "grub-install $disk && grub-mkconfig -o /boot/grub/grub.cfg";;
-   1) echo "Grub not installed";;
+	0) arch-chroot /mnt /bin/bash -c "grub-install $disk && grub-mkconfig -o /boot/grub/grub.cfg";;
+	1) echo "Grub not installed";;
 esac
 
 #Add the main user
 dialog --backtitle "Archlinux Installation" --title "User creation" \
-        --form "\nPlease, enter the user configuration" 25 60 16 \
-        "Username :" 1 1 "user" 1 25 25 30 \
-        "Real name:" 2 1 "Human Foo Bar" 2 25 25 30 2>temp
+		--form "\nPlease, enter the user configuration" 25 60 16 \
+		"Username :" 1 1 "user" 1 25 25 30 \
+		"Real name:" 2 1 "Human Foo Bar" 2 25 25 30 2>temp
 user=$(cat temp | sed -n 1p)
 realname=$(cat temp | sed -n 2p)
 rm temp
