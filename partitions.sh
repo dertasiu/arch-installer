@@ -45,7 +45,8 @@ choice=`cat $tempfile`
 case $retval in
 	0)
 		part=$choice
-		rootfs=$part;;
+		rootfs=$part
+		p=$(echo "$p" | grep -v $part);;
 esac
 
 #Format the main partition
@@ -61,8 +62,7 @@ choice=`cat $tempfile`
 case $retval in
 	0)
 		mkfs.$choice $part
-		parts="$parts"",boot"
-		p=$(echo "$p" | grep -v $choice);;
+		parts="$parts"",boot";;
 esac
 
 #View avaiable partitions and select the main partition
