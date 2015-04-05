@@ -83,7 +83,8 @@ choice=`cat $tempfile`
 case $retval in
 	0)
 		part=$choice
-		rootfs=$part;;
+		rootfs=$part
+		p=$(echo "$p" | grep -v $part);;
 esac
 
 #Format the main partition
@@ -122,10 +123,6 @@ do
 			fdisk -l "$disk"
 			echo "You can press Shift + PageUp/PageDown to scroll"
 			read -p "Press Return to continue..."
-			fdisk -l "$disk" > /tmp/partitions
-			partitions="$(cat /tmp/partitions | grep sd | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
-			p=$(echo $partitions)
-
 			dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
 				--menu "Choose the partition type that you want to use for: boot" 20 30 7 ${p} 2> temp
 			part="$(cat temp)"
@@ -146,15 +143,13 @@ do
 			then
 				mkfs.$filesystem $part
 				bootdir="boot"
+				p=$(echo "$p" | grep -v $part)
 			fi
 			;;
 		"/home")
 			fdisk -l "$disk"
 			echo "You can press Shift + PageUp/PageDown to scroll"
 			read -p "Press Return to continue..."
-			fdisk -l "$disk" > /tmp/partitions
-			partitions="$(cat /tmp/partitions | grep sd | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
-			p=$(echo $partitions)
 			dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
 				--menu "Choose the partition type that you want to use for: home" 20 30 7 ${p} 2> temp
 			part="$(cat temp)"
@@ -175,15 +170,13 @@ do
 			then
 				mkfs.$filesystem $part
 				homedir="home"
+				p=$(echo "$p" | grep -v $part)
 			fi
 			;;
 		"/tmp")
 			fdisk -l "$disk"
 			echo "You can press Shift + PageUp/PageDown to scroll"
 			read -p "Press Return to continue..."
-			fdisk -l "$disk" > /tmp/partitions
-			partitions="$(cat /tmp/partitions | grep sd | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
-			p=$(echo $partitions)
 			dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
 				--menu "Choose the partition type that you want to use for: tmp" 20 30 7 ${p} 2> temp
 			part="$(cat temp)"
@@ -204,15 +197,13 @@ do
 			then
 				mkfs.$filesystem $part
 				tmpdir="tmp"
+				p=$(echo "$p" | grep -v $part)
 			fi
 			;;
 		"/usr")
 			fdisk -l "$disk"
 			echo "You can press Shift + PageUp/PageDown to scroll"
 			read -p "Press Return to continue..."
-			fdisk -l "$disk" > /tmp/partitions
-			partitions="$(cat /tmp/partitions | grep sd | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
-			p=$(echo $partitions)
 			dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
 				--menu "Choose the partition type that you want to use for: usr" 20 30 7 ${p} 2> temp
 			part="$(cat temp)"
@@ -233,15 +224,13 @@ do
 			then
 				mkfs.$filesystem $part
 				usrdir="usr"
+				p=$(echo "$p" | grep -v $part)
 			fi
 			;;
 		"/var")
 			fdisk -l "$disk"
 			echo "You can press Shift + PageUp/PageDown to scroll"
 			read -p "Press Return to continue..."
-			fdisk -l "$disk" > /tmp/partitions
-			partitions="$(cat /tmp/partitions | grep sd | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
-			p=$(echo $partitions)
 			dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
 				--menu "Choose the partition type that you want to use for: var" 20 30 7 ${p} 2> temp
 			part="$(cat temp)"
@@ -262,15 +251,13 @@ do
 			then
 				mkfs.$filesystem $part
 				vardir="var"
+				p=$(echo "$p" | grep -v $part)
 			fi
 			;;
 		"/srv")
 			fdisk -l "$disk"
 			echo "You can press Shift + PageUp/PageDown to scroll"
 			read -p "Press Return to continue..."
-			fdisk -l "$disk" > /tmp/partitions
-			partitions="$(cat /tmp/partitions | grep sd | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
-			p=$(echo $partitions)
 			dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
 				--menu "Choose the partition type that you want to use for: srv" 20 30 7 ${p} 2> temp
 			part="$(cat temp)"
@@ -291,15 +278,13 @@ do
 			then
 				mkfs.$filesystem $part
 				srvdir="srv"
+				p=$(echo "$p" | grep -v $part)
 			fi
 			;;
 		"/opt")
 			fdisk -l "$disk"
 			echo "You can press Shift + PageUp/PageDown to scroll"
 			read -p "Press Return to continue..."
-			fdisk -l "$disk" > /tmp/partitions
-			partitions="$(cat /tmp/partitions | grep sd | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
-			p=$(echo $partitions)
 			dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
 				--menu "Choose the partition type that you want to use for: opt" 20 30 7 ${p} 2> temp
 			part="$(cat temp)"
@@ -320,15 +305,13 @@ do
 			then
 				mkfs.$filesystem $part
 				optdir="opt"
+				p=$(echo "$p" | grep -v $part)
 			fi
 			;;
 		"swap")
 			fdisk -l "$disk"
 			echo "You can press Shift + PageUp/PageDown to scroll"
 			read -p "Press Return to continue..."
-			fdisk -l "$disk" > /tmp/partitions
-			partitions="$(cat /tmp/partitions | grep sd | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
-			p=$(echo $partitions)
 			dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
 				--menu "Choose the partition type that you want to use for: swap" 20 30 7 ${p} 2> temp
 			part="$(cat temp)"
@@ -338,6 +321,7 @@ do
 			then
 				mkswap $part
 				swapon $part
+				p=$(echo "$p" | grep -v $part)
 			fi
 	esac
 done
