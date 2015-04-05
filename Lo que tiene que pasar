@@ -1,4 +1,5 @@
 [ ] Introduccion
+[ ] Preguntar por las conexiones wifi
 [ ] Mapa de teclado
 [ ] Seleccionar disco duro (/dev/sdX)
 [ ] Seleccionar programa de particionado y particionar
@@ -9,6 +10,7 @@
 [ ] Generar fstab
 [ ] Seleccionar el locale y generarlo
 [ ] Configurar el teclado en el sistema recién instalado
+[ ] Configurar correctamente la zona horaria
 [ ] Preguntar y establecer el hostname
 [ ] Instalar el GRUB en el disco seleccionado al principio
 [ ] Añadir el ususario
