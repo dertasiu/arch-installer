@@ -6,15 +6,16 @@
 [ ] [X] Seleccionar programa de particionado y particionar
 [ ] [X] Pedirme las particiones que quiero formatear y en que particion
 [ ] [X] Particion SWAP
-[ ] [C] Montar particiones (No ha montado /home, no dir, la única particion "especial" que habia especificado)
+[ ] [X] Montar particiones
 [ ] [X] Instalar sistema base
-[ ] [X] Generar fstab (Solo que sin la /home por el erroe de antes, por lo demas todo bien)
-[ ] [C] Seleccionar el locale y generarlo (Al iniciar, apared un error diciendo : El commando es_ES.UTF-8 no existe)
-[ ] [C] Configurar el teclado en el sistema recién instalado (Sigue apareciendo el ingles problema de vconsole.conf)
-[ ] [C] Configurar correctamente la zona horaria (El lugar hacia donde se hace el link no es correcto)
-[ ] [C] Preguntar y establecer el hostname (Lo pregunta pero el archivo /etc/hostname contiene "test")
+[ ] [X] Generar fstab
+[ ] [X] Seleccionar el locale y generarlo
+[ ] [X] Configurar el teclado en el sistema recién instalado
+[ ] [X] Configurar correctamente la zona horaria
+[ ] [X] Preguntar y establecer el hostname
 [ ] [X] Instalar el GRUB en el disco seleccionado al principio
-[ ] [C] Añadir el usuario (Error en la línea 44X No acaba bien algo. No lo añade)
-[ ] [C] Preguntar por su contraseña (No la pregunta)
+[ ] [ ] Añadir el usuario (Error de sintaxis de useradd. No lo añade)
+[ ] [ ] Preguntar por su contraseña (No la pregunta, ya que el usuario no existe)
 [ ] [X] Habilitar el grupo wheel en /etc/sudoers
+[ ] [C] Meter a archlinuxfr en /etc/pacman.conf 
 [ ] [C] Instalar y actualizar yaourt (Comando no conocido)

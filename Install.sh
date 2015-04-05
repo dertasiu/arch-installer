@@ -447,16 +447,19 @@ if [ "$?" = "0" ]
 then
 	arch-chroot /mnt /bin/bash -c "useradd -c "$realname" -m -g users -G video,audio,lp,optical,games,power,wheel,storage -s /bin/bash $user"
 	clear
-	echo "Please, enter the password that the user will use:\n"
+	echo "Please, enter the password that the user will use:"
 	arch-chroot /mnt /bin/bash -c "passwd $user"
 fi
 
 #Enable the wheel group in the sudoers file
 sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /mnt/etc/sudoers
 
+#Enable networkmanager
+arch-chroot /mnt /bin/bash -c "systemctl enable NetworkManager"
+
 #Install Yaourt
-architechture=$(uname -m)
-echo "[archlinuxfr]\nServer = http://repo.archlinux.fr/$architechture\nSigLevel = Optional TrustAll" >>/mnt/etc/pacman.conf
+architecture=$(uname -m)
+printf "[archlinuxfr]\nServer = http://repo.archlinux.fr/$architecture\nSigLevel = Optional TrustAll" >>/mnt/etc/pacman.conf
 arch-chroot /mnt /bin/bash -c "pacman -Syy"
 arch-chroot /mnt /bin/bash -c "pacman -S --noconfirm yaourt"
 #Update yaourt's database
