@@ -62,7 +62,7 @@ case $retval in
 	0)
 		mkfs.$choice $part
 		parts="$parts"",boot"
-		p=$(grep -v $choice);;
+		p=$(echo $p | grep -v $choice);;
 esac
 
 #View avaiable partitions and select the main partition
@@ -109,7 +109,7 @@ do
 			then
 				mkfs.$filesystem $part
 				bootdir="boot"
-				p=$(grep -v $part)
+				p=$(echo $p | grep -v $part)
 			fi
 			;;
 		"/home")
@@ -139,7 +139,7 @@ do
 			then
 				mkfs.$filesystem $part
 				homedir="home"
-				p=$(grep -v $part)
+				p=$(echo $p | grep -v $part)
 			fi
 			;;
 		"/tmp")
@@ -169,7 +169,7 @@ do
 			then
 				mkfs.$filesystem $part
 				tmpdir="tmp"
-				p=$(grep -v $part)
+				p=$(echo $p | grep -v $part)
 			fi
 			;;
 		"/usr")
@@ -199,7 +199,7 @@ do
 			then
 				mkfs.$filesystem $part
 				usrdir="usr"
-				p=$(grep -v $part)
+				p=$(echo $p | grep -v $part)
 			fi
 			;;
 		"/var")
@@ -229,7 +229,7 @@ do
 			then
 				mkfs.$filesystem $part
 				vardir="var"
-				p=$(grep -v $part)
+				p=$(echo $p | grep -v $part)
 			fi
 			;;
 		"/srv")
@@ -259,7 +259,7 @@ do
 			then
 				mkfs.$filesystem $part
 				srvdir="srv"
-				p=$(grep -v $part)
+				p=$(echo $p | grep -v $part)
 			fi
 			;;
 		"/opt")
@@ -289,7 +289,7 @@ do
 			then
 				mkfs.$filesystem $part
 				optdir="opt"
-				p=$(grep -v $part)
+				p=$(echo $p | grep -v $part)
 			fi
 			;;
 		"swap")
@@ -308,7 +308,7 @@ do
 			then
 				mkswap $part
 				swapon $part
-				p=$(grep -v $part)
+				p=$(echo $p | grep -v $part)
 			fi
 	esac
 done
