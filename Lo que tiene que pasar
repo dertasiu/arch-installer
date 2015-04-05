@@ -14,8 +14,8 @@
 [ ] [X] Configurar correctamente la zona horaria
 [ ] [X] Preguntar y establecer el hostname
 [ ] [X] Instalar el GRUB en el disco seleccionado al principio
-[ ] [ ] Añadir el usuario (Error de sintaxis de useradd. No lo añade)
-[ ] [ ] Preguntar por su contraseña (No la pregunta, ya que el usuario no existe)
+[ ] [C] Añadir el usuario (Error de sintaxis de useradd. No lo añade)
+[ ] [C] Preguntar por su contraseña (No la pregunta, ya que el usuario no existe)
 [ ] [X] Habilitar el grupo wheel en /etc/sudoers
-[ ] [C] Meter a archlinuxfr en /etc/pacman.conf 
-[ ] [C] Instalar y actualizar yaourt (Comando no conocido)
+[ ] [X] Meter a archlinuxfr en /etc/pacman.conf 
+[ ] [X] Instalar y actualizar yaourt (Comando no conocido)
