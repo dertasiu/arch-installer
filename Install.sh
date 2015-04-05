@@ -12,7 +12,6 @@ case $response in
 	1) echo "Continuing!";;
 esac
 
-
 ##Keyboard type selection
 tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
 trap "rm -f $tempfile" 0 1 2 5 15
@@ -31,7 +30,6 @@ esac
 
 ##Partition creation
 #Display a list of all disk and partitions available
-
 dialog --backtitle "ArchLinux Installation" --title "Disk Selection" --msgbox 'Please select a disk to install ArchLinux' 6 30
 clear
 fdisk -l
