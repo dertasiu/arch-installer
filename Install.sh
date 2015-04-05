@@ -383,28 +383,29 @@ fi
 #Keyboard type configuration
 echo "KEYMAP=$keymap" > /mnt/etc/vconsole
 
-##TODO
 #Select the timezone
-# selected=0
-# timezonedir="/usr/share/zoneinfo"
-# while [ "$selected" = "0" ]
-# do
-# 		timezones="$(ls -l ${timezonedir} | grep -v .tab | awk -F " " '{print $9}' | awk '$fs=$fs" Time"' | awk '{if (NR!=1) {print}}')"
-# 		dialog --backtitle "ArchLinux Installation" --clear --title "Timezone selection: " \
-# 				--menu "Choose your timezone" 20 51 7 ${timezones} 2> temp
-# 		timezone="$(cat temp)"
-# 		rm temp
-
-# 		if [ "$?" = "0" ]
-# 			then
-# 				if [[ $timezone == *"/"* ]]; then
-# 					timezonedir=$timezonedir$timezone
-# 				else
-# 					ln -s ${timezone} timezone
-# 					selected=1
-# 				fi
-# 		fi
-# done
+selected=0
+timezonedir=/usr/share/zoneinfo
+while [ "$selected" = "0" ]
+do
+	ls -l $timezonedir | grep -v .tab |  awk '/drwx/' | awk -F " " '{print $9}' | awk '{print $0"/"}' | awk '$fs=$fs" Time"' | awk '{if (NR!=1) {print}}'>timezones
+	ls -l $timezonedir | grep -v .tab |  awk '/-rw-/' | awk -F " " '{print $9}' | awk '$fs=$fs" Time"' | awk '{if (NR!=1) {print}}'>>timezones
+	timezones=$(cat timezones)
+	rm timezones
+	dialog --backtitle "ArchLinux Installation" --clear --title "Timezone selection: " \
+			--menu "Choose your timezone" 20 51 7 ${timezones} 2> temp
+	timezone="$(cat temp)"
+	rm temp
+	if [ "$?" = "0" ]
+	then
+		if [[ $timezone == *"/"* ]]; then
+			timezonedir=$timezonedir/$timezone
+		else
+			ln -s $timezonedir${timezone} timezone
+			selected=1
+		fi
+	fi
+done
 
 #Enter the name of the machine (hostname)
 dialog --inputbox "Enter the machine's name:" 8 40 2>temp
