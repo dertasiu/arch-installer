@@ -15,7 +15,7 @@
 [X] [X] Preguntar y establecer el hostname
 [X] [X] Instalar el GRUB en el disco seleccionado al principio
 [X] [X] Añadir el usuario (Error de sintaxis de useradd. No lo añade)
-[X] [X] Preguntar por su contraseña (No la pregunta, ya que el usuario no existe)
+[X] [X] Preguntar por su contraseña
 [X] [X] Habilitar el grupo wheel en /etc/sudoers
 [X] [X] Meter a archlinuxfr en /etc/pacman.conf 
-[C] [X] Instalar y actualizar yaourt (Comando no conocido, en 32 Bits hay que comprobar si de verdad funciona)
+[C] [X] Instalar y actualizar yaourt (Comando no conocido, en 32 Bits hay que comprobar si de verdad funciona. En el momento de la prueba los servidores de repo.archlinux.fr estaban caidos)
