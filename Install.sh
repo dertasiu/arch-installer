@@ -403,7 +403,7 @@ do
 done
 
 #Enter the name of the machine (hostname)
-dialog --inputbox "Enter the machine's name:" 8 40 2>temp
+dialog --backtitle "Archlinux Installation" --inputbox "Enter the machine's name:" 8 40 2>temp
 hostname=$(cat temp)
 rm temp
 if [ "$?" = "0" ]
