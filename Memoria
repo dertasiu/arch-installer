@@ -20,4 +20,6 @@ Al final funcionó [Insertar_imagen_GITLAB]
 Y seguimos escribiendo el codigo.
 
 Se van realizando cambios tanto en el codigo como en las notas, tabular el codigo, meter comentarios, crear notas (Que queremos que haya, eliminar cosas...), 
-arreglar errores (creación de usuario, timezones, variable mal definida), eliminar partes imprescindibles del codigo para la compresión sea más fácil
+arreglar errores (creación de usuario, timezones, variable mal definida), eliminar partes imprescindibles del codigo para la compresión sea más fácil.
+
+Comprobamos si el instalador podía llegar a instalar Arch Linux, crear usuarios, crear y formatear particiones, seleccionar el nombre de la máquina, el GRUB se instale, que se actualize Pacman y que Yaourt instale
