@@ -1,3 +1,0 @@
-[archlinuxfr]
-Server = http://repo.archlinux.fr/x86_64
-SigLevel = Optional TrustAll
