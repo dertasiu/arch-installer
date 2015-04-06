@@ -382,10 +382,9 @@ do
 	check=$(ls -l $timezonedir | grep -v .tab | awk '/drwx/' | awk -F " " '{print $9}' | awk '{if (NR!=1) {print}}' | head -1)
 	if [[ $check != America ]]; then
 		echo "../ UP" >timezones
-		fi
+	fi
 	ls -l $timezonedir | grep -v .tab | awk '/drwx/' | awk -F " " '{print $9}' | awk '{print $0"/"}' | awk '$fs=$fs" Time"' | awk '{if (NR!=1) {print}}'>>timezones
 	ls -l $timezonedir | grep -v .tab | awk '/-rw-/' | awk -F " " '{print $9}' | awk '$fs=$fs" Time"' | awk '{if (NR!=1) {print}}'>>timezones
-	cat timezones
 	timezones=$(cat timezones)
 	rm timezones
 	dialog --backtitle "ArchLinux Installation" --clear --title "Timezone selection: " \
@@ -397,7 +396,7 @@ do
 		if [[ $timezone == *"/"* ]]; then
 			timezonedir=$timezonedir/$timezone
 		else
-			ln -s $timezonedir${timezone} timezone
+			ln -s $timezonedir${timezone} /mnt/etc/timezone
 			selected=1
 		fi
 	fi
