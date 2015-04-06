@@ -5,7 +5,7 @@ dialog --backtitle "ArchLinux Installation" --title "Welcome" --msgbox 'Proceed 
 
 ##Select the wifi network in the case
 dialog --backtitle "ArchLinux Installation" --title "Grub instalation" \
-		--yesno "Do you want to connect through a wifi network?" 7 60 
+		--yesno "Do you want to connect to a wifi network?" 7 60 
 response=$?
 case $response in
 	0) wifi-menu;;
@@ -77,7 +77,7 @@ fdisk -l "$disk" > /tmp/partitions
 partitions="$(cat /tmp/partitions | grep sd | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
 p="$(echo "$partitions")"
 dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
-	--menu "Choose the partition type that you want to use for: /" 20 30 7 ${p} 2> $tempfile
+	--menu "Choose the partition that you want to use for: /" 20 30 7 ${p} 2> $tempfile
 retval=$?
 choice=`cat $tempfile`
 case $retval in
@@ -94,13 +94,12 @@ trap "rm -f $tempfile" 0 1 2 5 15
 fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}')"
 
 dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
-	--menu "Choose the partition type that you want to use" 20 30 7 ${fs} 2> $tempfile
+	--menu "Choose the filesystem type that you want to use" 20 30 7 ${fs} 2> $tempfile
 retval=$?
 choice=`cat $tempfile`
 case $retval in
 	0)
-		mkfs.$choice $part
-		parts="$parts"",boot";;
+		mkfs.$choice $part;;
 esac
 
 #View avaiable partitions and select the main partition
@@ -124,7 +123,7 @@ do
 			echo "You can press Shift + PageUp/PageDown to scroll"
 			read -p "Press Return to continue..."
 			dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
-				--menu "Choose the partition type that you want to use for: boot" 20 30 7 ${p} 2> temp
+				--menu "Choose the partition that you want to use for: boot" 20 30 7 ${p} 2> temp
 			part="$(cat temp)"
 			rm temp
 			# Option is selected
@@ -136,7 +135,7 @@ do
 			fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}')"
 
 			dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
-				--menu "Choose the format that you want to use" 20 30 7 ${fs} 2> temp
+				--menu "Choose the filesystem type that you want to use" 20 30 7 ${fs} 2> temp
 			filesystem="$(cat temp)"
 			rm temp
 			if [ "$?" = "0" ]
@@ -151,7 +150,7 @@ do
 			echo "You can press Shift + PageUp/PageDown to scroll"
 			read -p "Press Return to continue..."
 			dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
-				--menu "Choose the partition type that you want to use for: home" 20 30 7 ${p} 2> temp
+				--menu "Choose the partition that you want to use for: home" 20 30 7 ${p} 2> temp
 			part="$(cat temp)"
 			rm temp
 			# Option is selected
@@ -163,7 +162,7 @@ do
 			fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}')"
 
 			dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
-				--menu "Choose the format that you want to use" 20 30 7 ${fs} 2> temp
+				--menu "Choose the filesystem type that you want to use" 20 30 7 ${fs} 2> temp
 			filesystem="$(cat temp)"
 			rm temp
 			if [ "$?" = "0" ]
@@ -178,7 +177,7 @@ do
 			echo "You can press Shift + PageUp/PageDown to scroll"
 			read -p "Press Return to continue..."
 			dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
-				--menu "Choose the partition type that you want to use for: tmp" 20 30 7 ${p} 2> temp
+				--menu "Choose the partition that you want to use for: tmp" 20 30 7 ${p} 2> temp
 			part="$(cat temp)"
 			rm temp
 			# Option is selected
@@ -190,7 +189,7 @@ do
 			fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}')"
 
 			dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
-				--menu "Choose the format that you want to use" 20 30 7 ${fs} 2> temp
+				--menu "Choose the filesystem type that you want to use" 20 30 7 ${fs} 2> temp
 			filesystem="$(cat temp)"
 			rm temp
 			if [ "$?" = "0" ]
@@ -205,7 +204,7 @@ do
 			echo "You can press Shift + PageUp/PageDown to scroll"
 			read -p "Press Return to continue..."
 			dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
-				--menu "Choose the partition type that you want to use for: usr" 20 30 7 ${p} 2> temp
+				--menu "Choose the partition that you want to use for: usr" 20 30 7 ${p} 2> temp
 			part="$(cat temp)"
 			rm temp
 			# Option is selected
@@ -217,7 +216,7 @@ do
 			fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}')"
 
 			dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
-				--menu "Choose the format that you want to use" 20 30 7 ${fs} 2> temp
+				--menu "Choose the filesystem type that you want to use" 20 30 7 ${fs} 2> temp
 			filesystem="$(cat temp)"
 			rm temp
 			if [ "$?" = "0" ]
@@ -232,7 +231,7 @@ do
 			echo "You can press Shift + PageUp/PageDown to scroll"
 			read -p "Press Return to continue..."
 			dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
-				--menu "Choose the partition type that you want to use for: var" 20 30 7 ${p} 2> temp
+				--menu "Choose the partition that you want to use for: var" 20 30 7 ${p} 2> temp
 			part="$(cat temp)"
 			rm temp
 			# Option is selected
@@ -244,7 +243,7 @@ do
 			fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}')"
 
 			dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
-				--menu "Choose the format that you want to use" 20 30 7 ${fs} 2> temp
+				--menu "Choose the filesystem type that you want to use" 20 30 7 ${fs} 2> temp
 			filesystem="$(cat temp)"
 			rm temp
 			if [ "$?" = "0" ]
@@ -259,7 +258,7 @@ do
 			echo "You can press Shift + PageUp/PageDown to scroll"
 			read -p "Press Return to continue..."
 			dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
-				--menu "Choose the partition type that you want to use for: srv" 20 30 7 ${p} 2> temp
+				--menu "Choose the partition that you want to use for: srv" 20 30 7 ${p} 2> temp
 			part="$(cat temp)"
 			rm temp
 			# Option is selected
@@ -271,7 +270,7 @@ do
 			fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}')"
 
 			dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
-				--menu "Choose the format that you want to use" 20 30 7 ${fs} 2> temp
+				--menu "Choose the filesystem type that you want to use" 20 30 7 ${fs} 2> temp
 			filesystem="$(cat temp)"
 			rm temp
 			if [ "$?" = "0" ]
@@ -286,7 +285,7 @@ do
 			echo "You can press Shift + PageUp/PageDown to scroll"
 			read -p "Press Return to continue..."
 			dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
-				--menu "Choose the partition type that you want to use for: opt" 20 30 7 ${p} 2> temp
+				--menu "Choose the partition that you want to use for: opt" 20 30 7 ${p} 2> temp
 			part="$(cat temp)"
 			rm temp
 			# Option is selected
@@ -298,7 +297,7 @@ do
 			fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}')"
 
 			dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
-				--menu "Choose the format that you want to use" 20 30 7 ${fs} 2> temp
+				--menu "Choose the filesystem type that you want to use" 20 30 7 ${fs} 2> temp
 			filesystem="$(cat temp)"
 			rm temp
 			if [ "$?" = "0" ]
@@ -313,7 +312,7 @@ do
 			echo "You can press Shift + PageUp/PageDown to scroll"
 			read -p "Press Return to continue..."
 			dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
-				--menu "Choose the partition type that you want to use for: swap" 20 30 7 ${p} 2> temp
+				--menu "Choose the partition that you want to use for: swap" 20 30 7 ${p} 2> temp
 			part="$(cat temp)"
 			rm temp
 			# Option is selected
@@ -413,15 +412,6 @@ then
 	echo "$hostname" > /mnt/etc/hostname
 fi
 
-#Grub instalation question, It will install grub to the previously selected disk stored in the variable $disk 
-dialog --backtitle "ArchLinux Installation" --title "Grub instalation" \
-		--yesno "Do you want to install grub in the previous selected hard drive" 7 60 
-response=$?
-case $response in
-	0) arch-chroot /mnt /bin/bash -c "grub-install $disk && grub-mkconfig -o /boot/grub/grub.cfg";;
-	1) echo "Grub not installed";;
-esac
-
 #Add the main user
 dialog --backtitle "Archlinux Installation" --title "User creation" \
 		--form "\nPlease, enter the user configuration" 25 60 16 \
@@ -450,5 +440,13 @@ printf "[archlinuxfr]\nServer = http://repo.archlinux.fr/$architecture\nSigLevel
 arch-chroot /mnt /bin/bash -c "pacman -Syy"
 arch-chroot /mnt /bin/bash -c "pacman -S --noconfirm yaourt"
 #Update yaourt's database
-clear
 arch-chroot /mnt /bin/bash -c "yaourt -Syy"
+
+#Grub instalation question, It will install grub to the previously selected disk stored in the variable $disk 
+dialog --backtitle "ArchLinux Installation" --title "Grub instalation" \
+		--yesno "Do you want to install grub in the previous selected hard drive" 7 60 
+response=$?
+case $response in
+	0) arch-chroot /mnt /bin/bash -c "grub-install $disk && grub-mkconfig -o /boot/grub/grub.cfg";;
+	1) echo "Grub not installed";;
+esac
