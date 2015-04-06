@@ -421,7 +421,7 @@ realname=$(cat temp | sed -n 2p | sed 's/^/"/' | sed 's/$/"/')
 rm temp
 if [ "$?" = "0" ]
 then
-	arch-chroot /mnt /bin/sh -c "useradd -c $realname -m -g users -G video,audio,lp,optical,games,power,wheel,storage -s /bin/bash $user"
+	arch-chroot /mnt /bin/sh -c "useradd -c $realname -m -g users -G video,audio,lp,optical,games,power,wheel,storage -s /bin/bash $user" #Add the user to the following groups and it create the home directory
 	clear
 	echo "Please, enter the password that the user will use:"
 	arch-chroot /mnt /bin/bash -c "passwd $user"
