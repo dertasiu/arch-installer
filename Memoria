@@ -18,3 +18,6 @@ Luego hubo otro problema (RUBY y gemas de RUBY por ser incompatibles con ARM)
 Al final funcionó [Insertar_imagen_GITLAB]
 
 Y seguimos escribiendo el codigo.
+
+Se van realizando cambios tanto en el codigo como en las notas, tabular el codigo, meter comentarios, crear notas (Que queremos que haya, eliminar cosas...), 
+arreglar errores (creación de usuario, timezones, variable mal definida), eliminar partes imprescindibles del codigo para la compresión sea más fácil
