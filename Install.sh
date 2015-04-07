@@ -340,7 +340,7 @@ mount $srvfs /mnt/srv
 mount $optfs /mnt/opt
 
 ##Install basic system with: The base and the development system (We will want this to compile the majority of packets from AUR), grub, networkmanager and a packet that is useful if we use another OS' grub: os-prober
-pacstrap /mnt base base-devel grub-bios networkmanager os-prober sudo
+pacstrap /mnt base base-devel grub-bios networkmanager os-prober sudo dialog
 
 ##Generate the fstab file
 genfstab /mnt > /mnt/etc/fstab
