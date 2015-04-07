@@ -449,3 +449,7 @@ case $response in
 	0) arch-chroot /mnt /bin/bash -c "grub-install $disk && grub-mkconfig -o /boot/grub/grub.cfg";;
 	1) echo "Grub not installed";;
 esac
+
+#Copy the post-insall script to the hard drive
+cp DesktopEnvironment.sh /mnt/root
+cp servers.sh /mnt/root
