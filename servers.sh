@@ -1,4 +1,5 @@
 LAMP=0
+user=$(cat /etc/passwd | grep 1000 | awk -F':' '{ print $1}' | head -1)
 cmd=(dialog --backtitle "ArchLinux Installation" --separate-output --checklist "Select the Services that you want to install:" 22 76 16)
 options=(SSH "Remote console"	off
 		Web "Apache + PHP5 + MariaDB(Mysql) A complete Web Server"	off
@@ -47,38 +48,44 @@ do
 			if [[ $LAMP == "0" ]]; then
 				web
 			fi
-			arch-chroot /mnt /bin/bash -c "pacman -Syy --noconfirm owncloud"
+			pacman -Syy --noconfirm owncloud
 		;;
 
 		"Wordpress")
 			if [[ $LAMP == "0" ]]; then
 				web
 			fi
-			arch-chroot /mnt /bin/bash -c "yaourt -Syy --noconfirm wordpress"
+			pacman -Syy --noconfirm wordpress
 		;;
 
 		"Subsonic")
-			arch-chroot /mnt /bin/bash -c "pacman -Syy --noconfirm "
+			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) NOPASSWD:ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			sudo -u $user yaourt -Syy -A --noconfirm subsonic
+			sed -i '/%wheel ALL=(ALL) NOPASSWD:ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 		;;
 
 		"NTOP")
-			arch-chroot /mnt /bin/bash -c "pacman -Syy --noconfirm "
+			pacman -Syy --noconfirm ntop
+			systemctl enable ntop
+			systemctl start ntop
 		;;
 
 		"TightVNC")
-			arch-chroot /mnt /bin/bash -c "pacman -Syy --noconfirm "
+			pacman -Syy --noconfirm 
 		;;
 
 		"Deluge")
-			arch-chroot /mnt /bin/bash -c "yaourt -Syy --noconfirm "
+			yaourt -Syy --noconfirm 
 		;;
 
 		"PPTP")
-			arch-chroot /mnt /bin/bash -c "pacman -Syy --noconfirm "
+			pacman -Syy --noconfirm 
 		;;
 
 		"Prosody")
-			arch-chroot /mnt /bin/bash -c "pacman -Syy --noconfirm "
+			pacman -Syy --noconfirm 
 		;;
 esac
 done
