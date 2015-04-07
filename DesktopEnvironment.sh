@@ -20,62 +20,72 @@ for choice in $desktop
 do
 	case $choice in
 		"KDE4")
-			arch-root /mnt /bin/bash -c "pacman -Syy --noconfirm kde"
+			pacman -Syy --noconfirm kde
 		;;
 
 		"KDE5")
-			arch-root /mnt /bin/bash -c "pacman -Syy --noconfirm plasma"
+			pacman -Syy --noconfirm plasma
 		;;
 
 		"Gnome")
-			arch-root /mnt /bin/bash -c "pacman -Syy --noconfirm gnome gnome-extra"
+			pacman -Syy --noconfirm gnome gnome-extra
 		;;
 
 		"MATE")
-			arch-root /mnt /bin/bash -c "pacman -Syy --noconfirm mate mate-extra"
+			pacman -Syy --noconfirm mate mate-extra
 		;;
 
 		"Pantheon")
-			arch-root /mnt /bin/bash -c "yaourt -Syy --noconfirm pantheon-session-bzr"
+			yaourt -Syy --noconfirm pantheon-session-bzr
 		;;
 
 		"XFCE")
-			arch-root /mnt /bin/bash -c "pacman -Syy --noconfirm xfce4"
+			pacman -Syy --noconfirm xfce4
 		;;
 
 		"LXDE")
-			arch-root /mnt /bin/bash -c "pacman -Syy --noconfirm lxde-common"
+			pacman -Syy --noconfirm lxde-common
 		;;
 
 		"LXQT")
-			arch-root /mnt /bin/bash -c "pacman -Syy --noconfirm lxqt"
+			pacman -Syy --noconfirm lxqt
 		;;
 
 		"Unity")
-			printf "[Unity-for-Arch]\nSigLevel = Optional TrustAll\nServer = http://dl.dropbox.com/u/486665/Repos/$repo/$arch\[Unity-for-Arch-Extra]\nSigLevel = Optional TrustAll\nServer = http://dl.dropbox.com/u/486665/Repos/$repo/$arch" >> /mnt/etc/pacman.conf
-			arch-root /mnt /bin/bash -c "yaourt -Syy --noconfirm unity"
+			printf "[Unity-for-Arch]\nSigLevel = Optional TrustAll\nServer = http://dl.dropbox.com/u/486665/Repos/$repo/$arch\[Unity-for-Arch-Extra]\nSigLevel = Optional TrustAll\nServer = http://dl.dropbox.com/u/486665/Repos/$repo/$arch" >> /etc/pacman.conf
+			yaourt -Syy --noconfirm unity
 		;;
 
 		"DDE")
 			arch=$(uname -m)
-			printf "[home_metakcahura_arch-deepin_Arch_Extra]\nSigLevel = Never\nServer = http://download.opensuse.org/repositories/home:/metakcahura:/arch-deepin/Arch_Extra/$arch" >> /mnt/etc/pacman.conf
-			arch-root /mnt /bin/bash -c "pacman -Syy --noconfirm deepin deepin-extra"
+			printf "[home_metakcahura_arch-deepin_Arch_Extra]\nSigLevel = Never\nServer = http://download.opensuse.org/repositories/home:/metakcahura:/arch-deepin/Arch_Extra/$arch" >> /etc/pacman.conf
+			pacman -Syy --noconfirm deepin deepin-extra
 		;;
 
 		"OpenBox")
-			arch-root /mnt /bin/bash -c "pacman -Syy --noconfirm openbox"
+			pacman -Syy --noconfirm openbox
 		;;
 
 		"i3")
-			arch-root /mnt /bin/bash -c "pacman -Syy --noconfirm i3"
+			pacman -Syy --noconfirm i3
 		;;
 
 		"Cinnamon")
-			arch-root /mnt /bin/bash -c "pacman -Syy --noconfirm cinnamon"
+			pacman -Syy --noconfirm cinnamon
 		;;
 
 		"Budgie")
-			arch-root /mnt /bin/bash -c "yaourt -Syy --noconfirm  budgie-desktop-git"
+			yaourt -Syy --noconfirm  budgie-desktop-git
 		;;
 esac
 done
+#Install the compatibility layer for virtualbox
+dialog --backtitle "ArchLinux Installation" --title "Grub instalation" \
+		--yesno "Are you on a VirtualBox machine?" 7 60 
+response=$?
+case $response in
+	0) pacman -Syy --noconfirm  virtualbox-guest-utils virtualbox-guest-modules
+		modprobe -a vboxguest vboxsf vboxvideo
+		systemctl enable vboxservice && systemctl start vboxservice;;
+	1) echo "Bye!";;
+esac
