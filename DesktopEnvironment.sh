@@ -1,3 +1,4 @@
+user=$(cat /etc/passwd | grep 1000 | awk -F':' '{ print $1}' | head -1)
 cmd=(dialog --backtitle "ArchLinux Installation" --separate-output --checklist "Select the Desktop Environment:" 22 76 16)
 options=(KDE4 " "	off
 		KDE5 " "	off
@@ -20,11 +21,11 @@ for choice in $desktop
 do
 	case $choice in
 		"KDE4")
-			pacman -Syy --noconfirm kde
+			pacman -Syy --noconfirm kde kde-meta
 		;;
 
 		"KDE5")
-			pacman -Syy --noconfirm plasma
+			pacman -Syy --noconfirm plasma plasma-meta
 		;;
 
 		"Gnome")
@@ -36,29 +37,45 @@ do
 		;;
 
 		"Pantheon")
-			yaourt -Syy --noconfirm pantheon-session-bzr
+			printf "[pantheon]\nSigLevel = Optional TrustAll\nServer = http://pkgbuild.com/~alucryd/\x24repo/\x24arch\n"
+			pacman -Syy --noconfirm pantheon-session-bzr audience-bzr contractor-bzr dexter-contacts-bzr eidete-bzr elementary-icon-theme-bzr elementary-icon-theme-bzr elementary-wallpapers-bzr gtk-theme-elementary-bzr feedler-bzr footnote-bzr geary indicator-pantheon-session-bzr lightdm-pantheon-greeter-bzr maya-calendar-bzr midori-granite-bzr noise-bzr pantheon-backgrounds-bzr pantheon-calculator-bzr pantheon-default-settings-bzr pantheon-files-bzr pantheon-notify-bzr pantheon-print-bzr pantheon-terminal-bzr plank-theme-pantheon-bzr scratch-text-editor-bzr snap-photobooth-bzr switchboard-bzr ttf-dejavu ttf-droid ttf-freefont ttf-liberation 
+			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) NOPASSWD:ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			sudo -u $user yaourt -A -Syy --noconfirm ttf-opensans ttf-raleway-font-family
+			sed -i '/%wheel ALL=(ALL) NOPASSWD:ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 		;;
 
 		"XFCE")
-			pacman -Syy --noconfirm xfce4
+			pacman -Syy --noconfirm xfce4 xfce4-goodies
 		;;
 
 		"LXDE")
-			pacman -Syy --noconfirm lxde-common
+			pacman -Syy --noconfirm lxde lxde-common
 		;;
 
 		"LXQT")
-			pacman -Syy --noconfirm lxqt
+			pacman -Syy --noconfirm lxqt oxygen-icons qtcurve sddm
+			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) NOPASSWD:ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			sudo -u $user yaourt -A -Syy --noconfirm qterminal-git obconf-qt-git
+			sed -i '/%wheel ALL=(ALL) NOPASSWD:ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 		;;
 
 		"Unity")
-			printf "[Unity-for-Arch]\nSigLevel = Optional TrustAll\nServer = http://dl.dropbox.com/u/486665/Repos/$repo/$arch\[Unity-for-Arch-Extra]\nSigLevel = Optional TrustAll\nServer = http://dl.dropbox.com/u/486665/Repos/$repo/$arch" >> /etc/pacman.conf
-			yaourt -Syy --noconfirm unity
+			printf "[Unity-for-Arch]\nSigLevel = Optional TrustAll\nServer = http://dl.dropbox.com/u/486665/Repos/\x24repo/\x24arch\n[Unity-for-Arch-Extra]\nSigLevel = Optional TrustAll\nServer = http://dl.dropbox.com/u/486665/Repos/\x24repo/\x24arch" >> /etc/pacman.conf
+			pacman -Syy --noconfirm $(pacman -Slq Unity-for-Arch)
+			pacman -Slq Unity-for-Arch-Extra
+			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) NOPASSWD:ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			sudo -u $user yaourt -A -Syy --noconfirm  freetype2-ubuntu
+			sed -i '/%wheel ALL=(ALL) NOPASSWD:ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 		;;
 
 		"DDE")
-			arch=$(uname -m)
-			printf "[home_metakcahura_arch-deepin_Arch_Extra]\nSigLevel = Never\nServer = http://download.opensuse.org/repositories/home:/metakcahura:/arch-deepin/Arch_Extra/$arch" >> /etc/pacman.conf
+			printf "[home_metakcahura_arch-deepin_Arch_Extra]\nSigLevel = Never\nServer = http://download.opensuse.org/repositories/home:/metakcahura:/arch-deepin/Arch_Extra/\x24arch" >> /etc/pacman.conf
 			pacman -Syy --noconfirm deepin deepin-extra
 		;;
 
@@ -75,7 +92,11 @@ do
 		;;
 
 		"Budgie")
-			yaourt -Syy --noconfirm  budgie-desktop-git
+			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) NOPASSWD:ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			sudo -u $user yaourt -A -Syy --noconfirm budgie-desktop-git
+			sed -i '/%wheel ALL=(ALL) NOPASSWD:ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 		;;
 esac
 done
