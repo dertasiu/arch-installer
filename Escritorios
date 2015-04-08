@@ -2,11 +2,12 @@ KDE4		[X]
 KDE5		[X]
 GNOME		[X]
 MATE		[X]
-Pantheon	[C] (No deja que se instale en modo root, no se puede leer PKGBUILD)
-XFCE		[X]
-LXDE		[X]
-LXQT		[X]
-Unity		[C] (Problema con el repositorio, no puedo poner variables $repo sale en blanco)
-DDE		    [X]
-OpenBox		[X]
-Cinnamon	[X]
+Pantheon	[C] (No deja que se instale en modo root)
+XFCE		[ ]
+LXDE		[ ]
+LXQT		[ ]
+Unity		[ ] 
+DDE		    [ ]
+OpenBox		[ ]
+Cinnamon	[ ]
+Budgie      [ ] (No deja que se instale en modo root)
