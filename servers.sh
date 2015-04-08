@@ -60,9 +60,9 @@ do
 
 		"Subsonic")
 			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
-			sed -i '/%wheel ALL=(ALL) NOPASSWD:ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 			sudo -u $user yaourt -Syy -A --noconfirm subsonic
-			sed -i '/%wheel ALL=(ALL) NOPASSWD:ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 		;;
 
