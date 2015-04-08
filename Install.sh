@@ -340,7 +340,7 @@ mount $srvfs /mnt/srv
 mount $optfs /mnt/opt
 
 ##Install basic system with: The base and the development system (We will want this to compile the majority of packets from AUR), grub, networkmanager and a packet that is useful if we use another OS' grub: os-prober
-pacstrap /mnt base base-devel grub-bios networkmanager os-prober sudo dialog
+pacstrap /mnt base base-devel grub-bios networkmanager os-prober sudo dialog wget
 
 ##Generate the fstab file
 genfstab /mnt > /mnt/etc/fstab
@@ -433,12 +433,18 @@ sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /mnt/etc/sudoers
 #Enable networkmanager
 arch-chroot /mnt /bin/bash -c "systemctl enable NetworkManager"
 
+##Aur helpers
 #Install Yaourt
 printf "\n[archlinuxfr]\nServer = http://repo.archlinux.fr/\x24arch\nSigLevel = Optional TrustAll" >>/mnt/etc/pacman.conf
 arch-chroot /mnt /bin/bash -c "pacman -Syy"
 arch-chroot /mnt /bin/bash -c "pacman -S --noconfirm yaourt"
 #Update yaourt's database
 arch-chroot /mnt /bin/bash -c "yaourt -Syy"
+
+#Install Aura
+printf "\n[haskell-core]\nServer = http://xsounds.org/~haskell/core/\x24arch\nSigLevel = Optional TrustAll\n"
+pacman -Syy --noconfirm abs ghc haskell-aur haskell-lens haskell-mtl haskell-parsec haskell-regex-base haskell-regex-pcre-builtin haskell-split haskell-temporary haskell-text haskell-transformers haskell-wreq
+arch-chroot /mnt /bin/bash -c "mkdir /tmp/aura && cd /tmp/aura && wget https://aur.archlinux.org/packages/au/aura/PKGBUILD && wget https://aur.archlinux.org/packages/au/aura/aura.tar.gz && chown -R $user:users /tmp/aura && sudo -u $user makepkg && pacman -U aura*"
 
 #Grub instalation question, It will install grub to the previously selected disk stored in the variable $disk 
 dialog --backtitle "ArchLinux Installation" --title "Grub instalation" \
