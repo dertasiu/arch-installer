@@ -40,9 +40,9 @@ do
 			printf "\n[pantheon]\nServer = http://pkgbuild.com/~alucryd/\x24repo/\x24arch\nSigLevel = Optional TrustAll\n" >> /etc/pacman.conf
 			pacman -Syy --noconfirm pantheon-session-bzr audience-bzr contractor-bzr eidete-bzr elementary-icon-theme-bzr elementary-icon-theme-bzr elementary-wallpapers-bzr gtk-theme-elementary-bzr footnote-bzr geary indicator-pantheon-session-bzr lightdm-pantheon-greeter-bzr maya-calendar-bzr midori-granite-bzr noise-bzr pantheon-backgrounds-bzr pantheon-calculator-bzr pantheon-default-settings-bzr pantheon-files-bzr pantheon-notify-bzr pantheon-print-bzr pantheon-terminal-bzr plank-theme-pantheon-bzr scratch-text-editor-bzr snap-photobooth-bzr switchboard-bzr ttf-dejavu ttf-droid ttf-freefont ttf-liberation 
 			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
-			sed -i '/%wheel ALL=(ALL) NOPASSWD:ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 			sudo -u $user yaourt -A -Syy --noconfirm ttf-opensans ttf-raleway-font-family dexter-contacts-bzr feedler-bzr pantheon-notify-bzr
-			sed -i '/%wheel ALL=(ALL) NOPASSWD:ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 		;;
 
@@ -57,9 +57,9 @@ do
 		"LXQT")
 			pacman -Syy --noconfirm lxqt oxygen-icons qtcurve sddm
 			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
-			sed -i '/%wheel ALL=(ALL) NOPASSWD:ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 			sudo -u $user yaourt -A -Syy --noconfirm qterminal-git obconf-qt-git
-			sed -i '/%wheel ALL=(ALL) NOPASSWD:ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 		;;
 
@@ -68,9 +68,9 @@ do
 			pacman -Syy --noconfirm $(pacman -Slq Unity-for-Arch)
 			pacman -Slq Unity-for-Arch-Extra
 			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
-			sed -i '/%wheel ALL=(ALL) NOPASSWD:ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-			sudo -u $user yaourt -A -Syy --noconfirm  freetype2-ubuntu
-			sed -i '/%wheel ALL=(ALL) NOPASSWD:ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			sudo -u $user yaourt -A -Syy --noconfirm freetype2-ubuntu
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 		;;
 
@@ -93,9 +93,9 @@ do
 
 		"Budgie")
 			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
-			sed -i '/%wheel ALL=(ALL) NOPASSWD:ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 			sudo -u $user yaourt -A -Syy --noconfirm budgie-desktop-git
-			sed -i '/%wheel ALL=(ALL) NOPASSWD:ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 		;;
 esac
