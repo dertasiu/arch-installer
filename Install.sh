@@ -441,11 +441,6 @@ arch-chroot /mnt /bin/bash -c "pacman -S --noconfirm yaourt"
 #Update yaourt's database
 arch-chroot /mnt /bin/bash -c "yaourt -Syy"
 
-#Install Aura
-printf "\n[haskell-core]\nServer = http://xsounds.org/~haskell/core/\x24arch\nSigLevel = Optional TrustAll\n"
-pacman -Syy --noconfirm abs ghc haskell-aur haskell-lens haskell-mtl haskell-parsec haskell-regex-base haskell-regex-pcre-builtin haskell-split haskell-temporary haskell-text haskell-transformers haskell-wreq
-arch-chroot /mnt /bin/bash -c "mkdir /tmp/aura && cd /tmp/aura && wget https://aur.archlinux.org/packages/au/aura/PKGBUILD && wget https://aur.archlinux.org/packages/au/aura/aura.tar.gz && chown -R $user:users /tmp/aura && sudo -u $user makepkg && pacman -U aura*"
-
 #Grub instalation question, It will install grub to the previously selected disk stored in the variable $disk 
 dialog --backtitle "ArchLinux Installation" --title "Grub instalation" \
 		--yesno "Do you want to install grub in the previous selected hard drive" 7 60 
