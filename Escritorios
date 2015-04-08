@@ -2,10 +2,10 @@ KDE4		[X]
 KDE5		[X]
 GNOME		[X]
 MATE		[X]
-Pantheon	[C] (No deja que se instale en modo root)
-XFCE		[ ]
-LXDE		[ ]
-LXQT		[ ]
+Pantheon	[ ] (No deja que se instale en modo root)
+XFCE		[X]
+LXDE		[X]
+LXQT		[ ] (ide contraseña)
 Unity		[ ] 
 DDE		   [ ]
 OpenBox		[ ]
