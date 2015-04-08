@@ -1,14 +1,14 @@
-KDE4		[X] 
-KDE5		[X]
-GNOME		[X]
-MATE		[X]
-Pantheon	[ ] (No se muestra en gdm ni parece que se haya instalado)
-XFCE		[X]
-LXDE		[X]
-LXQT		[ ] (No se muestra en gdm ni parece que se haya instalado)
-Unity		[ ] (No se muestra en gdm ni parece que se haya instalado)
-DDE         [X]
-OpenBox		[X]
-i3          [X]
-Cinnamon	[X]
-Budgie      [ ] (No se muestra en gdm ni parece que se haya instalado)
+[X] KDE4  
+[X] KDE5
+[X] GNOME
+[X] MATE
+[ ] Pantheon (No se muestra en gdm ni parece que se haya instalado)
+[X] XFCE
+[X] LXDE
+[ ] LXQT (No se muestra en gdm ni parece que se haya instalado)
+[ ] Unity (No se muestra en gdm ni parece que se haya instalado)
+[X] DDE
+[X] OpenBox
+[X] i3
+[X] Cinnamon
+[ ] Budgie (No se muestra en gdm ni parece que se haya instalado)
