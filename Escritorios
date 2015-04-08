@@ -2,12 +2,13 @@ KDE4		[X]
 KDE5		[X]
 GNOME		[X]
 MATE		[X]
-Pantheon	[ ] (No deja que se instale en modo root)
+Pantheon	[ ] (No se muestra en gdm ni parece que se haya instalado)
 XFCE		[X]
 LXDE		[X]
-LXQT		[ ] (ide contraseña)
-Unity		[ ] 
-DDE		   [ ]
-OpenBox		[ ]
-Cinnamon	[ ]
-Budgie       [ ] (No deja que se instale en modo root)
+LXQT		[ ] (No se muestra en gdm ni parece que se haya instalado)
+Unity		[ ] (No se muestra en gdm ni parece que se haya instalado)
+DDE         [X]
+OpenBox		[X]
+i3          [X]
+Cinnamon	[X]
+Budgie      [ ] (No se muestra en gdm ni parece que se haya instalado)
