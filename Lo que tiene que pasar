@@ -19,3 +19,5 @@
 [X] [X] Habilitar el grupo wheel en /etc/sudoers
 [X] [X] Meter a archlinuxfr en /etc/pacman.conf 
 [C] [X] Instalar y actualizar yaourt (Comando no conocido, en 32 Bits hay que comprobar si de verdad funciona. En el momento de la prueba los servidores de repo.archlinux.fr estaban caidos)
+[ ] [ ] Instalar el/los escritorios seleccionados por el usuario
+[ ] [ ] Instalar el/los programas seleccionados por el usuario
