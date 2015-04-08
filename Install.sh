@@ -434,8 +434,7 @@ sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /mnt/etc/sudoers
 arch-chroot /mnt /bin/bash -c "systemctl enable NetworkManager"
 
 #Install Yaourt
-architecture=$(uname -m)
-printf "[archlinuxfr]\nServer = http://repo.archlinux.fr/$architecture\nSigLevel = Optional TrustAll" >>/mnt/etc/pacman.conf
+printf "\n[archlinuxfr]\nServer = http://repo.archlinux.fr/\x24arch\nSigLevel = Optional TrustAll" >>/mnt/etc/pacman.conf
 arch-chroot /mnt /bin/bash -c "pacman -Syy"
 arch-chroot /mnt /bin/bash -c "pacman -S --noconfirm yaourt"
 #Update yaourt's database
