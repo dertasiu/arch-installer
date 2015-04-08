@@ -7,7 +7,7 @@ XFCE		[ ]
 LXDE		[ ]
 LXQT		[ ]
 Unity		[ ] 
-DDE		    [ ]
+DDE		   [ ]
 OpenBox		[ ]
 Cinnamon	[ ]
-Budgie      [ ] (No deja que se instale en modo root)
+Budgie       [ ] (No deja que se instale en modo root)
