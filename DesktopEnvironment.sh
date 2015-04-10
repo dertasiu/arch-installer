@@ -22,18 +22,26 @@ do
 	case $choice in
 		"KDE4")
 			pacman -Syy --noconfirm kde kde-meta
+			#Enable NetworkManager
+			systemctl enable NetworkManager
 		;;
 
 		"KDE5")
 			pacman -Syy --noconfirm plasma plasma-meta
+			#Enable NetworkManager
+			systemctl enable NetworkManager
 		;;
 
 		"Gnome")
 			pacman -Syy --noconfirm gnome gnome-extra
+			#Enable NetworkManager
+			systemctl enable NetworkManager
 		;;
 
 		"MATE")
 			pacman -Syy --noconfirm mate mate-extra
+			#Enable NetworkManager
+			systemctl enable NetworkManager
 		;;
 
 		"Pantheon")
@@ -44,14 +52,20 @@ do
 			sudo -u $user yaourt -A -Syy --noconfirm ttf-opensans pantheon-notify-bzr
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			#Enable NetworkManager
+			systemctl enable NetworkManager
 		;;
 
 		"XFCE")
 			pacman -Syy --noconfirm xfce4 xfce4-goodies
+			#Enable NetworkManager
+			systemctl enable NetworkManager
 		;;
 
 		"LXDE")
 			pacman -Syy --noconfirm lxde lxde-common
+			#Enable NetworkManager
+			systemctl enable NetworkManager
 		;;
 
 		"LXQT")
@@ -61,6 +75,8 @@ do
 			sudo -u $user yaourt -A -Syy --noconfirm qterminal-git obconf-qt-git
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			#Enable NetworkManager
+			systemctl enable NetworkManager
 		;;
 
 		"Unity")
@@ -72,23 +88,33 @@ do
 			sudo -u $user yaourt -A -Syy --noconfirm freetype2-ubuntu
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			#Enable NetworkManager
+			systemctl enable NetworkManager
 		;;
 
 		"DDE")
 			printf "\n[home_metakcahura_arch-deepin_Arch_Extra]\nServer = http://download.opensuse.org/repositories/home:/metakcahura:/arch-deepin/Arch_Extra/\x24arch\nSigLevel = Never\n" >> /etc/pacman.conf
 			pacman -Syy --noconfirm deepin deepin-extra
+			#Enable NetworkManager
+			systemctl enable NetworkManager
 		;;
 
 		"OpenBox")
 			pacman -Syy --noconfirm openbox
+			#Enable NetworkManager
+			systemctl enable NetworkManager
 		;;
 
 		"i3")
 			pacman -Syy --noconfirm i3
+			#Enable NetworkManager
+			systemctl enable NetworkManager
 		;;
 
 		"Cinnamon")
 			pacman -Syy --noconfirm cinnamon
+			#Enable NetworkManager
+			systemctl enable NetworkManager
 		;;
 
 		"Budgie")
@@ -97,6 +123,8 @@ do
 			sudo -u $user yaourt -A -Syy --noconfirm budgie-desktop-git
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			#Enable NetworkManager
+			systemctl enable NetworkManager
 		;;
 esac
 done

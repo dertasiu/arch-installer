@@ -430,8 +430,8 @@ fi
 #Enable the wheel group in the sudoers file
 sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /mnt/etc/sudoers
 
-#Enable networkmanager
-arch-chroot /mnt /bin/bash -c "systemctl enable NetworkManager"
+#Enable dhcpcd
+arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd"
 
 ##Aur helpers
 #Install Yaourt
