@@ -13,7 +13,7 @@ options=(KDE4 " "	off
 		OpenBox " "	off
 		i3 " "	off
 		Cinnamon " "	off
-		Budige " "	off
+		Budgie " "	off
 		)
 desktop=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 clear
