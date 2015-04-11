@@ -5,10 +5,10 @@
 [X] Pantheon
 [X] XFCE
 [X] LXDE
-[ ] LXQT (No se muestra en gdm ni parece que se haya instalado)
+[ ] LXQT (Problema con las llaves PGP de Pacman)
 [ ] Unity (No se muestra en gdm ni parece que se haya instalado)
 [X] DDE
 [X] OpenBox
 [X] i3
 [X] Cinnamon
-[ ] Budgie (No se muestra en gdm ni parece que se haya instalado)
+[ ] Budgie (Error de compilación)
