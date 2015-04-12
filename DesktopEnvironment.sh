@@ -14,6 +14,7 @@ options=(KDE4 " "	off
 		i3 " "	off
 		Cinnamon " "	off
 		Budgie " "	off
+		Enlightenment " " off
 		)
 desktop=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 clear
@@ -129,8 +130,14 @@ do
 			#Enable NetworkManager
 			systemctl enable NetworkManager
 		;;
+		"Enlightenment")
+			pacman -Syy --noconfirm enlightenment
+			#Enable NetworkManager
+			systemctl enable NetworkManager
+		;;
 esac
 done
+
 #Install the compatibility layer for virtualbox
 dialog --backtitle "ArchLinux Installation" --title "Grub instalation" \
 		--yesno "Are you on a VirtualBox machine?" 7 60 
