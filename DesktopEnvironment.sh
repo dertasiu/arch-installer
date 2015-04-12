@@ -138,8 +138,8 @@ do
 esac
 done
 
-dialog --backtitle "ArchLinux Installation" --clear --title "Locale selection: " \
-		--menu "Select the Session Manager:" 22 76 16 \
+dialog --backtitle "ArchLinux Installation" --clear --title "Display Manager selection: " \
+		--menu "Select the Display Manager:" 22 76 16 \
 		Entrance " " \
 		GDM " " \
 		LightDM " " \
