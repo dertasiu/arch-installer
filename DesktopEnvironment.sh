@@ -74,7 +74,7 @@ do
 			pacman-key --init
 			pacman-key --populate archlinux
 			#Install LXQt
-			pacman -Syy --noconfirm lxqt oxygen-icons qtcurve sddm
+			pacman -Syy --noconfirm lxqt oxygen-icons qtcurve
 			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 			sudo -u $user yaourt -A -Syy --noconfirm qterminal-git obconf-qt-git
@@ -134,6 +134,81 @@ do
 			pacman -Syy --noconfirm enlightenment
 			#Enable NetworkManager
 			systemctl enable NetworkManager
+		;;
+esac
+done
+
+dialog --backtitle "ArchLinux Installation" --clear --title "Locale selection: " \
+		--menu "Select the Session Manager:" 22 76 16 \
+		Entrance " " \
+		GDM " " \
+		LightDM " " \
+		LXDM " " \
+		MDM " " \
+		Qingy " " \
+		SDDM " " \
+		SLiM " " \
+		XDM " " 2> temp
+clear
+dm=$(cat temp)
+for choice in $dm
+do
+	case $choice in
+		"Entrance")
+			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			sudo -u $user yaourt -A -Syy --noconfirm entrance-git
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			systemctl enable entrance
+		;;
+
+		"GDM")
+			pacman -Syy --noconfirm gdm
+			systemctl enable gdm
+		;;
+
+		"LightDM")
+			pacman -Syy --noconfirm lightdm
+			systemctl enable lightdm
+		;;
+
+		"LXDM")
+			pacman -Syy --noconfirm lxdm
+			systemctl enable lxdm
+		;;
+
+		"MDM")
+			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			sudo -u $user yaourt -A -Syy --noconfirm mdm-display-manager
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			systemctl enable mdm
+		;;
+
+		"Qingy")
+			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			sudo -u $user yaourt -A -Syy --noconfirm qingy
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			systemctl enable qingy@tty1
+		;;
+
+		"SDDM")
+			pacman -Syy --noconfirm sddm
+			systemctl enable sddm
+		;;
+
+		"SLiM")
+			pacman -Syy --noconfirm slim
+			systemctl enable slim
+		;;
+
+		"XDM")
+			pacman -Syy --noconfirm xorg-xdm
+			systemctl enable xdm
 		;;
 esac
 done

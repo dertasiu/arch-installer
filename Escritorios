@@ -13,3 +13,14 @@
 [X] Cinnamon
 [ ] Budgie (Error de compilación)
 [X] Enlightenment
+
+#Display Managers
+[X] Entrance
+[X] GDM
+[ ] LightDM (No se puede iniciar el servicio)
+[X] LXDM
+[X] MDM
+[ ] Qingy (No inicia)
+[X] SDDM
+[X] SLiM (No deja elegir la sesion (Comprobar))
+[X] XDM (No deja elegir la sesion)
