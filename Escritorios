@@ -5,7 +5,7 @@
 [X] Pantheon
 [X] XFCE
 [X] LXDE
-[ ] LXQT (Problema con las llaves PGP de Pacman)
+[X] LXQT
 [ ] Unity (No se muestra en gdm ni parece que se haya instalado)
 [X] DDE
 [X] OpenBox
