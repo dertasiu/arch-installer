@@ -69,6 +69,10 @@ do
 		;;
 
 		"LXQT")
+			#Reload pacman's keys, this resolves an issue related to instalation of lxqt
+			pacman-key --init
+			pacman-key --populate archlinux
+			#Install LXQt
 			pacman -Syy --noconfirm lxqt oxygen-icons qtcurve sddm
 			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
