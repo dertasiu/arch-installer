@@ -82,7 +82,25 @@ do
 			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 			#Enable NetworkManager
 			systemctl enable NetworkManager
-		;;
+			dialog --backtitle "ArchLinux Installation" --clear --title "Window Manager Selecion: " \
+					--menu "LXQt requieres an Window Manger to work, select it:" 22 76 16 \
+					Openbox " " \
+					Kwin " " 2> temp
+			clear
+			wm=$(cat temp)
+			rm temp
+			for choice in $wm
+			do
+				case $choice in
+					"Openbox")
+						pacman -S --noconfirm openbox
+					;;
+
+					"Kwin")
+						pacman -S --noconfirm kwin
+					;;
+			esac
+			done
 
 		"Unity")
 			printf "\n[Unity-for-Arch]\nServer = http://dl.dropbox.com/u/486665/Repos/\x24repo/\x24arch\nSigLevel = Optional TrustAll\n\n[Unity-for-Arch-Extra]\nServer = http://dl.dropbox.com/u/486665/Repos/\x24repo/\x24arch\nSigLevel = Optional TrustAll\n" >> /etc/pacman.conf
