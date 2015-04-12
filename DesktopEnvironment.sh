@@ -145,10 +145,8 @@ dialog --backtitle "ArchLinux Installation" --clear --title "Locale selection: "
 		LightDM " " \
 		LXDM " " \
 		MDM " " \
-		Qingy " " \
 		SDDM " " \
-		SLiM " " \
-		XDM " " 2> temp
+		SLiM " " 2> temp
 clear
 dm=$(cat temp)
 for choice in $dm
@@ -187,15 +185,6 @@ do
 			systemctl enable mdm
 		;;
 
-		"Qingy")
-			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
-			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-			sudo -u $user yaourt -A -Syy --noconfirm qingy
-			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
-			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-			systemctl enable qingy@tty1
-		;;
-
 		"SDDM")
 			pacman -Syy --noconfirm sddm
 			systemctl enable sddm
@@ -204,11 +193,6 @@ do
 		"SLiM")
 			pacman -Syy --noconfirm slim
 			systemctl enable slim
-		;;
-
-		"XDM")
-			pacman -Syy --noconfirm xorg-xdm
-			systemctl enable xdm
 		;;
 esac
 done
