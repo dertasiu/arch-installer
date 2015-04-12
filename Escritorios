@@ -5,8 +5,8 @@
 [X] Pantheon
 [X] XFCE
 [X] LXDE
-[ ] LXQT (Problema con las llaves PGP de Pacman)
-[ ] Unity (No se muestra en gdm ni parece que se haya instalado)
+[X] LXQT
+[X] Unity (GDM no arranca, tiene que ser LighDM y en virtualbox de momento aparecen graficos glitcheados)
 [X] DDE
 [X] OpenBox
 [X] i3
