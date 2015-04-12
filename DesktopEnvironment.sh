@@ -85,13 +85,12 @@ do
 
 		"Unity")
 			printf "\n[Unity-for-Arch]\nServer = http://dl.dropbox.com/u/486665/Repos/\x24repo/\x24arch\nSigLevel = Optional TrustAll\n\n[Unity-for-Arch-Extra]\nServer = http://dl.dropbox.com/u/486665/Repos/\x24repo/\x24arch\nSigLevel = Optional TrustAll\n" >> /etc/pacman.conf
-			pacman -Syy --noconfirm $(pacman -Slq Unity-for-Arch)
-			pacman -Slq Unity-for-Arch-Extra
-			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
-			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-			sudo -u $user yaourt -A -Syy --noconfirm freetype2-ubuntu
-			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
-			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			pacman -Syy
+			ubuntu=$(pacman -Slq Unity-for-Arch | grep -v upower-compat | grep -v gsettings-desktop-schemas)
+			ubuntuextra=$(pacman -Slq Unity-for-Arch-Extra)
+			pacman -R --noconfirm gsettings-desktop-schemas glib-networking libsoup networkmanager
+			pacman -S --noconfirm ${ubuntu}
+			pacman -S --noconfirm networkmanager
 			#Enable NetworkManager
 			systemctl enable NetworkManager
 		;;
