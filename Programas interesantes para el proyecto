@@ -5,3 +5,6 @@ BashDB
 Es un debugger de shell scripts
 
 Algún programa escrito en Haskell (Aura)
+
+Con esto se podría configurar por ejemplo el teclado de gnome
+dbus-launch gsettings set org.gnome.desktop.input-sources sources "[('xkb','us')]"
