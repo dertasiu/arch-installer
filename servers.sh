@@ -49,8 +49,7 @@ do
 			rm temp
 			if [ "$?" = "0" ]
 			then
-				mysqlroot="'/usr/bin/mysqladmin' -u root password '$rpassword'"
-				$mysqlroot
+				/usr/bin/mysqladmin -u root password $rpassword
 			fi
 
 			#Add the main user of mysql
@@ -93,8 +92,7 @@ do
 				rm temp
 				if [ "$?" = "0" ]
 				then
-					mysqlroot="'/usr/bin/mysqladmin' -u root password '$rpassword'"
-					$mysqlroot
+					/usr/bin/mysqladmin -u root password $rpassword
 				fi
 
 				#Add the main user of mysql
@@ -163,8 +161,7 @@ do
 				rm temp
 				if [ "$?" = "0" ]
 				then
-					mysqlroot="'/usr/bin/mysqladmin' -u root password '$rpassword'"
-					$mysqlroot
+					/usr/bin/mysqladmin -u root password $rpassword
 				fi
 
 				#Add the main user of mysql
