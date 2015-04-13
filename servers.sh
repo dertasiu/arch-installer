@@ -33,6 +33,8 @@ do
 					fi;;
 				1) echo "Port not changed";;
 			esac
+			systemctl start sshd
+			systemctl enable sshd
 		;;
 
 		"Web")
@@ -47,12 +49,13 @@ do
 			rm temp
 			if [ "$?" = "0" ]
 			then
-				'/usr/bin/mysqladmin' -u root password '$rpassword'
+				mysqlroot="'/usr/bin/mysqladmin' -u root password '$rpassword'"
+				$mysqlroot
 			fi
 
 			#Add the main user of mysql
-			dialog --backtitle "Archlinux Installation" --title "User creation" \
-					--form "\nPlease, enter the user configuration" 25 60 16 \
+			dialog --backtitle "Archlinux Installation" --title "Mysql user creation" \
+					--form "\nPlease, enter the mysql user configuration" 25 60 16 \
 					"Username :" 1 1 "user" 1 25 25 30 \
 					"Password :" 2 1 "passw0rd" 2 25 25 30 2>temp
 			dbuser=$(cat temp | sed -n 1p)
@@ -90,7 +93,8 @@ do
 				rm temp
 				if [ "$?" = "0" ]
 				then
-					'/usr/bin/mysqladmin' -u root password '$rpassword'
+					mysqlroot="'/usr/bin/mysqladmin' -u root password '$rpassword'"
+					$mysqlroot
 				fi
 
 				#Add the main user of mysql
@@ -159,7 +163,8 @@ do
 				rm temp
 				if [ "$?" = "0" ]
 				then
-					'/usr/bin/mysqladmin' -u root password '$rpassword'
+					mysqlroot="'/usr/bin/mysqladmin' -u root password '$rpassword'"
+					$mysqlroot
 				fi
 
 				#Add the main user of mysql
