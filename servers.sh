@@ -37,25 +37,180 @@ do
 
 		"Web")
 			pacman -Syy --noconfirm apache php php-apache mariadb
-
+			##MariaDB
 			mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
-			'/usr/bin/mysqladmin' -u root password 'mysql'
-			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers
+			systemctl start mysqld
+
+			#Ask for the password of the root's database username
+			dialog --backtitle "Archlinux Installation" --inputbox "Enter the root's password for MySQL/MariaDB:" 8 40 2>temp
+			rpassword=$(cat temp)
+			rm temp
+			if [ "$?" = "0" ]
+			then
+				'/usr/bin/mysqladmin' -u root password '$rpassword'
+			fi
+
+			#Add the main user of mysql
+			dialog --backtitle "Archlinux Installation" --title "User creation" \
+					--form "\nPlease, enter the user configuration" 25 60 16 \
+					"Username :" 1 1 "user" 1 25 25 30 \
+					"Password :" 2 1 "passw0rd" 2 25 25 30 2>temp
+			dbuser=$(cat temp | sed -n 1p)
+			dbpass=$(cat temp | sed -n 2p)
+			rm temp
+			if [ "$?" = "0" ]
+			then
+				DB1="CREATE USER '$dbuser'@'localhost' IDENTIFIED BY '$dbpass';"
+				DB2=" GRANT ALL PRIVILEGES ON *.* TO '$dbuser'@'localhost' WITH GRANT OPTION;"
+				DB="${DB1}${DB2}"
+				mysql -uroot -p$rpassword -e "$DB"
+			fi
+
+			##Apache+PHP5
+			sed -i 's/LoadModule mpm_event_module modules\x2Fmod_mpm_event.so/LoadModule mpm_prefork_module modules\x2Fmod_mpm_prefork.so/g' /etc/httpd/conf/httpd.conf #Replace the first string with the second one
+			sed -i '/LoadModule dir_module modules\x2Fmod_dir.so/a LoadModule php5_module modules\x2Flibphp5.so' /etc/httpd/conf/httpd.conf #Append the second string after the first one
+			sed -i '/Include conf\x2Fextra\x2Fhttpd-default.conf/a \\n\x23PHP5\nInclude conf\x2Fextra\x2Fphp5_module.conf' /etc/httpd/conf/httpd.conf #Append the second string after the first one
+			systemctl enable httpd
+			systemctl start httpd
+
 			LAMP=1
 		;;
 
 		"Owncloud")
 			if [[ $LAMP == "0" ]]; then
-				web
+				dialog --backtitle "ArchLinux Installation" --title "Oops..." --msgbox 'To install OwnCloud, you have to install and configure a LAMP server before:' 6 30
+				pacman -Syy --noconfirm apache php php-apache mariadb
+				##MariaDB
+				mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
+				systemctl start mysqld
+
+				#Ask for the password of the root's database username
+				dialog --backtitle "Archlinux Installation" --inputbox "Enter the root's password for MySQL/MariaDB:" 8 40 2>temp
+				rpassword=$(cat temp)
+				rm temp
+				if [ "$?" = "0" ]
+				then
+					'/usr/bin/mysqladmin' -u root password '$rpassword'
+				fi
+
+				#Add the main user of mysql
+				dialog --backtitle "Archlinux Installation" --title "User creation" \
+						--form "\nPlease, enter the user configuration" 25 60 16 \
+						"Username :" 1 1 "user" 1 25 25 30 \
+						"Password :" 2 1 "passw0rd" 2 25 25 30 2>temp
+				dbuser=$(cat temp | sed -n 1p)
+				dbpass=$(cat temp | sed -n 2p)
+				rm temp
+				if [ "$?" = "0" ]
+				then
+					DB1="CREATE USER '$dbuser'@'localhost' IDENTIFIED BY '$dbpass';"
+					DB2=" GRANT ALL PRIVILEGES ON *.* TO '$dbuser'@'localhost' WITH GRANT OPTION;"
+					DB="${DB1}${DB2}"
+					mysql -uroot -p$rpassword -e "$DB"
+				fi
+
+				##Apache+PHP5
+				sed -i 's/LoadModule mpm_event_module modules\x2Fmod_mpm_event.so/LoadModule mpm_prefork_module modules\x2Fmod_mpm_prefork.so/g' /etc/httpd/conf/httpd.conf #Replace the first string with the second one
+				sed -i '/LoadModule dir_module modules\x2Fmod_dir.so/a LoadModule php5_module modules\x2Flibphp5.so' /etc/httpd/conf/httpd.conf #Append the second string after the first one
+				sed -i '/Include conf\x2Fextra\x2Fhttpd-default.conf/a \\n\x23PHP5\nInclude conf\x2Fextra\x2Fphp5_module.conf' /etc/httpd/conf/httpd.conf #Append the second string after the first one
+				systemctl enable httpd
+				systemctl start httpd
+
+				LAMP=1
 			fi
-			pacman -Syy --noconfirm owncloud
+			pacman -Syy --noconfirm owncloud php-intl php-mcrypt
+			sed -i '/extension=gd.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
+			sed -i '/extension=iconv.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
+			sed -i '/extension=xmlrpc.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
+			sed -i '/extension=zip.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
+			sed -i '/extension=bz2.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
+			sed -i '/extension=curl.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
+			sed -i '/extension=intl.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
+			sed -i '/extension=mcrypt.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
+			sed -i '/extension=openssl.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
+			sed -i '/extension=pdo_mysql.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
+			sed -i '/extension=mysql.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
+			cp /etc/webapps/owncloud/apache.example.conf /etc/httpd/conf/extra/owncloud.conf
+			echo -e "Include conf/extra/owncloud.conf" >> /etc/httpd/conf/httpd.conf
+			chown http:http -R /usr/share/webapps/owncloud/
+			#Enter the database's password
+			dialog --backtitle "Archlinux Installation" --inputbox "Enter owncloud's database password:" 8 40 2>temp
+			ownpass=$(cat temp)
+			rm temp
+			DB1="CREATE USER 'owncloud'@'localhost' IDENTIFIED BY '$ownpass';"
+			DB2=" CREATE DATABASE owncloud;"
+			DB3=" GRANT ALL PRIVILEGES ON owncloud.* TO 'owncloud'@'localhost' WITH GRANT OPTION;"
+			DB="${DB1}${DB2}${DB3}"
+			mysql -uroot -p$rpassword -e "$DB"
+			systemctl restart httpd
 		;;
 
 		"Wordpress")
 			if [[ $LAMP == "0" ]]; then
-				web
+				dialog --backtitle "ArchLinux Installation" --title "Oops..." --msgbox 'To install WordPress, you have to install and configure a LAMP server before:' 6 30
+				pacman -Syy --noconfirm apache php php-apache mariadb
+				##MariaDB
+				mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
+				systemctl start mysqld
+
+				#Ask for the password of the root's database username
+				dialog --backtitle "Archlinux Installation" --inputbox "Enter the root's password for MySQL/MariaDB:" 8 40 2>temp
+				rpassword=$(cat temp)
+				rm temp
+				if [ "$?" = "0" ]
+				then
+					'/usr/bin/mysqladmin' -u root password '$rpassword'
+				fi
+
+				#Add the main user of mysql
+				dialog --backtitle "Archlinux Installation" --title "User creation" \
+						--form "\nPlease, enter the user configuration" 25 60 16 \
+						"Username :" 1 1 "user" 1 25 25 30 \
+						"Password :" 2 1 "passw0rd" 2 25 25 30 2>temp
+				dbuser=$(cat temp | sed -n 1p)
+				dbpass=$(cat temp | sed -n 2p)
+				rm temp
+				if [ "$?" = "0" ]
+				then
+					DB1="CREATE USER '$dbuser'@'localhost' IDENTIFIED BY '$dbpass';"
+					DB2=" GRANT ALL PRIVILEGES ON *.* TO '$dbuser'@'localhost' WITH GRANT OPTION;"
+					DB="${DB1}${DB2}"
+					mysql -uroot -p$rpassword -e "$DB"
+				fi
+
+				##Apache+PHP5
+				sed -i 's/LoadModule mpm_event_module modules\x2Fmod_mpm_event.so/LoadModule mpm_prefork_module modules\x2Fmod_mpm_prefork.so/g' /etc/httpd/conf/httpd.conf #Replace the first string with the second one
+				sed -i '/LoadModule dir_module modules\x2Fmod_dir.so/a LoadModule php5_module modules\x2Flibphp5.so' /etc/httpd/conf/httpd.conf #Append the second string after the first one
+				sed -i '/Include conf\x2Fextra\x2Fhttpd-default.conf/a \\n\x23PHP5\nInclude conf\x2Fextra\x2Fphp5_module.conf' /etc/httpd/conf/httpd.conf #Append the second string after the first one
+				systemctl enable httpd
+				systemctl start httpd
+
+				LAMP=1
 			fi
 			pacman -Syy --noconfirm wordpress
+			sed -i '/extension=ftp.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
+			sed -i '/extension=curl.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
+			sed -i '/extension=gd.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
+			sed -i '/extension=iconv.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
+			sed -i '/extension=pdo_mysql.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
+			sed -i '/extension=mysql.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
+			sed -i '/extension=openssl.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
+			sed -i '/extension=sockets.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
+			sed -i '/extension=xmlrpc.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
+			sed -i '/extension=pspell.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
+			printf "Alias /wordpress \x22/usr/share/webapps/wordpress\x22\n<Directory \x22/usr/share/webapps/wordpress\x22>\n\tAllowOverride All\n\tOptions FollowSymlinks\n\tRequire all granted\n\tphp_admin_value open_basedir \x22/srv/:/tmp/:/usr/share/webapps/:/etc/webapps:\x24\x22\n</Directory>" > /etc/httpd/conf/extra/httpd-wordpress.conf
+			echo -e "\nInclude conf/extra/httpd-wordpress.conf\n" >> /etc/httpd/conf/httpd.conf
+			chown http:http -R /usr/share/webapps/wordpress/
+			#Enter the database's password
+			dialog --backtitle "Archlinux Installation" --inputbox "Enter wordpres' database password:" 8 40 2>temp
+			wordpass=$(cat temp)
+			rm temp
+			DB1="CREATE USER 'wordpress'@'localhost' IDENTIFIED BY '$wordpass';"
+			DB2=" CREATE DATABASE wordpress;"
+			DB3=" GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress'@'localhost' WITH GRANT OPTION;"
+			DB="${DB1}${DB2}${DB3}"
+			mysql -uroot -p$rpassword -e "$DB"
+			systemctl restart httpd
 		;;
 
 		"Subsonic")
