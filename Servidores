@@ -1,5 +1,4 @@
-[ ] SSH
-[ ] SFTP
+[X] SSH
 [ ] Apache + PHP + MariaDB
 [ ] Owncloud
 [ ] Wordpress
