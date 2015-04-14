@@ -225,6 +225,10 @@ do
 
 		"NTOP")
 			pacman -Syy --noconfirm ntop
+			dialog --backtitle "Archlinux Installation" --inputbox "Enter NTOP's admin password:" 8 40 2>temp
+			ntoppass=$(cat temp)
+			rm temp
+			ntop --set-admin-password=$ntoppass
 			systemctl enable ntop
 			systemctl start ntop
 		;;
