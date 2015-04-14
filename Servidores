@@ -1,9 +1,9 @@
 [X] SSH
-[ ] Apache + PHP + MariaDB
-[ ] Owncloud
-[ ] Wordpress
+[X] Apache + PHP + MariaDB
+[X] Owncloud
+[X] Wordpress
 [ ] Subsonic
-[ ] NTOP
+[X] NTOP
 [ ] TightVNC: Servidor VNC
 [ ] Deluge (Torrent)
 [ ] PPTP (VPN)
