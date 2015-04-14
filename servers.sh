@@ -6,6 +6,7 @@ options=(SSH "Remote console"	off
 		Owncloud "Self-hosted cloud"	off
 		Wordpress "Self-hosted blog"	off
 		Subsonic "Music Server"	off
+		Madsonic "Music Server"	off
 		NTOP "Traffic monitoring tool"	off
 		TightVNC "Remote screen server"	off
 		Deluge "Torrent server with web UI"	off
@@ -260,6 +261,55 @@ do
 					if [ "$?" = "0" ]
 					then
 						sed -i "s/SUBSONIC_HTTPS_PORT=0/SUBSONIC_HTTPS_PORT=$port/g" /var/lib/subsonic/subsonic.sh
+					fi;;
+				1) echo "HTTPS port not configured";;
+			esac
+			systemctl enable subsonic
+			systemctl start subsonic
+		;;
+
+		"Madsonic")
+			pacman -Syy --noconfirm ffmpeg flac lame
+			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			sudo -u $user yaourt -Syy -A --noconfirm madsonic
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			cd /var/madsonic
+			test -d transcode || mkdir transcode
+			chown -R root:root transcode
+			mkdir /var/madsonic/transcode
+			cd /var/madsonic/transcode
+			ln -s "$(which ffmpeg)"
+			ln -s "$(which flac)"
+			ln -s "$(which lame)"
+
+			dialog --backtitle "ArchLinux Installation" --title "Madsonic Configuration" \
+					--yesno "Do you want to change the default HTTP port(4040) of Madsonic?" 7 60
+			response=$?
+			case $response in
+				0) dialog --backtitle "Archlinux Installation" --title "Madsonic Configuration" \
+							--inputbox "Enter the port that you want to use:" 8 40 2>temp
+					port=$(cat temp)
+					rm temp
+					if [ "$?" = "0" ]
+					then
+						sed -i "s/MADSONIC_PORT=4040/MADSONIC_PORT=$port/g" /lib/madsonic/madsonic.sh
+					fi;;
+				1) echo "HTTP port not changed";;
+			esac
+
+			dialog --backtitle "ArchLinux Installation" --title "Madsonic Configuration" \
+					--yesno "Do you want to add a HTTPS port to Madsonic?" 7 60
+			response=$?
+			case $response in
+				0) dialog --backtitle "Archlinux Installation" --title "Madsonic Configuration" \
+							--inputbox "Enter the port that you want to use:" 8 40 2>temp
+					port=$(cat temp)
+					rm temp
+					if [ "$?" = "0" ]
+					then
+						sed -i "s/MADSONIC_HTTPS_PORT=0/MADSONIC_HTTPS_PORT=$port/g" /lib/madsonic/madsonic.sh
 					fi;;
 				1) echo "HTTPS port not configured";;
 			esac
