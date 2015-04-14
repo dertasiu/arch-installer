@@ -216,11 +216,55 @@ do
 		;;
 
 		"Subsonic")
+			pacman -Syy --noconfirm ffmpeg flac lame
 			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 			sudo -u $user yaourt -Syy -A --noconfirm subsonic
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			useradd --system subsonic
+			gpasswd --add subsonic audio
+			cd /var/lib/subsonic
+			chown -R subsonic:subsonic .
+			test -d transcode || mkdir transcode
+			chown -R root:root transcode
+			mkdir /var/lib/subsonic/transcode
+			cd /var/lib/subsonic/transcode
+			ln -s "$(which ffmpeg)"
+			ln -s "$(which flac)"
+			ln -s "$(which lame)"
+
+			dialog --backtitle "ArchLinux Installation" --title "Subsonic Configuration" \
+					--yesno "Do you want to change the default HTTP port(4040) of Subsonic?" 7 60
+			response=$?
+			case $response in
+				0) dialog --backtitle "Archlinux Installation" --title "Subsonic Configuration" \
+							--inputbox "Enter the port that you want to use:" 8 40 2>temp
+					port=$(cat temp)
+					rm temp
+					if [ "$?" = "0" ]
+					then
+						sed -i "s/SUBSONIC_PORT=4040/SUBSONIC_PORT=$port" /var/lib/subsonic/subsonic.sh
+					fi;;
+				1) echo "HTTP port not changed";;
+			esac
+
+			dialog --backtitle "ArchLinux Installation" --title "Subsonic Configuration" \
+					--yesno "Do you want to add a HTTPS port to Subsonic?" 7 60
+			response=$?
+			case $response in
+				0) dialog --backtitle "Archlinux Installation" --title "Subsonic Configuration" \
+							--inputbox "Enter the port that you want to use:" 8 40 2>temp
+					port=$(cat temp)
+					rm temp
+					if [ "$?" = "0" ]
+					then
+						sed -i "s/SUBSONIC_HTTPS_PORT=0/SUBSONIC_HTTPS_PORT=$port" /var/lib/subsonic/subsonic.sh
+					fi;;
+				1) echo "HTTPS port not configured";;
+			esac
+			systemctl enable subsonic
+			systemctl start subsonic
 		;;
 
 		"NTOP")
@@ -234,7 +278,7 @@ do
 		;;
 
 		"TightVNC")
-			pacman -Syy --noconfirm 
+			pacman -Syy --noconfirm tigervnc
 		;;
 
 		"Deluge")
