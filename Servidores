@@ -2,7 +2,8 @@
 [X] Apache + PHP + MariaDB
 [X] Owncloud
 [X] Wordpress
-[ ] Subsonic
+[ ] Subsonic (No acaba de funcionar cuando se configura un puerto HTTPS)
+[ ] Madsonic
 [X] NTOP
 [ ] TightVNC: Servidor VNC
 [ ] Deluge (Torrent)
