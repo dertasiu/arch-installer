@@ -244,7 +244,7 @@ do
 					rm temp
 					if [ "$?" = "0" ]
 					then
-						sed -i "s/SUBSONIC_PORT=4040/SUBSONIC_PORT=$port" /var/lib/subsonic/subsonic.sh
+						sed -i "s/SUBSONIC_PORT=4040/SUBSONIC_PORT=$port/g" /var/lib/subsonic/subsonic.sh
 					fi;;
 				1) echo "HTTP port not changed";;
 			esac
@@ -259,7 +259,7 @@ do
 					rm temp
 					if [ "$?" = "0" ]
 					then
-						sed -i "s/SUBSONIC_HTTPS_PORT=0/SUBSONIC_HTTPS_PORT=$port" /var/lib/subsonic/subsonic.sh
+						sed -i "s/SUBSONIC_HTTPS_PORT=0/SUBSONIC_HTTPS_PORT=$port/g" /var/lib/subsonic/subsonic.sh
 					fi;;
 				1) echo "HTTPS port not configured";;
 			esac
