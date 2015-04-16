@@ -332,12 +332,38 @@ do
 		;;
 
 		"Deluge")
-			yaourt -Syy --noconfirm 
+			pacman -Syy --noconfirm deluge python2-pip python2-mako
+			pip2.7 install service-identity
+			systemctl start deluged
+			systemctl enable deluged
+			systemctl start deluge-web
+			systemctl enable deluge-web
+			dialog --backtitle "ArchLinux Installation" --title "Deluege web is now running" --msgbox 'Deluge web is now running at the port 8112, you can change that port in the web UI settings later.' 6 30
 		;;
 
 		"PPTP")
-			pacman -Syy --noconfirm 
-		;;
+			ip=$(ip a | grep inet | grep -v 127.0.0.1 | grep -v ::1/128 | awk -F ' ' '{print $2}' | sed 's/\x2F24//g')
+
+			pacman -Syy --noconfirm xl2tpd ppp lsof python2
+			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			sudo -u $user yaourt -A -Syy --noconfirm openswan
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			iptables --table nat --append POSTROUTING --jump MASQUERADE
+			echo "net.ipv4.ip_forward = 1" |  tee -a /etc/sysctl.conf
+			echo "net.ipv4.conf.all.accept_redirects = 0" |  tee -a /etc/sysctl.conf
+			echo "net.ipv4.conf.all.send_redirects = 0" |  tee -a /etc/sysctl.conf
+			echo "net.ipv4.conf.default.rp_filter = 0" |  tee -a /etc/sysctl.conf
+			echo "net.ipv4.conf.default.accept_source_route = 0" |  tee -a /etc/sysctl.conf
+			echo "net.ipv4.conf.default.send_redirects = 0" |  tee -a /etc/sysctl.conf
+			echo "net.ipv4.icmp_ignore_bogus_error_responses = 1" |  tee -a /etc/sysctl.conf
+			for vpn in /proc/sys/net/ipv4/conf/*; do echo 0 > $vpn/accept_redirects; echo 0 > $vpn/send_redirects; done
+			sysctl -p
+			printf "\x23\x21/usr/bin/env bash\nfor vpn in /proc/sys/net/ipv4/conf/*; do\n\techo 0 > \x24vpn/accept_redirects;\n\techo 0 > \x24vpn/send_redirects;\ndone\niptables --table nat --append POSTROUTING --jump MASQUERADE\n\nsysctl -p" > /usr/local/bin/vpn-boot.sh		;;
+			chmod 755 /usr/local/bin/vpn-boot.sh
+			printf "[Unit]\nDescription=VPN Settings at boot\nAfter=netctl@eth0.service\nBefore=openswan.service xl2tpd.service\n\n[Service]\nExecStart=/usr/local/bin/vpn-boot.sh\n\n[Install]\nWantedBy=multi-user.target\n" > /etc/systemd/system/vpnboot.service
+			systemctl enable vpnboot.service
 
 		"Prosody")
 			pacman -Syy --noconfirm 
