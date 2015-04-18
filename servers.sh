@@ -10,7 +10,7 @@ options=(SSH "Remote console"	off
 		NTOP "Traffic monitoring tool"	off
 		TightVNC "Remote screen server"	off
 		Deluge "Torrent server with web UI"	off
-		PPTP "VirtualPrivateNetwork Server"	off
+		L2TP "VirtualPrivateNetwork Server L2TP, IPSEC"	off
 		Prosody "XMPP Chat Server"	off
 		)
 desktop=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
@@ -341,7 +341,7 @@ do
 			dialog --backtitle "ArchLinux Installation" --title "Deluege web is now running" --msgbox 'Deluge web is now running at the port 8112, you can change that port in the web UI settings later.' 6 30
 		;;
 
-		"PPTP")
+		"L2TP")
 			ip=$(ip a | grep inet | grep -v 127.0.0.1 | grep -v ::1/128 | awk -F ' ' '{print $2}' | sed 's/\x2F24//g')
 
 			pacman -Syy --noconfirm xl2tpd ppp lsof python2
@@ -358,7 +358,11 @@ do
 			echo "net.ipv4.conf.default.accept_source_route = 0" |  tee -a /etc/sysctl.conf
 			echo "net.ipv4.conf.default.send_redirects = 0" |  tee -a /etc/sysctl.conf
 			echo "net.ipv4.icmp_ignore_bogus_error_responses = 1" |  tee -a /etc/sysctl.conf
-			for vpn in /proc/sys/net/ipv4/conf/*; do echo 0 > $vpn/accept_redirects; echo 0 > $vpn/send_redirects; done
+			for vpn in /proc/sys/net/ipv4/conf/*
+			do
+				echo 0 > $vpn/accept_redirects
+				echo 0 > $vpn/send_redirects
+			done
 			sysctl -p
 			printf "\x23\x21/usr/bin/env bash\nfor vpn in /proc/sys/net/ipv4/conf/*; do\n\techo 0 > \x24vpn/accept_redirects;\n\techo 0 > \x24vpn/send_redirects;\ndone\niptables --table nat --append POSTROUTING --jump MASQUERADE\n\nsysctl -p" > /usr/local/bin/vpn-boot.sh		;;
 			chmod 755 /usr/local/bin/vpn-boot.sh
