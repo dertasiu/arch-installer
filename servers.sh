@@ -342,7 +342,17 @@ do
 		;;
 
 		"L2TP")
-			ip=$(ip a | grep inet | grep -v 127.0.0.1 | grep -v ::1/128 | awk -F ' ' '{print $2}' | sed 's/\x2F24//g')
+			patterns=$(echo -e "en\nwl")
+			interfaces=$(ip a | grep -E "$patterns" | grep -v inet | grep -v loop | grep -v link | grep -v DOWN | awk -F " " '{print $2}' | sed 's/://g' | sed 's/$/ net/')
+
+			dialog --backtitle "ArchLinux Installation" --clear --title "Interface: " \
+					--menu "In what interface do you want to setup the VPN Server?" 20 30 7 ${interfaces} 2> temp
+			iface=$(cat temp)
+			rm temp
+
+			net=$(ip addr show dev $iface | grep "inet " | awk -F ' ' '{print $4}' | sed 's/255/0/g')
+			ip=$(ip addr show dev $iface | grep "inet " | awk -F ' ' '{print $2}' | sed 's/\x2F24//g')
+			gateway=$(ip route show dev $iface | grep default | awk -F " " '{print $3}')
 
 			pacman -Syy --noconfirm xl2tpd ppp lsof python2
 			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
@@ -364,10 +374,34 @@ do
 				echo 0 > $vpn/send_redirects
 			done
 			sysctl -p
-			printf "\x23\x21/usr/bin/env bash\nfor vpn in /proc/sys/net/ipv4/conf/*; do\n\techo 0 > \x24vpn/accept_redirects;\n\techo 0 > \x24vpn/send_redirects;\ndone\niptables --table nat --append POSTROUTING --jump MASQUERADE\n\nsysctl -p" > /usr/local/bin/vpn-boot.sh		;;
+			printf "\x23\x21/usr/bin/env bash\nfor vpn in /proc/sys/net/ipv4/conf/*; do\n\techo 0 > \x24vpn/accept_redirects;\n\techo 0 > \x24vpn/send_redirects;\ndone\niptables --table nat --append POSTROUTING --jump MASQUERADE\n\nsysctl -p" > /usr/local/bin/vpn-boot.sh
 			chmod 755 /usr/local/bin/vpn-boot.sh
-			printf "[Unit]\nDescription=VPN Settings at boot\nAfter=netctl@eth0.service\nBefore=openswan.service xl2tpd.service\n\n[Service]\nExecStart=/usr/local/bin/vpn-boot.sh\n\n[Install]\nWantedBy=multi-user.target\n" > /etc/systemd/system/vpnboot.service
+			printf "[Unit]\nDescription=VPN Settings at boot\nAfter=netctl@$iface.service\nBefore=openswan.service xl2tpd.service\n\n[Service]\nExecStart=/usr/local/bin/vpn-boot.sh\n\n[Install]\nWantedBy=multi-user.target\n" > /etc/systemd/system/vpnboot.service
 			systemctl enable vpnboot.service
+			#IPSEC Configuration
+			sed -i "s/\x23 plutoopts=\x22--perpeerlog\x22/plutoopts=\x22--interface=$iface\x22/g" /etc/ipsec.conf
+			sed -i "s/virtual_private=%v4:10.0.0.0\x2F8,%v4:192.168.0.0\x2F16,%v4:172.16.0.0\x2F12,%v4:25.0.0.0\x2F8,%v6:fd00::\x2F8,%v6:fe80::\x2F10/virtual_private=%v4:10.0.0.0\x2F8,%v4:192.168.0.0\x2F16,%v4:$net\x2F24,%v4:172.16.0.0\x2F12,%v4:25.0.0.0\x2F8,%v6:fd00::\x2F8,%v6:fe80::\x2F10/g" /etc/ipsec.conf
+			sed -i "s/protostack=auto/protostack=netkey/g" /etc/ipsec.conf
+			sed -i '/#plutostderrlog=\x2Fdev\x2Fnull/a \\tforce_keepalive=yes\n\tkeep_alive=60\n\t# Send a keep-alive packet every 60 seconds.' /etc/ipsec.conf
+			printf "\nconn L2TP-PSK-noNAT\n\tauthby=secret\n\t#shared secret. Use rsasig for certificates.\n\n\tpfs=no\n\t#Not enable pfs\n\n\tauto=add\n\n\t#the ipsec tunnel should be started and routes created when the ipsec daemon itself starts.\n\n\tkeyingtries=3\n\t#Only negotiate a conn. 3 times.\n\n\tikelifetime=8h\n\tkeylife=1h\n\n\ttype=transport\n\t#because we use l2tp as tunnel protocol\n\n\tleft=$ip\n\t#fill in server IP above\n\tleftnexthop=$gateway\n\tleftprotoport=17/1701\n\n\tright=\x25any\n\trightprotoport=17/\x25any\n\trightsubnetwithin=0.0.0.0/0\n\n\tdpddelay=10\n\t# Dead Peer Dectection (RFC 3706) keepalives delay\n\tdpdtimeout=20\n\t#  length of time (in seconds) we will idle without hearing either an R_U_THERE poll from our peer, or an R_U_THERE_ACK reply.\n\tdpdaction=clear\n\t# When a DPD enabled peer is declared dead, what action should be taken. clear means the eroute and SA with both be cleared.\n" >> /etc/ipsec.conf
+			echo -e "$ip %any:\t PSK \x22$(openssl rand -hex 30)\x22" > /etc/ipsec.secrets
+			systemctl start openswan
+			ipsec verify
+			systemctl enable openswan
+			printf "[global]\nipsec saref = yes\nsaref refinfo = 30\nauth file = /etc/ppp/pap-secrets\nlisten-addr = $ip\n\n[lns default]\nip range = 172.16.1.30-172.16.1.100\nlocal ip = 172.16.1.1\nrequire authentication = yes\nppp debug = no\npppoptfile = /etc/ppp/options.xl2tpd\nlength bit = yes" > /etc/xl2tpd/xl2tpd.conf
+			mkdir /var/run/xl2tpd/
+			#printf "ms-dns 8.8.8.8\nms-dns 8.8.4.4\nauth\nmtu 1200\nmru 1000\ncrtscts\nhide-password\nmodem\nname l2tpd\nproxyarp\nlcp-echo-interval 30\nlcp-echo-failure 4\nlogin" > /etc/ppp/options.xl2tpd
+			printf "ipcp-accept-local\nipcp-accept-remote\nms-dns 8.8.8.8\nms-dns 8.8.4.4\nauth\nmtu 1200\nmru 1000\ncrtscts\nhide-password\nmodem\nname l2tpd\nproxyarp\nlcp-echo-interval 30\nlcp-echo-failure 4\nlogin" > /etc/ppp/options.xl2tpd
+
+			##PAM Auth
+			echo -e "\nunix authentication = yes" >> /etc/xl2tpd/xl2tpd.conf
+			printf "auth\trequired\tpam_nologin.so\nauth\trequired\tpam_unix.so\naccount required\tpam_unix.so\nsession required\tpam_unix.so" > /etc/pam.d/ppp
+			echo -e "*\tl2tpd\t\x22\x22\t*" >> /etc/ppp/pap-secrets
+
+			systemctl restart openswan
+			systemctl restart xl2tpd
+			systemctl enable xl2tpd
+		;;
 
 		"Prosody")
 			pacman -Syy --noconfirm 
