@@ -8,3 +8,6 @@ Algún programa escrito en Haskell (Aura)
 
 Con esto se podría configurar por ejemplo el teclado de gnome
 dbus-launch gsettings set org.gnome.desktop.input-sources sources "[('xkb','us')]"
+
+Pagina web que habla sobre las redirecciones de stdin, stdout, stderr, etc...
+http://www.tldp.org/LDP/abs/html/io-redirection.html
