@@ -216,6 +216,88 @@ do
 esac
 done
 
+dialog --backtitle "ArchLinux Installation" --clear --title "Display Manager selection: " \
+		--menu "Select the Display Manager:" 22 76 16 \
+		BASH " " \
+		SH " " \
+		ZSH " " \
+		FISH " " \
+		CShell " " \
+		DASH " " \
+		KornShell " " \
+		Oh " " \
+		rc " " 2> temp
+clear
+dm=$(cat temp)
+for choice in $dm
+do
+	case $choice in
+		"BASH")
+			usermod -s /bin/bash root
+			usermod -s /bin/bash $user
+		;;
+
+		"SH")
+			usermod -s /bin/sh root
+			usermod -s /bin/sh $user
+		;;
+
+		"ZSH")
+			pacman -S zsh grml-zsh-config
+			usermod -s /bin/zsh root
+			usermod -s /bin/zsh $user
+		;;
+
+		"FISH")
+			pacman -Syy --noconfirm fish
+			usermod -s /usr/bin/fish root
+			usermod -s /usr/bin/fish $user
+		;;
+
+		"CShell")
+			pacman -Syy --noconfirm tcsh
+			usermod -s /bin/tcsh root
+			usermod -s /bin/tcsh $user
+		;;
+
+		"DASH")
+			pacman -Syy --noconfirm dash
+			usermod -s /bin/dash root
+			usermod -s /bin/dash $user
+		;;
+
+		"KornShell")
+			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			sudo -u $user yaourt -Syy -A --noconfirm ksh
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			usermod -s /bin/ksh root
+			usermod -s /bin/ksh $user
+		;;
+
+		"Oh")
+			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			sudo -u $user yaourt -Syy -A --noconfirm oh
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			usermod -s /usr/bin/oh root
+			usermod -s /usr/bin/oh $user
+		;;
+
+		"rc")
+			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			sudo -u $user yaourt -Syy -A --noconfirm 9base-git
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			usermod -s /opt/plan9 root
+			usermod -s /opt/plan9 $user
+		;;
+esac
+done
+
 #Install the compatibility layer for virtualbox
 dialog --backtitle "ArchLinux Installation" --title "Grub instalation" \
 		--yesno "Are you on a VirtualBox machine?" 7 60 
