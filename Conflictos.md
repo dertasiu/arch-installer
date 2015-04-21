@@ -6,7 +6,7 @@ do
 dialog
 if [[ seleccionados = conflictivo1 conflictio2 ]]
     echo "$conflictivo1 Está en conflicto con conflictio2"
-    seleccion=flase
+    seleccion=false
 done
 
 Opcion1)
