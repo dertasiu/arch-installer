@@ -216,8 +216,8 @@ do
 esac
 done
 
-dialog --backtitle "ArchLinux Installation" --clear --title "Display Manager selection: " \
-		--menu "Select the Display Manager:" 22 76 16 \
+dialog --backtitle "ArchLinux Installation" --clear --title "Default Shell selection: " \
+		--menu "Select the Default Shell:" 22 76 16 \
 		BASH " " \
 		SH " " \
 		ZSH " " \
@@ -243,7 +243,42 @@ do
 		;;
 
 		"ZSH")
-			pacman -Syy --noconfirm zsh grml-zsh-config
+			pacman -Syy --noconfirm zsh
+			dialog --backtitle "ArchLinux Installation" --clear --title "ZSH selection: " \
+					--menu "Select the ZSH theme:" 22 76 16 \
+					grml "grml zsh config" \
+					oh-my-zsh "oh my zsh" \
+					None "Pure ZSH!" 2> temp
+			clear
+			dm=$(cat temp)
+			for choice in $dm
+			do
+				case $choice in
+					"grml") oh-my-zsh-git
+						pacman -Sy --noconfirm grml-zsh-config
+					;;
+
+					"oh-my-zsh")
+						sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+						sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+						sudo -u $user yaourt -Syy -A --noconfirm oh-my-zsh-git bullet-train-oh-my-zsh-theme-git oh-my-zsh-powerline-theme-git powerline-fonts-git
+						sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+						sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+						cp /usr/share/oh-my-zsh/zshrc /home/$user/.zshrc
+						cp /usr/share/oh-my-zsh/zshrc /root/.zshrc
+						themes=$(ls /usr/share/oh-my-zsh/themes | awk -F "." '{print $1}' | sed -e 's/$/ theme/')
+						dialog --backtitle "ArchLinux Installation" --clear --title "Oh my ZSH theme selection: " \
+								--menu "Select the Oh my ZSH theme:" 22 76 16 ${themes} 2> temp
+						theme=$(cat temp)
+						rm temp
+						sed -i "s/ZSH_THEME=\x22robbyrussell\x22/ZSH_THEME=\x22$theme\x22/" /home/$user/.zshrc
+						sed -i "s/ZSH_THEME=\x22robbyrussell\x22/ZSH_THEME=\x22$theme\x22/" /root/.zshrc
+					;;
+
+					"None") none
+						echo "Pure ZSH!"
+					;;
+
 			usermod -s /bin/zsh root
 			usermod -s /bin/zsh $user
 		;;
@@ -287,13 +322,10 @@ do
 		;;
 
 		"rc")
-			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
-			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-			sudo -u $user yaourt -Syy -A --noconfirm 9base-git
-			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
-			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-			usermod -s /opt/plan9 root
-			usermod -s /opt/plan9 $user
+			pacman -Syy --noconfirm 9base
+			ln -s /opt/plan9/bin/rc /bin/rc
+			usermod -s /bin/rc root
+			usermod -s /bin/rc $user
 		;;
 esac
 done
