@@ -243,7 +243,7 @@ do
 		;;
 
 		"ZSH")
-			pacman -S zsh grml-zsh-config
+			pacman -Syy --noconfirm zsh grml-zsh-config
 			usermod -s /bin/zsh root
 			usermod -s /bin/zsh $user
 		;;
