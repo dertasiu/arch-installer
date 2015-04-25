@@ -254,7 +254,7 @@ do
 			for choice in $dm
 			do
 				case $choice in
-					"grml") oh-my-zsh-git
+					"grml")
 						pacman -Sy --noconfirm grml-zsh-config
 					;;
 
@@ -278,6 +278,8 @@ do
 					"None") none
 						echo "Pure ZSH!"
 					;;
+				esac
+			done
 
 			usermod -s /bin/zsh root
 			usermod -s /bin/zsh $user
@@ -327,7 +329,7 @@ do
 			usermod -s /bin/rc root
 			usermod -s /bin/rc $user
 		;;
-esac
+	esac
 done
 
 #Install the compatibility layer for virtualbox
