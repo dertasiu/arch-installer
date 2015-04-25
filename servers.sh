@@ -407,7 +407,7 @@ do
 			pacman -Syy --noconfirm prosody lua51-sec lua51-zlib
 			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-			sudo -u $user yaourt -Syy -A --noconfirm libadbi lua51-event lua-cyrussasl
+			sudo -u $user yaourt -Syy -A --noconfirm lua51-event lua-cyrussasl
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 			
