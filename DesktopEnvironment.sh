@@ -333,7 +333,7 @@ do
 	esac
 done
 
-#Install the compatibility layer for virtualbox
+#Install the compatibility layer for virtualbox or the graphics card driver
 dialog --backtitle "ArchLinux Installation" --title "Grub instalation" \
 		--yesno "Are you on a VirtualBox machine?" 7 60 
 response=$?
@@ -341,5 +341,18 @@ case $response in
 	0) pacman -S --noconfirm  virtualbox-guest-utils virtualbox-guest-modules
 		modprobe -a vboxguest vboxsf vboxvideo
 		systemctl enable vboxservice && systemctl start vboxservice;;
-	1) echo "Bye!";;
+	1) graphics=$(lspci -k | grep -A 2 -E "(VGA|3D)")
+		if [[ $graphics  = *Intel* || $graphics = *intel* || $graphics = *INTEL* ]]
+		then
+		        pacman -S xf86-video-intel mesa-libgl
+		fi
+		if [[ $graphics = *NVIDIA* || $graphics = *nvidia* || $graphics = *Nvidia* ]]
+		then
+		        pacman -S nvidia
+		fi
+		if [[ $graphics  = *ATI* || $graphics = *ati* || $graphics = *Ati* || $graphics = *AMD* || $graphics = *amd* || $graphics = *amd* ]]
+		then
+		        pacman -S xf86-video-ati mesa-libgl mesa-vdpau lib32-mesa-vdpau
+		fi
+;;
 esac
