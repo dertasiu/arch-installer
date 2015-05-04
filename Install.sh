@@ -412,6 +412,10 @@ then
 	echo "$hostname" > /mnt/etc/hostname
 fi
 
+#Set the root password
+rootpasswd=$(dialog --passwordbox "Please, enter the root password" 0 36 2>&1 > /dev/tty)
+arch-chroot /mnt /bin/sh -c "passwd root $rootpasswd"
+
 #Add the main user
 dialog --backtitle "Archlinux Installation" --title "User creation" \
 		--form "\nPlease, enter the user configuration" 25 60 16 \
