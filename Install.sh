@@ -320,6 +320,7 @@ do
 			then
 				mkswap $part
 				swapon $part
+				swap=$part
 				p=$(echo "$p" | grep -v $part)
 			fi
 	esac
@@ -453,3 +454,7 @@ esac
 #Copy the post-insall script to the hard drive
 cp DesktopEnvironment.sh /mnt/root
 cp servers.sh /mnt/root
+
+#Umount all the partitions
+umount {$rootfs,$bootfs,$homefs,$tmpfs,$usrfs,$varfs,$srvfs,$optfs}
+swapoff $swap
