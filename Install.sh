@@ -413,7 +413,7 @@ then
 fi
 
 #Set the root password
-rootpasswd=$(dialog --passwordbox "Please, enter the root password" 0 36 2>&1 > /dev/tty)
+rootpasswd=$(dialog --backtitle "Archlinux Installation" --title "Root passoword" --passwordbox "Please, enter the root password" 0 36 2>&1 > /dev/tty)
 arch-chroot /mnt /bin/sh -c "passwd root $rootpasswd"
 
 #Add the main user
@@ -427,7 +427,7 @@ rm temp
 if [ "$?" = "0" ]
 then
 	arch-chroot /mnt /bin/sh -c "useradd -c $realname -m -g users -G video,audio,lp,optical,games,power,wheel,storage -s /bin/bash $user" #Add the user to the following groups and it create the home directory
-	userpasswd=$(dialog --passwordbox "Please, enter the user password" 0 36 2>&1 > /dev/tty)
+	userpasswd=$(dialog --backtitle "Archlinux Installation" --title "User creation" --passwordbox "Please, enter the user password" 0 36 2>&1 > /dev/tty)
 	arch-chroot /mnt /bin/bash -c "passwd $user $userpasswd"
 fi
 
@@ -447,10 +447,22 @@ arch-chroot /mnt /bin/bash -c "yaourt -Syy"
 
 #Grub instalation question, It will install grub to the previously selected disk stored in the variable $disk 
 dialog --backtitle "ArchLinux Installation" --title "Grub instalation" \
-		--yesno "Do you want to install grub in the previous selected hard drive" 7 60 
+		--yesno "Do you want to install grub" 7 60 
 response=$?
 case $response in
-	0) arch-chroot /mnt /bin/bash -c "grub-install $disk && grub-mkconfig -o /boot/grub/grub.cfg";;
+	0)
+		disks=$(fdisk -l | grep /dev/sd | grep iB | awk -F " " '{print $2}' | sed 's/://g')
+		for disk in $disks
+		do
+			echo "$disk Disk" >> temp
+			fdisk -l $disk | grep sd | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}' >> temp
+		done
+		partitions=$(cat temp)
+		rm temp
+
+		grubpart=$(dialog --backtitle "ArchLinux Installation" --clear --title "Grub partition/disk selection: " --menu "Choose the disk/partition to install grub in it: " 0 0 0 ${partitions} 2>&1 > /dev/tty)
+
+		arch-chroot /mnt /bin/bash -c "grub-install $grubpart && grub-mkconfig -o /boot/grub/grub.cfg";;
 	1) echo "Grub not installed";;
 esac
 
