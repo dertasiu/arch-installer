@@ -458,3 +458,8 @@ cp servers.sh /mnt/root
 #Umount all the partitions
 umount {$rootfs,$bootfs,$homefs,$tmpfs,$usrfs,$varfs,$srvfs,$optfs}
 swapoff $swap
+
+#Prepare the system to boot directly to root and run the post-insall script
+mkdir /mnt/etc/systemd/system/getty@tty1.service.d
+echo -e "[Service]\nExecStart=\nExecStart=-/sbin/agetty --autologin root --noclear %I 38400 linux" > /mnt/etc/systemd/system/getty@tty1.service.d/override.conf
+echo "sh post-install.sh" >> /mnt/root/.bashrc
