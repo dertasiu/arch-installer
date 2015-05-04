@@ -17,30 +17,31 @@ options=(KDE4 " "	off
 		Enlightenment " " off
 		)
 desktop=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+pacman -Syy
 clear
 for choice in $desktop
 do
 	case $choice in
 		"KDE4")
-			pacman -Syy --noconfirm kde kde-meta
+			pacman -S --noconfirm kde kde-meta
 			#Enable NetworkManager
 			systemctl enable NetworkManager
 		;;
 
 		"KDE5")
-			pacman -Syy --noconfirm plasma plasma-meta
+			pacman -S --noconfirm plasma plasma-meta
 			#Enable NetworkManager
 			systemctl enable NetworkManager
 		;;
 
 		"Gnome")
-			pacman -Syy --noconfirm gnome gnome-extra
+			pacman -S --noconfirm gnome gnome-extra
 			#Enable NetworkManager
 			systemctl enable NetworkManager
 		;;
 
 		"MATE")
-			pacman -Syy --noconfirm mate mate-extra
+			pacman -S --noconfirm mate mate-extra
 			#Enable NetworkManager
 			systemctl enable NetworkManager
 		;;
@@ -50,7 +51,7 @@ do
 			pacman -Syy --noconfirm pantheon-session-bzr audience-bzr contractor-bzr eidete-bzr elementary-icon-theme-bzr elementary-icon-theme-bzr elementary-wallpapers-bzr gtk-theme-elementary-bzr footnote-bzr geary indicator-pantheon-session-bzr lightdm-pantheon-greeter-bzr maya-calendar-bzr midori-granite-bzr noise-bzr pantheon-backgrounds-bzr pantheon-calculator-bzr pantheon-default-settings-bzr pantheon-files-bzr pantheon-print-bzr pantheon-terminal-bzr plank-theme-pantheon-bzr scratch-text-editor-bzr snap-photobooth-bzr switchboard-bzr ttf-dejavu ttf-droid ttf-freefont ttf-liberation 
 			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-			sudo -u $user yaourt -A -Syy --noconfirm ttf-opensans pantheon-notify-bzr
+			sudo -u $user yaourt -A -S --noconfirm ttf-opensans pantheon-notify-bzr
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 			#Enable NetworkManager
@@ -58,13 +59,13 @@ do
 		;;
 
 		"XFCE")
-			pacman -Syy --noconfirm xfce4 xfce4-goodies
+			pacman -S --noconfirm xfce4 xfce4-goodies
 			#Enable NetworkManager
 			systemctl enable NetworkManager
 		;;
 
 		"LXDE")
-			pacman -Syy --noconfirm lxde lxde-common
+			pacman -S --noconfirm lxde lxde-common
 			#Enable NetworkManager
 			systemctl enable NetworkManager
 		;;
@@ -77,7 +78,7 @@ do
 			pacman -Syy --noconfirm lxqt oxygen-icons qtcurve
 			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-			sudo -u $user yaourt -A -Syy --noconfirm qterminal-git obconf-qt-git
+			sudo -u $user yaourt -A -S --noconfirm qterminal-git obconf-qt-git
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 			#Enable NetworkManager
@@ -117,25 +118,25 @@ do
 
 		"DDE")
 			printf "\n[home_metakcahura_arch-deepin_Arch_Extra]\nServer = http://download.opensuse.org/repositories/home:/metakcahura:/arch-deepin/Arch_Extra/\x24arch\nSigLevel = Never\n" >> /etc/pacman.conf
-			pacman -Syy --noconfirm deepin deepin-extra
+			pacman -S --noconfirm deepin deepin-extra
 			#Enable NetworkManager
 			systemctl enable NetworkManager
 		;;
 
 		"OpenBox")
-			pacman -Syy --noconfirm openbox
+			pacman -S --noconfirm openbox
 			#Enable NetworkManager
 			systemctl enable NetworkManager
 		;;
 
 		"i3")
-			pacman -Syy --noconfirm i3
+			pacman -S --noconfirm i3
 			#Enable NetworkManager
 			systemctl enable NetworkManager
 		;;
 
 		"Cinnamon")
-			pacman -Syy --noconfirm cinnamon
+			pacman -S --noconfirm cinnamon
 			#Enable NetworkManager
 			systemctl enable NetworkManager
 		;;
@@ -143,14 +144,14 @@ do
 		"Budgie")
 			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-			sudo -u $user yaourt -A -Syy --noconfirm budgie-desktop-git
+			sudo -u $user yaourt -A -S --noconfirm budgie-desktop-git
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 			#Enable NetworkManager
 			systemctl enable NetworkManager
 		;;
 		"Enlightenment")
-			pacman -Syy --noconfirm enlightenment
+			pacman -S --noconfirm enlightenment
 			#Enable NetworkManager
 			systemctl enable NetworkManager
 		;;
@@ -174,43 +175,43 @@ do
 		"Entrance")
 			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-			sudo -u $user yaourt -A -Syy --noconfirm entrance-git
+			sudo -u $user yaourt -A -S --noconfirm entrance-git
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 			systemctl enable entrance
 		;;
 
 		"GDM")
-			pacman -Syy --noconfirm gdm
+			pacman -S --noconfirm gdm
 			systemctl enable gdm
 		;;
 
 		"LightDM")
-			pacman -Syy --noconfirm lightdm
+			pacman -S --noconfirm lightdm
 			systemctl enable lightdm
 		;;
 
 		"LXDM")
-			pacman -Syy --noconfirm lxdm
+			pacman -S --noconfirm lxdm
 			systemctl enable lxdm
 		;;
 
 		"MDM")
 			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-			sudo -u $user yaourt -A -Syy --noconfirm mdm-display-manager
+			sudo -u $user yaourt -A -S --noconfirm mdm-display-manager
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 			systemctl enable mdm
 		;;
 
 		"SDDM")
-			pacman -Syy --noconfirm sddm
+			pacman -S --noconfirm sddm
 			systemctl enable sddm
 		;;
 
 		"SLiM")
-			pacman -Syy --noconfirm slim
+			pacman -S --noconfirm slim
 			systemctl enable slim
 		;;
 esac
@@ -243,7 +244,7 @@ do
 		;;
 
 		"ZSH")
-			pacman -Syy --noconfirm zsh
+			pacman -S --noconfirm zsh
 			dialog --backtitle "ArchLinux Installation" --clear --title "ZSH selection: " \
 					--menu "Select the ZSH theme:" 22 76 16 \
 					grml "grml zsh config" \
@@ -255,13 +256,13 @@ do
 			do
 				case $choice in
 					"grml")
-						pacman -Sy --noconfirm grml-zsh-config
+						pacman -S --noconfirm grml-zsh-config
 					;;
 
 					"oh-my-zsh")
 						sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 						sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-						sudo -u $user yaourt -Syy -A --noconfirm oh-my-zsh-git bullet-train-oh-my-zsh-theme-git oh-my-zsh-powerline-theme-git powerline-fonts-git
+						sudo -u $user yaourt -S -A --noconfirm oh-my-zsh-git bullet-train-oh-my-zsh-theme-git oh-my-zsh-powerline-theme-git powerline-fonts-git
 						sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 						sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 						cp /usr/share/oh-my-zsh/zshrc /home/$user/.zshrc
@@ -286,19 +287,19 @@ do
 		;;
 
 		"FISH")
-			pacman -Syy --noconfirm fish
+			pacman -S --noconfirm fish
 			usermod -s /usr/bin/fish root
 			usermod -s /usr/bin/fish $user
 		;;
 
 		"CShell")
-			pacman -Syy --noconfirm tcsh
+			pacman -S --noconfirm tcsh
 			usermod -s /bin/tcsh root
 			usermod -s /bin/tcsh $user
 		;;
 
 		"DASH")
-			pacman -Syy --noconfirm dash
+			pacman -S --noconfirm dash
 			usermod -s /bin/dash root
 			usermod -s /bin/dash $user
 		;;
@@ -306,7 +307,7 @@ do
 		"KornShell")
 			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-			sudo -u $user yaourt -Syy -A --noconfirm ksh
+			sudo -u $user yaourt -S -A --noconfirm ksh
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 			usermod -s /bin/ksh root
@@ -316,7 +317,7 @@ do
 		"Oh")
 			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-			sudo -u $user yaourt -Syy -A --noconfirm oh
+			sudo -u $user yaourt -S -A --noconfirm oh
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 			usermod -s /usr/bin/oh root
@@ -324,7 +325,7 @@ do
 		;;
 
 		"rc")
-			pacman -Syy --noconfirm 9base
+			pacman -S --noconfirm 9base
 			ln -s /opt/plan9/bin/rc /bin/rc
 			usermod -s /bin/rc root
 			usermod -s /bin/rc $user
@@ -337,7 +338,7 @@ dialog --backtitle "ArchLinux Installation" --title "Grub instalation" \
 		--yesno "Are you on a VirtualBox machine?" 7 60 
 response=$?
 case $response in
-	0) pacman -Syy --noconfirm  virtualbox-guest-utils virtualbox-guest-modules
+	0) pacman -S --noconfirm  virtualbox-guest-utils virtualbox-guest-modules
 		modprobe -a vboxguest vboxsf vboxvideo
 		systemctl enable vboxservice && systemctl start vboxservice;;
 	1) echo "Bye!";;

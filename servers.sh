@@ -14,12 +14,13 @@ options=(SSH "Remote console"	off
 		Prosody "XMPP Chat Server"	off
 		)
 desktop=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+pacman -Syy
 clear
 for choice in $desktop
 do
 	case $choice in
 		"SSH")
-			pacman -Syy --noconfirm openssh
+			pacman -S --noconfirm openssh
 			dialog --backtitle "ArchLinux Installation" --title "SSH Configuration" \
 					--yesno "Do you want to change the default port(22) of SSHD?" 7 60 
 			response=$?
@@ -39,7 +40,7 @@ do
 		;;
 
 		"Web")
-			pacman -Syy --noconfirm apache php php-apache mariadb
+			pacman -S --noconfirm apache php php-apache mariadb
 			##MariaDB
 			mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
 			systemctl start mysqld
@@ -82,7 +83,7 @@ do
 		"Owncloud")
 			if [[ $LAMP == "0" ]]; then
 				dialog --backtitle "ArchLinux Installation" --title "Oops..." --msgbox 'To install OwnCloud, you have to install and configure a LAMP server before:' 6 30
-				pacman -Syy --noconfirm apache php php-apache mariadb
+				pacman -S --noconfirm apache php php-apache mariadb
 				##MariaDB
 				mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
 				systemctl start mysqld
@@ -121,7 +122,7 @@ do
 
 				LAMP=1
 			fi
-			pacman -Syy --noconfirm owncloud php-intl php-mcrypt
+			pacman -S --noconfirm owncloud php-intl php-mcrypt
 			sed -i '/extension=gd.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
 			sed -i '/extension=iconv.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
 			sed -i '/extension=xmlrpc.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
@@ -151,7 +152,7 @@ do
 		"Wordpress")
 			if [[ $LAMP == "0" ]]; then
 				dialog --backtitle "ArchLinux Installation" --title "Oops..." --msgbox 'To install WordPress, you have to install and configure a LAMP server before:' 6 30
-				pacman -Syy --noconfirm apache php php-apache mariadb
+				pacman -S --noconfirm apache php php-apache mariadb
 				##MariaDB
 				mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
 				systemctl start mysqld
@@ -190,7 +191,7 @@ do
 
 				LAMP=1
 			fi
-			pacman -Syy --noconfirm wordpress
+			pacman -S --noconfirm wordpress
 			sed -i '/extension=ftp.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
 			sed -i '/extension=curl.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
 			sed -i '/extension=gd.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
@@ -217,10 +218,10 @@ do
 		;;
 
 		"Subsonic")
-			pacman -Syy --noconfirm ffmpeg flac lame
+			pacman -S --noconfirm ffmpeg flac lame
 			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-			sudo -u $user yaourt -Syy -A --noconfirm subsonic
+			sudo -u $user yaourt -S -A --noconfirm subsonic
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 			useradd --system subsonic
@@ -269,10 +270,10 @@ do
 		;;
 
 		"Madsonic")
-			pacman -Syy --noconfirm ffmpeg flac lame
+			pacman -S --noconfirm ffmpeg flac lame
 			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-			sudo -u $user yaourt -Syy -A --noconfirm madsonic
+			sudo -u $user yaourt -S -A --noconfirm madsonic
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 			cd /var/madsonic
@@ -318,7 +319,7 @@ do
 		;;
 
 		"NTOP")
-			pacman -Syy --noconfirm ntop
+			pacman -S --noconfirm ntop
 			dialog --backtitle "Archlinux Installation" --inputbox "Enter NTOP's admin password:" 8 40 2>temp
 			ntoppass=$(cat temp)
 			rm temp
@@ -328,11 +329,11 @@ do
 		;;
 
 		"TightVNC")
-			pacman -Syy --noconfirm tigervnc
+			pacman -S --noconfirm tigervnc
 		;;
 
 		"Deluge")
-			pacman -Syy --noconfirm deluge python2-pip python2-mako
+			pacman -S --noconfirm deluge python2-pip python2-mako
 			pip2.7 install service-identity
 			systemctl start deluged
 			systemctl enable deluged
@@ -354,10 +355,10 @@ do
 			ip=$(ip addr show dev $iface | grep "inet " | awk -F ' ' '{print $2}' | sed 's/\x2F24//g')
 			gateway=$(ip route show dev $iface | grep default | awk -F " " '{print $3}')
 
-			pacman -Syy --noconfirm xl2tpd ppp lsof python2
+			pacman -S --noconfirm xl2tpd ppp lsof python2
 			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-			sudo -u $user yaourt -A -Syy --noconfirm openswan
+			sudo -u $user yaourt -A -S --noconfirm openswan
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 			iptables --table nat --append POSTROUTING --jump MASQUERADE
@@ -404,10 +405,10 @@ do
 		;;
 
 		"Prosody")
-			pacman -Syy --noconfirm prosody lua51-sec lua51-zlib
+			pacman -S --noconfirm prosody lua51-sec lua51-zlib
 			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-			sudo -u $user yaourt -Syy -A --noconfirm lua51-event lua-cyrussasl
+			sudo -u $user yaourt -S -A --noconfirm lua51-event lua-cyrussasl
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 			
