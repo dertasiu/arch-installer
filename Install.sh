@@ -418,7 +418,7 @@ arch-chroot /mnt /bin/sh -c "passwd root $rootpasswd"
 
 #Add the main user
 dialog --backtitle "Archlinux Installation" --title "User creation" \
-		--form "\nPlease, enter the user configuration" 25 60 16 \
+		--form "Please, enter the user configuration" 0 0 0 \
 		"Username :" 1 1 "user" 1 25 25 30 \
 		"Real name:" 2 1 "Human Foo Bar" 2 25 25 30 2>temp
 user=$(cat temp | sed -n 1p)
@@ -427,9 +427,8 @@ rm temp
 if [ "$?" = "0" ]
 then
 	arch-chroot /mnt /bin/sh -c "useradd -c $realname -m -g users -G video,audio,lp,optical,games,power,wheel,storage -s /bin/bash $user" #Add the user to the following groups and it create the home directory
-	clear
-	echo "Please, enter the password that the user will use:"
-	arch-chroot /mnt /bin/bash -c "passwd $user"
+	userpasswd=$(dialog --passwordbox "Please, enter the user password" 0 36 2>&1 > /dev/tty)
+	arch-chroot /mnt /bin/bash -c "passwd $user $userpasswd"
 fi
 
 #Enable the wheel group in the sudoers file
