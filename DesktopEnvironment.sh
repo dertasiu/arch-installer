@@ -118,7 +118,7 @@ do
 
 		"DDE")
 			printf "\n[home_metakcahura_arch-deepin_Arch_Extra]\nServer = http://download.opensuse.org/repositories/home:/metakcahura:/arch-deepin/Arch_Extra/\x24arch\nSigLevel = Never\n" >> /etc/pacman.conf
-			pacman -S --noconfirm deepin deepin-extra
+			pacman -Syy --noconfirm deepin deepin-extra
 			#Enable NetworkManager
 			systemctl enable NetworkManager
 		;;
