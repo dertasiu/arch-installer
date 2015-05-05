@@ -1,6 +1,6 @@
 LAMP=0
 user=$(cat /etc/passwd | grep 1000 | awk -F':' '{ print $1}' | head -1)
-cmd=(dialog --backtitle "ArchLinux Installation" --separate-output --checklist "Select the Services that you want to install:" 22 76 16)
+cmd=(dialog --backtitle "ArchLinux Installation" --separate-output --checklist "Select the Services that you want to install:" 0 0 0)
 options=(SSH "Remote console"	off
 		Web "Apache + PHP5 + MariaDB(Mysql) A complete Web Server"	off
 		Owncloud "Self-hosted cloud"	off
@@ -324,6 +324,13 @@ do
 			ntoppass=$(cat temp)
 			rm temp
 			ntop --set-admin-password=$ntoppass
+			patterns=$(echo -e "en\nwl")
+			interfaces=$(ip a | grep -E "$patterns" | grep -v inet | grep -v loop | grep -v link | grep -v DOWN | awk -F " " '{print $2}' | sed 's/://g' | sed 's/$/ net/')
+			dialog --backtitle "ArchLinux Installation" --clear --title "Interface: " \
+					--menu "In what interface do you want to setup the VPN Server?" 20 30 7 ${interfaces} 2> temp
+			interface=$(cat temp)
+			rm temp
+			sed -i "s/-i eth0/-i $interface" /lib/systemd/system/ntop.service
 			systemctl enable ntop
 			systemctl start ntop
 		;;
