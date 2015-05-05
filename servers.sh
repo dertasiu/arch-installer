@@ -46,7 +46,7 @@ do
 			systemctl start mysqld
 
 			#Ask for the password of the root's database username
-			dialog --backtitle "Archlinux Installation" --inputbox "Enter the root's password for MySQL/MariaDB:" 8 40 2>temp
+			dialog --backtitle "Archlinux Installation" --passwordbox "Enter the root's password for MySQL/MariaDB:" 8 40 2>temp
 			rpassword=$(cat temp)
 			rm temp
 			if [ "$?" = "0" ]
@@ -89,7 +89,7 @@ do
 				systemctl start mysqld
 
 				#Ask for the password of the root's database username
-				dialog --backtitle "Archlinux Installation" --inputbox "Enter the root's password for MySQL/MariaDB:" 8 40 2>temp
+				dialog --backtitle "Archlinux Installation" --passwordbox "Enter the root's password for MySQL/MariaDB:" 8 40 2>temp
 				rpassword=$(cat temp)
 				rm temp
 				if [ "$?" = "0" ]
@@ -138,7 +138,7 @@ do
 			echo -e "Include conf/extra/owncloud.conf" >> /etc/httpd/conf/httpd.conf
 			chown http:http -R /usr/share/webapps/owncloud/
 			#Enter the database's password
-			dialog --backtitle "Archlinux Installation" --inputbox "Enter owncloud's database password:" 8 40 2>temp
+			dialog --backtitle "Archlinux Installation" --passwordbox "Enter owncloud's database password:" 8 40 2>temp
 			ownpass=$(cat temp)
 			rm temp
 			DB1="CREATE USER 'owncloud'@'localhost' IDENTIFIED BY '$ownpass';"
@@ -158,7 +158,7 @@ do
 				systemctl start mysqld
 
 				#Ask for the password of the root's database username
-				dialog --backtitle "Archlinux Installation" --inputbox "Enter the root's password for MySQL/MariaDB:" 8 40 2>temp
+				dialog --backtitle "Archlinux Installation" --passwordbox "Enter the root's password for MySQL/MariaDB:" 8 40 2>temp
 				rpassword=$(cat temp)
 				rm temp
 				if [ "$?" = "0" ]
@@ -206,7 +206,7 @@ do
 			echo -e "\nInclude conf/extra/httpd-wordpress.conf\n" >> /etc/httpd/conf/httpd.conf
 			chown http:http -R /usr/share/webapps/wordpress/
 			#Enter the database's password
-			dialog --backtitle "Archlinux Installation" --inputbox "Enter wordpres' database password:" 8 40 2>temp
+			dialog --backtitle "Archlinux Installation" --passwordbox "Enter WordPress' database password:" 8 40 2>temp
 			wordpass=$(cat temp)
 			rm temp
 			DB1="CREATE USER 'wordpress'@'localhost' IDENTIFIED BY '$wordpass';"
@@ -320,7 +320,7 @@ do
 
 		"NTOP")
 			pacman -S --noconfirm ntop
-			dialog --backtitle "Archlinux Installation" --inputbox "Enter NTOP's admin password:" 8 40 2>temp
+			dialog --backtitle "Archlinux Installation" --passwordbox "Enter NTOP's admin password:" 8 40 2>temp
 			ntoppass=$(cat temp)
 			rm temp
 			ntop --set-admin-password=$ntoppass
