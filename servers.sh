@@ -314,8 +314,8 @@ do
 					fi;;
 				1) echo "HTTPS port not configured";;
 			esac
-			systemctl enable subsonic
-			systemctl start subsonic
+			systemctl enable madsonic
+			systemctl start madsonic
 		;;
 
 		"NTOP")
