@@ -20,6 +20,8 @@ for choice in $desktop
 do
 	case $choice in
 		"SSH")
+			port=22
+			ip=$(ip a | grep inet | grep -v inet6 | grep -v host | awk -F " " '{print $2}' | awk -F "/" '{print $1}')
 			pacman -S --noconfirm openssh
 			dialog --backtitle "ArchLinux Installation" --title "SSH Configuration" \
 					--yesno "Do you want to change the default port(22) of SSHD?" 7 60 
@@ -37,6 +39,8 @@ do
 			esac
 			systemctl start sshd
 			systemctl enable sshd
+			dialog --backtitle "ArchLinux Installation" --title "SSH Instalation" \
+					--msgbox "SSH Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip \nPort: $port" 0 0
 		;;
 
 		"Web")
