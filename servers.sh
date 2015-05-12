@@ -39,11 +39,12 @@ do
 			esac
 			systemctl start sshd
 			systemctl enable sshd
-			dialog --backtitle "ArchLinux Installation" --title "SSH Instalation" \
+			dialog --backtitle "ArchLinux Installation" --title "SSH Installation" \
 					--msgbox "SSH Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip \nPort: $port" 0 0
 		;;
 
 		"Web")
+			ip=$(ip a | grep inet | grep -v inet6 | grep -v host | awk -F " " '{print $2}' | awk -F "/" '{print $1}')
 			pacman -S --noconfirm apache php php-apache mariadb
 			##MariaDB
 			mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
@@ -72,7 +73,10 @@ do
 				DB2=" GRANT ALL PRIVILEGES ON *.* TO '$dbuser'@'localhost' WITH GRANT OPTION;"
 				DB="${DB1}${DB2}"
 				mysql -uroot -p$rpassword -e "$DB"
+				userdb="\n\nMySQL User\nUser: $dbuser\nPassword: $dbpass"
 			fi
+			dialog --backtitle "ArchLinux Installation" --title "MySQL Installation" \
+					--msgbox "MySQL Instalation is now completed. You can use this settings to connect to the server:\n\nUsername: root \nPassword: $rpassword$userdb" 0 0
 
 			##Apache+PHP5
 			sed -i 's/LoadModule mpm_event_module modules\x2Fmod_mpm_event.so/LoadModule mpm_prefork_module modules\x2Fmod_mpm_prefork.so/g' /etc/httpd/conf/httpd.conf #Replace the first string with the second one
@@ -80,13 +84,15 @@ do
 			sed -i '/Include conf\x2Fextra\x2Fhttpd-default.conf/a \\n\x23PHP5\nInclude conf\x2Fextra\x2Fphp5_module.conf' /etc/httpd/conf/httpd.conf #Append the second string after the first one
 			systemctl enable httpd
 			systemctl start httpd
+			dialog --backtitle "ArchLinux Installation" --title "Apache Installation" \
+					--msgbox "Apache Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip" 0 0
 
 			LAMP=1
 		;;
 
 		"Owncloud")
 			if [[ $LAMP == "0" ]]; then
-				dialog --backtitle "ArchLinux Installation" --title "Oops..." --msgbox 'To install OwnCloud, you have to install and configure a LAMP server before:' 6 30
+				ip=$(ip a | grep inet | grep -v inet6 | grep -v host | awk -F " " '{print $2}' | awk -F "/" '{print $1}')
 				pacman -S --noconfirm apache php php-apache mariadb
 				##MariaDB
 				mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
@@ -102,8 +108,8 @@ do
 				fi
 
 				#Add the main user of mysql
-				dialog --backtitle "Archlinux Installation" --title "User creation" \
-						--form "\nPlease, enter the user configuration" 25 60 16 \
+				dialog --backtitle "Archlinux Installation" --title "Mysql user creation" \
+						--form "\nPlease, enter the mysql user configuration" 25 60 16 \
 						"Username :" 1 1 "user" 1 25 25 30 \
 						"Password :" 2 1 "passw0rd" 2 25 25 30 2>temp
 				dbuser=$(cat temp | sed -n 1p)
@@ -115,7 +121,10 @@ do
 					DB2=" GRANT ALL PRIVILEGES ON *.* TO '$dbuser'@'localhost' WITH GRANT OPTION;"
 					DB="${DB1}${DB2}"
 					mysql -uroot -p$rpassword -e "$DB"
+					userdb="\n\nMySQL User\nUser: $dbuser\nPassword: $dbpass"
 				fi
+				dialog --backtitle "ArchLinux Installation" --title "MySQL Installation" \
+						--msgbox "MySQL Instalation is now completed. You can use this settings to connect to the server:\n\nUsername: root \nPassword: $rpassword$userdb" 0 0
 
 				##Apache+PHP5
 				sed -i 's/LoadModule mpm_event_module modules\x2Fmod_mpm_event.so/LoadModule mpm_prefork_module modules\x2Fmod_mpm_prefork.so/g' /etc/httpd/conf/httpd.conf #Replace the first string with the second one
@@ -123,6 +132,8 @@ do
 				sed -i '/Include conf\x2Fextra\x2Fhttpd-default.conf/a \\n\x23PHP5\nInclude conf\x2Fextra\x2Fphp5_module.conf' /etc/httpd/conf/httpd.conf #Append the second string after the first one
 				systemctl enable httpd
 				systemctl start httpd
+				dialog --backtitle "ArchLinux Installation" --title "Apache Installation" \
+						--msgbox "Apache Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip" 0 0
 
 				LAMP=1
 			fi
@@ -155,7 +166,7 @@ do
 
 		"Wordpress")
 			if [[ $LAMP == "0" ]]; then
-				dialog --backtitle "ArchLinux Installation" --title "Oops..." --msgbox 'To install WordPress, you have to install and configure a LAMP server before:' 6 30
+				ip=$(ip a | grep inet | grep -v inet6 | grep -v host | awk -F " " '{print $2}' | awk -F "/" '{print $1}')
 				pacman -S --noconfirm apache php php-apache mariadb
 				##MariaDB
 				mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
@@ -171,8 +182,8 @@ do
 				fi
 
 				#Add the main user of mysql
-				dialog --backtitle "Archlinux Installation" --title "User creation" \
-						--form "\nPlease, enter the user configuration" 25 60 16 \
+				dialog --backtitle "Archlinux Installation" --title "Mysql user creation" \
+						--form "\nPlease, enter the mysql user configuration" 25 60 16 \
 						"Username :" 1 1 "user" 1 25 25 30 \
 						"Password :" 2 1 "passw0rd" 2 25 25 30 2>temp
 				dbuser=$(cat temp | sed -n 1p)
@@ -184,7 +195,10 @@ do
 					DB2=" GRANT ALL PRIVILEGES ON *.* TO '$dbuser'@'localhost' WITH GRANT OPTION;"
 					DB="${DB1}${DB2}"
 					mysql -uroot -p$rpassword -e "$DB"
+					userdb="\n\nMySQL User\nUser: $dbuser\nPassword: $dbpass"
 				fi
+				dialog --backtitle "ArchLinux Installation" --title "MySQL Installation" \
+						--msgbox "MySQL Instalation is now completed. You can use this settings to connect to the server:\n\nUsername: root \nPassword: $rpassword$userdb" 0 0
 
 				##Apache+PHP5
 				sed -i 's/LoadModule mpm_event_module modules\x2Fmod_mpm_event.so/LoadModule mpm_prefork_module modules\x2Fmod_mpm_prefork.so/g' /etc/httpd/conf/httpd.conf #Replace the first string with the second one
@@ -192,6 +206,8 @@ do
 				sed -i '/Include conf\x2Fextra\x2Fhttpd-default.conf/a \\n\x23PHP5\nInclude conf\x2Fextra\x2Fphp5_module.conf' /etc/httpd/conf/httpd.conf #Append the second string after the first one
 				systemctl enable httpd
 				systemctl start httpd
+				dialog --backtitle "ArchLinux Installation" --title "Apache Installation" \
+						--msgbox "Apache Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip" 0 0
 
 				LAMP=1
 			fi
