@@ -337,6 +337,10 @@ do
 
 		"TightVNC")
 			pacman -S --noconfirm tigervnc
+			cp /lib/systemd/system/vncserver.service /lib/systemd/system/vncserver@:1.service
+			sed -i "s/User=/User=$user/g" /lib/systemd/system/vncserver@:1.service
+			systemctl enable vncserver
+			systemctl start vncserver
 		;;
 
 		"Deluge")
