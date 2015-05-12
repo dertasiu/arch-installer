@@ -376,29 +376,30 @@ fi
 echo "KEYMAP=$keymap" > /mnt/etc/vconsole.conf
 
 #Select the timezone
-selected=0
-timezonedir=/usr/share/zoneinfo
-while [ "$selected" = "0" ]
+selected=0 #Define the variable $selected to 0, this will be used to scape from the while
+timezonedir=/usr/share/zoneinfo #Define the starting directory
+while [ "$selected" = "0" ] #While the selection in unselected do...
 do
+	#This command should output "America", it will make an ls to the timezones dir, stored in the variable $timezonedir. This will be used in the case that you were on the main timezone dir.
 	check=$(ls -l $timezonedir | grep -v .tab | awk '/drwx/' | awk -F " " '{print $9}' | awk '{if (NR!=1) {print}}' | head -1)
-	if [[ $check != America ]]; then
-		echo "../ UP" >timezones
+	if [[ $check != America ]]; then #In the case that you wouldn't be in the root of the timezones dir
+		echo "../ UP" >timezones #Set an option to go up a dir in the menu
 	fi
-	ls -l $timezonedir | grep -v .tab | awk '/drwx/' | awk -F " " '{print $9}' | awk '{print $0"/"}' | awk '$fs=$fs" Time"' | awk '{if (NR!=1) {print}}'>>timezones
+	#Get a list of folders in the timezone dir and save it to the temporal file: timezones
+	ls -l $timezonedir | grep -v .tab | awk '/drwx/' | awk -F " " '{print $9}' | awk '{print $0"/"}' | awk '$fs=$fs" Time"' | awk '{if (NR!=1) {print}}'>>timezones 
+	#Get a list of files in the timezone dir and save it to the temporal file: timezones
 	ls -l $timezonedir | grep -v .tab | awk '/-rw-/' | awk -F " " '{print $9}' | awk '$fs=$fs" Time"' | awk '{if (NR!=1) {print}}'>>timezones
-	timezones=$(cat timezones)
-	rm timezones
-	dialog --backtitle "ArchLinux Installation" --clear --title "Timezone selection: " \
-			--menu "Choose your timezone" 20 51 7 ${timezones} 2> temp
-	timezone="$(cat temp)"
-	rm temp
-	if [ "$?" = "0" ]
+	timezones=$(cat timezones) #Save all this to a variable called $timezones 
+	rm timezones #Delete the temporal file
+	timezone=$(dialog --backtitle "ArchLinux Installation" --clear --title "Timezone selection: " \
+			--menu "Choose your timezone" 20 51 7 ${timezones} 2>&1 >/dev/tty) #Generate a menu to select the timezone or the folder that will contain the timezone
+	if [ "$?" = "0" ] #If a selection is made then...
 	then
-		if [[ $timezone == *"/"* ]]; then
-			timezonedir=$timezonedir/$timezone
-		else
+		if [[ $timezone == *"/"* ]]; then #If the timezone contains an slash, that will mean that is a directory
+			timezonedir=$timezonedir/$timezone #Append the selected folder to the main $timezonedir variable
+		else #If is a file, link it to its location
 			ln -s $timezonedir${timezone} /mnt/etc/timezone
-			selected=1
+			selected=1 #Set the seleccin done to exit the while
 		fi
 	fi
 done
