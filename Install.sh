@@ -18,12 +18,10 @@ while [ $selected == "0" ];do #Create the loop to select the keyboard
 done
 
 ##Activate WiFi if it needed
-dialog --backtitle "ArchLinux Installation" --title "Grub instalation" \
-		--yesno "Do you want to connect to a wifi network?" 7 60 
-response=$?
-case $response in
-	0) wifi-menu;;
-	1) echo "Continuing!";;
+dialog --backtitle "ArchLinux Installation" --title "Grub instalation" --yesno "Do you want to connect to a wifi network?" 7 60 #Ask the user if wants to connect to a wifi network
+case $? in #In the case that...
+	0) wifi-menu;; #0(Accept) is pressed: open the wifi-menu
+	1) echo "Continuing!";; #1(Cancel) is pressed: Do nothing
 esac
 
 ##Partition creation
