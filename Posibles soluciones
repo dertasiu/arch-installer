@@ -36,3 +36,9 @@ do
 		fi
 	fi
 done
+
+
+
+
+
+dialog --backtitle "ArchLinux Installation" --title "Disk Selection" --infobox "`fdisk -l`" 15 85%
