@@ -4,20 +4,18 @@
 dialog --backtitle "ArchLinux Installation" --title "Welcome" --msgbox 'Proceed to the installation:' 6 30
 
 ##Keyboard selection
-tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
-trap "rm -f $tempfile" 0 1 2 5 15
-localectl list-keymaps > /tmp/original
-locales2="$(awk '$locales=$locales" Keyboard"' /tmp/original)" #Save a list of all keymap files available to locales2 processing a 2ª column to make the menu
-dialog --backtitle "ArchLinux Installation" --clear --title "Choose your keymap: " \
-	--menu "Hi! Choose your favorite keymap:" 20 51 7  ${locales2} 2> $tempfile
-retval=$?
-choice=`cat $tempfile`
-case $retval in
-	0)
-		loadkeys $choice #Loads the selected keymap
-		keymap=$choice
-		rm /tmp/original;;
-esac
+selected=0 #Set the variable $selected to 0, this will help to break the while
+while [ $selected == "0" ];do #Create the loop to select the keyboard
+	locales="$(localectl list-keymaps | awk '$locales=$locales" Keyboard"')" && locales=$(echo "$locales") #List all tha locales avaiable and add it a "Keyboard to the end, this is done because it have to fit in the menu. Then echo itself to generate a list.
+	keyboard=$(dialog --backtitle "ArchLinux Installation" --clear --title "Choose your keymap: " --menu "Hi! Choose your favorite keymap:" 0 0 0 	${locales} 2>&1 > /dev/tty) #Generate the menu and save the answer to a variable. Redirect the error output(Answer) and redirect all the menu to the terminal.
+	if [ $? == 0 ];then #If the answer is "Accept"...
+		loadkeys $keyboard #Load the selected keymap
+		keymap=$keyboard #Export the keyboard variable to use ir later
+		selected=1 #Get out the while
+	else #If the selection is cancel...
+		dialog --backtitle "ArchLinux Installation" --msgbox "Please, select the keyboard!" 6 32 #Ask the user to select the keyboard and rerun
+	fi
+done
 
 ##Activate WiFi if it needed
 dialog --backtitle "ArchLinux Installation" --title "Grub instalation" \
