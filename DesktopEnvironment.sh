@@ -19,9 +19,9 @@ options=(KDE4 " "	off
 desktop=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 pacman -Syy
 clear
-for choice in $desktop
+for choice in $desktop #For each line that is on the variable $desktop, grab one line and fit it on the $choice variable
 do
-	case $choice in
+	case $choice in #In the case that the $choice variable is..., do... Ex: $choice=KDE5; case $choice in. This will select the KDE5 option
 		"KDE4")
 			pacman -S --noconfirm kde kde-meta
 			#Enable NetworkManager
