@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##Welcome message
-dialog --backtitle "ArchLinux Installation" --title "Welcome" --msgbox 'Proceed to the installation:' 6 30
+dialog --backtitle "ArchLinux Installation" --title "Welcome" --msgbox 'Proceed to the installation:' 6 32
 
 ##Keyboard selection
 selected=0 #Set the variable $selected to 0, this will help to break the while
@@ -26,26 +26,16 @@ esac
 
 ##Partition creation
 #Display a list of all disk and partitions available
-dialog --backtitle "ArchLinux Installation" --title "Disk Selection" --msgbox 'Please select a disk to install ArchLinux' 6 30
-clear
-fdisk -l
-echo "You can press Shift + PageUp/PageDown to scroll"
-read -p "Press Return to continue..."
+dialog --backtitle "ArchLinux Installation" --title "Disk Selection" --msgbox 'Please select a disk to install ArchLinux' 6 45
+fdisk -l > /tmp/partitions
+dialog --backtitle "ArchLinux Installation" --title "Disk Selection" --textbox /tmp/partitions 0 0
+rm /tmp/partitions
 
 #Display a little devices list, selected disk will be saved to the variable $disk 
-tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
-trap "rm -f $tempfile" 0 1 2 5 15
-echo "print devices" > /tmp/parted.p #Save avaiable disks in a temporary file
+echo "print devices" > /tmp/parted.p #Save available disks in a temporary file
 part="$(parted < /tmp/parted.p | grep sd | awk '{if (NR!=1) {print}}')" #Process the temporary file, display only the line that have "sd" and exclude the first line
 rm /tmp/parted.p
-dialog --backtitle "ArchLinux Installation" --clear --title "Disk Select: " \
-	 --menu "Choose the Hard Drive that you want to use" 20 30 7 ${part} 2> $tempfile
-retval=$?
-choice=`cat $tempfile`
-case $retval in
-	0)
-		disk=$choice;;
-esac
+disk=$(dialog --backtitle "ArchLinux Installation" --clear --title "Disk Select: "  --menu "Choose the Hard Drive that you want to use" 0 0 0 ${part} 2>&1 >/dev/tty)
 
 #Selection of the partition program
 tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
