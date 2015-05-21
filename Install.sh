@@ -354,13 +354,8 @@ do
 done
 
 #Enter the name of the machine (hostname)
-dialog --backtitle "Archlinux Installation" --inputbox "Enter the machine's name:" 8 40 2>temp
-hostname=$(cat temp)
-rm temp
-if [ "$?" = "0" ]
-then
-	echo "$hostname" > /mnt/etc/hostname
-fi
+hostname=$(dialog --backtitle "Archlinux Installation" --inputbox "Enter the machine's name:" 0 0 2>&1 > /dev/tty)
+echo "$hostname" > /mnt/etc/hostname
 
 #Set the root password
 rootpasswd=$(dialog --backtitle "Archlinux Installation" --title "Root passoword" --passwordbox "Please, enter the root password" 0 36 2>&1 > /dev/tty)
