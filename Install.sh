@@ -47,31 +47,20 @@ $partitioner $disk
 #Show the partitions avaiable on the selected disk
 fdisk -l "$disk" > /tmp/partitions
 dialog --backtitle "ArchLinux Installation" --title "Partition Selection" --textbox /tmp/partitions 0 0
-rm /tmp/partitions
-fdisk -l "$disk" > /tmp/partitions
 
 #Select the main partition
 partitions="$(cat /tmp/partitions | grep sd | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
 p="$(echo "$partitions")"
 part=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
-	--menu "Choose the partition that you want to use for: /" 20 30 7 ${p} 2>&1 > /dev/tty)
+	--menu "Choose the partition that you want to use for: /" 0 0 0 ${p} 2>&1 > /dev/tty)
 rootfs=$part
 p=$(echo "$p" | grep -v $part);;
 
 #Format the main partition
-tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
-trap "rm -f $tempfile" 0 1 2 5 15
-
 fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}')"
-
-dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
-	--menu "Choose the filesystem type that you want to use" 20 30 7 ${fs} 2> $tempfile
-retval=$?
-choice=`cat $tempfile`
-case $retval in
-	0)
-		mkfs.$choice $part;;
-esac
+format=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
+	--menu "Choose the filesystem type that you want to use" 0 0 0 ${fs})
+mkfs.$format $part;;
 
 #View the available partitions and select the main partition
 cmd=(dialog --backtitle "ArchLinux Installation" --separate-output --checklist "Select options:" 22 76 16)
