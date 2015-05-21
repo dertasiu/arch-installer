@@ -38,19 +38,11 @@ rm /tmp/parted.p
 disk=$(dialog --backtitle "ArchLinux Installation" --clear --title "Disk Select: "  --menu "Choose the Hard Drive that you want to use" 0 0 0 ${part} 2>&1 >/dev/tty)
 
 #Selection of the partition program
-tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
-trap "rm -f $tempfile" 0 1 2 5 15
-dialog --backtitle "ArchLinux Installation" --clear --title "Choose partition maker program: " \
-	--menu "Choose  your favorite partitioner:" 20 51 7  \
-	"cfdisk" " " \
-	"fdisk" " " \
-	"parted" " " 2> $tempfile
-retval=$?
-choice=`cat $tempfile`
-case $retval in
-	0)
-		$choice $disk;;
-esac
+partitioner=$(dialog --backtitle "ArchLinux Installation" --clear --title "Choose partition maker program: " --menu "Choose  your favorite partitioner:" 0 0 0\
+		"cfdisk" "An ncurses based partitioner" \
+		"fdisk" "A command line MBR partitioner" \
+		"parted" "" 2>&1 > /dev/tty)
+$partitioner $disk
 
 #Select the main partition
 tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
