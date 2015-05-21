@@ -54,13 +54,13 @@ p="$(echo "$partitions")"
 part=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
 	--menu "Choose the partition that you want to use for: /" 0 0 0 ${p} 2>&1 > /dev/tty)
 rootfs=$part
-p=$(echo "$p" | grep -v $part);;
+p=$(echo "$p" | grep -v $part)
 
 #Format the main partition
 fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}')"
 format=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
 	--menu "Choose the filesystem type that you want to use" 0 0 0 ${fs})
-mkfs.$format $part;;
+mkfs.$format $part
 
 #View the available partitions and select the main partition
 cmd=(dialog --backtitle "ArchLinux Installation" --separate-output --checklist "Select options:" 0 0 0)
