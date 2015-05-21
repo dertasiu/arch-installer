@@ -316,15 +316,10 @@ sed -i "/${locale}/ s/# *//" /mnt/etc/locale.gen
 
 #Select and generate the locale
 locales="$(cat /mnt/etc/locale.gen | grep _ | sed '/#/d')"
-dialog --backtitle "ArchLinux Installation" --clear --title "Locale selection: " \
-	--menu "Choose your language" 20 30 7 ${locales} 2> temp
-locale="$(cat temp)"
-rm temp
-if [ "$?" = "0" ]
-then
-	echo "LANG=$locale" > /mnt/etc/locale.conf
-	arch-chroot /mnt /bin/bash -c "locale-gen"
-fi
+locale=$(dialog --backtitle "ArchLinux Installation" --clear --title "Locale selection: " \
+	--menu "Choose your language" 0 0 0 ${locales} 2>&1 > /dev/tty)
+echo "LANG=$locale" > /mnt/etc/locale.conf
+arch-chroot /mnt /bin/bash -c "locale-gen"
 
 #Keyboard type configuration
 echo "KEYMAP=$keymap" > /mnt/etc/vconsole.conf
