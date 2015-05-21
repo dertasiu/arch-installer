@@ -419,3 +419,6 @@ echo -e "if [ -f ~/.bashrc ]; then\n\tsource ~/.bashrc\nfi" >> /mnt/root/.bash_p
 #Umount all the partitions
 umount {$rootfs,$bootfs,$homefs,$tmpfs,$usrfs,$varfs,$srvfs,$optfs}
 swapoff $swap 2> /dev/null
+
+#Reboot the computer
+reboot
