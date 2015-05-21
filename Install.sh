@@ -388,9 +388,8 @@ arch-chroot /mnt /bin/bash -c "yaourt -Syy"
 
 #Grub instalation question, It will install grub to the previously selected disk stored in the variable $disk 
 dialog --backtitle "ArchLinux Installation" --title "Grub instalation" \
-		--yesno "Do you want to install grub" 7 60 
-response=$?
-case $response in
+		--yesno "Do you want to install grub"
+case $? in
 	0)
 		originaldisk=$disk
 		disks=$(fdisk -l | grep /dev/sd | grep iB | awk -F " " '{print $2}' | sed 's/://g')
@@ -405,7 +404,6 @@ case $response in
 		grubpart=$(dialog --backtitle "ArchLinux Installation" --clear --title "Grub partition/disk selection: " --menu "Choose the disk/partition to install grub in it (The disk that contains base system is $originaldisk): " 0 0 0 ${partitions} 2>&1 > /dev/tty)
 
 		arch-chroot /mnt /bin/bash -c "grub-install $grubpart && grub-mkconfig -o /boot/grub/grub.cfg";;
-	1) echo "Grub not installed";;
 esac
 
 #Copy the post-insall script to the hard drive
