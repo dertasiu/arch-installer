@@ -388,7 +388,7 @@ arch-chroot /mnt /bin/bash -c "yaourt -Syy"
 
 #Grub instalation question, It will install grub to the previously selected disk stored in the variable $disk 
 dialog --backtitle "ArchLinux Installation" --title "Grub instalation" \
-		--yesno "Do you want to install grub"
+		--yesno "Do you want to install grub?" 6 32
 case $? in
 	0)
 		originaldisk=$disk
