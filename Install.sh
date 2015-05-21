@@ -310,15 +310,9 @@ genfstab /mnt > /mnt/etc/fstab
 ##Languages and keymaps
 #Select the locale
 locales="$(cat /mnt/etc/locale.gen | grep _ | sed '1,4d' | sed 's/\(.\{1\}\)//')"
-
-dialog --backtitle "ArchLinux Installation" --clear --title "Locale selection: " \
-	--menu "Choose your language" 20 30 7 ${locales} 2> temp
-locale="$(cat temp)"
-rm temp
-if [ "$?" = "0" ]
-then
-	sed -i "/${locale}/ s/# *//" /mnt/etc/locale.gen
-fi
+locale=$(dialog --backtitle "ArchLinux Installation" --clear --title "Locale selection: " \
+	--menu "Choose your language" 0 0 0 ${locales} 2>&1 > /dev/tty)
+sed -i "/${locale}/ s/# *//" /mnt/etc/locale.gen
 
 #Select and generate the locale
 locales="$(cat /mnt/etc/locale.gen | grep _ | sed '/#/d')"
