@@ -358,23 +358,19 @@ hostname=$(dialog --backtitle "Archlinux Installation" --inputbox "Enter the mac
 echo "$hostname" > /mnt/etc/hostname
 
 #Set the root password
-rootpasswd=$(dialog --backtitle "Archlinux Installation" --title "Root passoword" --passwordbox "Please, enter the root password" 0 36 2>&1 > /dev/tty)
+rootpasswd=$(dialog --backtitle "Archlinux Installation" --title "Root passoword" --passwordbox "Please, enter the root password" 8 36 2>&1 > /dev/tty)
 arch-chroot /mnt /bin/sh -c "echo root:$rootpasswd | chpasswd"
 
 #Add the main user
-dialog --backtitle "Archlinux Installation" --title "User creation" \
-		--form "Please, enter the user configuration" 0 0 0 \
-		"Username :" 1 1 "user" 1 25 25 30 \
-		"Real name:" 2 1 "Human Foo Bar" 2 25 25 30 2>temp
-user=$(cat temp | sed -n 1p)
-realname=$(cat temp | sed -n 2p | sed 's/^/"/' | sed 's/$/"/')
-rm temp
-if [ "$?" = "0" ]
-then
-	arch-chroot /mnt /bin/sh -c "useradd -c $realname -m -g users -G video,audio,lp,optical,games,power,wheel,storage -s /bin/bash $user" #Add the user to the following groups and it create the home directory
-	userpasswd=$(dialog --backtitle "Archlinux Installation" --title "User creation" --passwordbox "Please, enter the user password" 0 36 2>&1 > /dev/tty)
-	arch-chroot /mnt /bin/bash -c "echo $user:$userpasswd | chpasswd"
-fi
+username=$(dialog --backtitle "Archlinux Installation" --title "User creation" \
+					--form "Please, enter the user configuration" 0 0 0 \
+						"Username :" 1 1 "user" 1 12 25 30 \
+						"Real name:" 2 1 "Nicolas Cage" 2 12 25 30 2>&1 > /dev/tty)
+user=$(echo "$username" | sed -n 1p)
+realname=$(echo "$realname" | sed -n 2p | sed 's/^/"/' | sed 's/$/"/')
+arch-chroot /mnt /bin/sh -c "useradd -c $realname -m -g users -G video,audio,lp,optical,games,power,wheel,storage -s /bin/bash $user" #Add the user to the following groups and it create the home directory
+userpasswd=$(dialog --backtitle "Archlinux Installation" --title "User creation" --passwordbox "Please, enter the user password" 0 36 2>&1 > /dev/tty)
+arch-chroot /mnt /bin/bash -c "echo $user:$userpasswd | chpasswd"
 
 #Enable the wheel group in the sudoers file
 sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /mnt/etc/sudoers
