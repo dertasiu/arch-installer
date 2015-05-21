@@ -341,7 +341,7 @@ do
 	timezones=$(cat timezones) #Save all this to a variable called $timezones 
 	rm timezones #Delete the temporal file
 	timezone=$(dialog --backtitle "ArchLinux Installation" --clear --title "Timezone selection: " \
-			--menu "Choose your timezone" 20 51 7 ${timezones} 2>&1 >/dev/tty) #Generate a menu to select the timezone or the folder that will contain the timezone
+			--menu "Choose your timezone" 0 0 0 ${timezones} 2>&1 >/dev/tty) #Generate a menu to select the timezone or the folder that will contain the timezone
 	if [ "$?" = "0" ] #If a selection is made then...
 	then
 		if [[ $timezone == *"/"* ]]; then #If the timezone contains an slash, that will mean that is a directory
