@@ -41,7 +41,7 @@ disk=$(dialog --backtitle "ArchLinux Installation" --clear --title "Disk Select:
 partitioner=$(dialog --backtitle "ArchLinux Installation" --clear --title "Choose partition maker program: " --menu "Choose  your favorite partitioner:" 0 0 0\
 		"cfdisk" "An ncurses based partitioner" \
 		"fdisk" "A command line MBR partitioner" \
-		"parted" "" 2>&1 > /dev/tty)
+		"parted" "A command line partitioner" 2>&1 > /dev/tty)
 $partitioner $disk
 
 #Select the main partition
