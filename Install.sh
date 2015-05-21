@@ -63,7 +63,7 @@ format=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition 
 mkfs.$format $part;;
 
 #View the available partitions and select the main partition
-cmd=(dialog --backtitle "ArchLinux Installation" --separate-output --checklist "Select options:" 22 76 16)
+cmd=(dialog --backtitle "ArchLinux Installation" --separate-output --checklist "Select options:" 0 0 0)
 options=("/boot" "Static files of the boot loader" off    # any option can be set to default to "on"
 	"/home" "User home directoties" off
 	"/tmp" "Temporary files" off
