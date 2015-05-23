@@ -79,214 +79,120 @@ for choice in $choices
 do
 	case $choice in
 		"/boot")
-			fdisk -l "$disk"
-			echo "You can press Shift + PageUp/PageDown to scroll"
-			read -p "Press Return to continue..."
-			dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
-				--menu "Choose the partition that you want to use for: boot" 20 30 7 ${p} 2> temp
-			part="$(cat temp)"
-			rm temp
-			# Option is selected
-			if [ "$?" = "0" ]
-			then
-				bootfs=$part
-			fi
-
+			#Select the partition
+			dialog --backtitle "ArchLinux Installation" --title "Partition Selection" --textbox /tmp/partitions 0 0
+			part=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
+				--menu "Choose the partition that you want to use for: boot" 0 0 0 ${p} 2>&1 > /dev/tty )
+			bootfs=$part
+			#Select the format 
 			fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}')"
-
-			dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
-				--menu "Choose the filesystem type that you want to use" 20 30 7 ${fs} 2> temp
-			filesystem="$(cat temp)"
-			rm temp
-			if [ "$?" = "0" ]
-			then
-				mkfs.$filesystem $part
-				bootdir="boot"
-				p=$(echo "$p" | grep -v $part)
-			fi
+			filesystem=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
+				--menu "Choose the filesystem type that you want to use" 0 0 0 ${fs} 2>&1 > /dev/tty )
+			#Format it!
+			mkfs.$filesystem $part
+			bootdir="boot"
+			p=$(echo "$p" | grep -v $part)
 			;;
 		"/home")
-			fdisk -l "$disk"
-			echo "You can press Shift + PageUp/PageDown to scroll"
-			read -p "Press Return to continue..."
-			dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
-				--menu "Choose the partition that you want to use for: home" 20 30 7 ${p} 2> temp
-			part="$(cat temp)"
-			rm temp
-			# Option is selected
-			if [ "$?" = "0" ]
-			then
-				homefs=$part
-			fi
-
+			#Select the partition
+			dialog --backtitle "ArchLinux Installation" --title "Partition Selection" --textbox /tmp/partitions 0 0
+			part=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
+				--menu "Choose the partition that you want to use for: home" 0 0 0 ${p} 2>&1 > /dev/tty )
+			homefs=$part
+			#Select the format 
 			fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}')"
-
-			dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
-				--menu "Choose the filesystem type that you want to use" 20 30 7 ${fs} 2> temp
-			filesystem="$(cat temp)"
-			rm temp
-			if [ "$?" = "0" ]
-			then
-				mkfs.$filesystem $part
-				homedir="home"
-				p=$(echo "$p" | grep -v $part)
-			fi
+			filesystem=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
+				--menu "Choose the filesystem type that you want to use" 0 0 0 ${fs} 2>&1 > /dev/tty )
+			#Format it!
+			mkfs.$filesystem $part
+			homedir="home"
+			p=$(echo "$p" | grep -v $part)
 			;;
 		"/tmp")
-			fdisk -l "$disk"
-			echo "You can press Shift + PageUp/PageDown to scroll"
-			read -p "Press Return to continue..."
-			dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
-				--menu "Choose the partition that you want to use for: tmp" 20 30 7 ${p} 2> temp
-			part="$(cat temp)"
-			rm temp
-			# Option is selected
-			if [ "$?" = "0" ]
-			then
-				tmpfs=$part
-			fi
-
+			#Select the partition
+			dialog --backtitle "ArchLinux Installation" --title "Partition Selection" --textbox /tmp/partitions 0 0
+			part=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
+				--menu "Choose the partition that you want to use for: tmp" 0 0 0 ${p} 2>&1 > /dev/tty )
+			tmpfs=$part
+			#Select the format 
 			fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}')"
-
-			dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
-				--menu "Choose the filesystem type that you want to use" 20 30 7 ${fs} 2> temp
-			filesystem="$(cat temp)"
-			rm temp
-			if [ "$?" = "0" ]
-			then
-				mkfs.$filesystem $part
-				tmpdir="tmp"
-				p=$(echo "$p" | grep -v $part)
-			fi
+			filesystem=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
+				--menu "Choose the filesystem type that you want to use" 0 0 0 ${fs} 2>&1 > /dev/tty )
+			#Format it!
+			mkfs.$filesystem $part
+			tmpdir="tmp"
+			p=$(echo "$p" | grep -v $part)
 			;;
 		"/usr")
-			fdisk -l "$disk"
-			echo "You can press Shift + PageUp/PageDown to scroll"
-			read -p "Press Return to continue..."
-			dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
-				--menu "Choose the partition that you want to use for: usr" 20 30 7 ${p} 2> temp
-			part="$(cat temp)"
-			rm temp
-			# Option is selected
-			if [ "$?" = "0" ]
-			then
-				usrfs=$part
-			fi
-
+			#Select the partition
+			dialog --backtitle "ArchLinux Installation" --title "Partition Selection" --textbox /tmp/partitions 0 0
+			part=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
+				--menu "Choose the partition that you want to use for: usr" 0 0 0 ${p} 2>&1 > /dev/tty )
+			usrfs=$part
+			#Select the format 
 			fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}')"
-
-			dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
-				--menu "Choose the filesystem type that you want to use" 20 30 7 ${fs} 2> temp
-			filesystem="$(cat temp)"
-			rm temp
-			if [ "$?" = "0" ]
-			then
-				mkfs.$filesystem $part
-				usrdir="usr"
-				p=$(echo "$p" | grep -v $part)
-			fi
+			filesystem=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
+				--menu "Choose the filesystem type that you want to use" 0 0 0 ${fs} 2>&1 > /dev/tty )
+			#Format it!
+			mkfs.$filesystem $part
+			usrdir="usr"
+			p=$(echo "$p" | grep -v $part)
 			;;
 		"/var")
-			fdisk -l "$disk"
-			echo "You can press Shift + PageUp/PageDown to scroll"
-			read -p "Press Return to continue..."
-			dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
-				--menu "Choose the partition that you want to use for: var" 20 30 7 ${p} 2> temp
-			part="$(cat temp)"
-			rm temp
-			# Option is selected
-			if [ "$?" = "0" ]
-			then
-				varfs=$part
-			fi
-
+			#Select the partition
+			dialog --backtitle "ArchLinux Installation" --title "Partition Selection" --textbox /tmp/partitions 0 0
+			part=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
+				--menu "Choose the partition that you want to use for: var" 0 0 0 ${p} 2>&1 > /dev/tty )
+			varfs=$part
+			#Select the format 
 			fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}')"
-
-			dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
-				--menu "Choose the filesystem type that you want to use" 20 30 7 ${fs} 2> temp
-			filesystem="$(cat temp)"
-			rm temp
-			if [ "$?" = "0" ]
-			then
-				mkfs.$filesystem $part
-				vardir="var"
-				p=$(echo "$p" | grep -v $part)
-			fi
+			filesystem=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
+				--menu "Choose the filesystem type that you want to use" 0 0 0 ${fs} 2>&1 > /dev/tty )
+			#Format it!
+			mkfs.$filesystem $part
+			vardir="var"
+			p=$(echo "$p" | grep -v $part)
 			;;
 		"/srv")
-			fdisk -l "$disk"
-			echo "You can press Shift + PageUp/PageDown to scroll"
-			read -p "Press Return to continue..."
-			dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
-				--menu "Choose the partition that you want to use for: srv" 20 30 7 ${p} 2> temp
-			part="$(cat temp)"
-			rm temp
-			# Option is selected
-			if [ "$?" = "0" ]
-			then
-				srvfs=$part
-			fi
-
+			#Select the partition
+			dialog --backtitle "ArchLinux Installation" --title "Partition Selection" --textbox /tmp/partitions 0 0
+			part=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
+				--menu "Choose the partition that you want to use for: srv" 0 0 0 ${p} 2>&1 > /dev/tty )
+			srvfs=$part
+			#Select the format 
 			fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}')"
-
-			dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
-				--menu "Choose the filesystem type that you want to use" 20 30 7 ${fs} 2> temp
-			filesystem="$(cat temp)"
-			rm temp
-			if [ "$?" = "0" ]
-			then
-				mkfs.$filesystem $part
-				srvdir="srv"
-				p=$(echo "$p" | grep -v $part)
-			fi
+			filesystem=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
+				--menu "Choose the filesystem type that you want to use" 0 0 0 ${fs} 2>&1 > /dev/tty )
+			#Format it!
+			mkfs.$filesystem $part
+			srvdir="srv"
+			p=$(echo "$p" | grep -v $part)
 			;;
 		"/opt")
-			fdisk -l "$disk"
-			echo "You can press Shift + PageUp/PageDown to scroll"
-			read -p "Press Return to continue..."
-			dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
-				--menu "Choose the partition that you want to use for: opt" 20 30 7 ${p} 2> temp
-			part="$(cat temp)"
-			rm temp
-			# Option is selected
-			if [ "$?" = "0" ]
-			then
-				optfs=$part
-			fi
-
+			#Select the partition
+			dialog --backtitle "ArchLinux Installation" --title "Partition Selection" --textbox /tmp/partitions 0 0
+			part=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
+				--menu "Choose the partition that you want to use for: opt" 0 0 0 ${p} 2>&1 > /dev/tty )
+			optfs=$part
+			#Select the format 
 			fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}')"
-
-			dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
-				--menu "Choose the filesystem type that you want to use" 20 30 7 ${fs} 2> temp
-			filesystem="$(cat temp)"
-			rm temp
-			if [ "$?" = "0" ]
-			then
-				mkfs.$filesystem $part
-				optdir="opt"
-				p=$(echo "$p" | grep -v $part)
-			fi
+			filesystem=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
+				--menu "Choose the filesystem type that you want to use" 0 0 0 ${fs} 2>&1 > /dev/tty )
+			#Format it!
+			mkfs.$filesystem $part
+			optdir="opt"
+			p=$(echo "$p" | grep -v $part)
 			;;
 		"swap")
-			fdisk -l "$disk"
-			echo "You can press Shift + PageUp/PageDown to scroll"
-			read -p "Press Return to continue..."
-			dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
-				--menu "Choose the partition that you want to use for: swap" 20 30 7 ${p} 2> temp
-			part="$(cat temp)"
-			rm temp
-			# Option is selected
-			if [ "$?" = "0" ]
-			then
-				mkswap $part
-				swapon $part
-				swap=$part
-				p=$(echo "$p" | grep -v $part)
-			fi
+			dialog --backtitle "ArchLinux Installation" --title "Partition Selection" --textbox /tmp/partitions 0 0
+			part$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
+				--menu "Choose the partition that you want to use for: swap" 0 0 0 ${p} 2>&1 > /dev/tty)
+			mkswap $part
+			swapon $part
+			swap=$part
+			p=$(echo "$p" | grep -v $part)
 	esac
 done
-
-parts="$(echo $parts | sed 's/^..//')"
 
 ##Mounts
 #First mount the root partition because later we are going to create the folders to mount the partitions there
