@@ -3,10 +3,10 @@ cmd=(dialog --backtitle "ArchLinux Installation" --separate-output --checklist "
 options=(KDE4 "KDE desktop environment v4"	off
 		KDE5 "KDE desktop environment v4"	off
 		Gnome "GNOME Desktop environment"	off
-		MATE "A mantained fork of GNOME v2"	off
-		Pantheon "Elementary OS' Desktop environment"	off
 		XFCE "XFCE desktop environment"	off
 		LXDE "Light Desktop environment"	off
+		MATE "A mantained fork of GNOME v2"	off
+		Pantheon "Elementary OS' Desktop environment"	off
 		LXQT "Light Desktop environment with QT"	off
 		Unity "Ubuntu's Desktop environment"	off
 		DDE "Deepin's Desktop environment"	off
@@ -55,6 +55,28 @@ do
 			systemctl enable NetworkManager
 		;;
 
+		"XFCE")
+			dialog --backtitle "ArchLinux Installation" --title "XFCE4 Instalation" \
+					--yesno "Do you want to install XFCE's extra software? (xfce4-goodies)"
+			if [[ $? = 0 ]];then
+				xfce4goodies=xfce4-goodies
+			fi
+			pacman -S --noconfirm xfce4 $xfce4goodies
+			#Enable NetworkManager
+			systemctl enable NetworkManager
+		;;
+
+		"LXDE")
+			dialog --backtitle "ArchLinux Installation" --title "LXDE Instalation" \
+					--yesno "Do you want to install LXDE's extra software? (lxde-common)"
+			if [[ $? = 0 ]];then
+				lxdecommon=lxde-common
+			fi
+			pacman -S --noconfirm lxde $lxdecommon
+			#Enable NetworkManager
+			systemctl enable NetworkManager
+		;;
+
 		"MATE")
 			dialog --backtitle "ArchLinux Installation" --title "MATE Instalation" \
 					--yesno "Do you want to install MATE's extra software? (mate-extra)"
@@ -74,28 +96,6 @@ do
 			sudo -u $user yaourt -A -S --noconfirm ttf-opensans pantheon-notify-bzr
 			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-			#Enable NetworkManager
-			systemctl enable NetworkManager
-		;;
-
-		"XFCE")
-			dialog --backtitle "ArchLinux Installation" --title "XFCE4 Instalation" \
-					--yesno "Do you want to install XFCE's extra software? (xfce4-goodies)"
-			if [[ $? = 0 ]];then
-				xfce4goodies=xfce4-goodies
-			fi
-			pacman -S --noconfirm xfce4 $xfce4goodies
-			#Enable NetworkManager
-			systemctl enable NetworkManager
-		;;
-
-		"LXDE")
-			dialog --backtitle "ArchLinux Installation" --title "LXDE Instalation" \
-					--yesno "Do you want to install LXDE's extra software? (lxde-common)"
-			if [[ $? = 0 ]];then
-				lxdecommon=lxde-common
-			fi
-			pacman -S --noconfirm lxde $lxdecommon
 			#Enable NetworkManager
 			systemctl enable NetworkManager
 		;;
