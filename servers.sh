@@ -161,6 +161,8 @@ do
 			DB3=" GRANT ALL PRIVILEGES ON owncloud.* TO 'owncloud'@'localhost' WITH GRANT OPTION;"
 			DB="${DB1}${DB2}${DB3}"
 			mysql -uroot -p$rpassword -e "$DB"
+			dialog --backtitle "ArchLinux Installation" --title "Owncloud Installation" \
+					--msgbox "Owncloud Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip/owncloud" 0 0
 			systemctl restart httpd
 		;;
 
@@ -234,6 +236,8 @@ do
 			DB3=" GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress'@'localhost' WITH GRANT OPTION;"
 			DB="${DB1}${DB2}${DB3}"
 			mysql -uroot -p$rpassword -e "$DB"
+			dialog --backtitle "ArchLinux Installation" --title "Wordpress Installation" \
+					--msgbox "Wordpress Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip/wordpress" 0 0
 			systemctl restart httpd
 		;;
 
@@ -285,6 +289,8 @@ do
 					fi;;
 				1) echo "HTTPS port not configured";;
 			esac
+			dialog --backtitle "ArchLinux Installation" --title "Subsonic Installation" \
+					--msgbox "Subsonic Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip:$port\nUser: admin\nPassword: admin" 0 0
 			systemctl enable subsonic
 			systemctl start subsonic
 		;;
@@ -334,6 +340,8 @@ do
 					fi;;
 				1) echo "HTTPS port not configured";;
 			esac
+			dialog --backtitle "ArchLinux Installation" --title "Madsonic Installation" \
+					--msgbox "Madsonic Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip:$port\nUser: admin\nPassword: admin" 0 0
 			systemctl enable madsonic
 			systemctl start madsonic
 		;;
@@ -351,6 +359,8 @@ do
 			interface=$(cat temp)
 			rm temp
 			sed -i "s/-i eth0/-i $interface" /lib/systemd/system/ntop.service
+			dialog --backtitle "ArchLinux Installation" --title "NTOP Installation" \
+					--msgbox "NTOP Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip:3000\User: admin\nPassword: $ntoppass" 0 0
 			systemctl enable ntop
 			systemctl start ntop
 		;;
@@ -370,7 +380,8 @@ do
 			systemctl enable deluged
 			systemctl start deluge-web
 			systemctl enable deluge-web
-			dialog --backtitle "ArchLinux Installation" --title "Deluege web is now running" --msgbox 'Deluge web is now running at the port 8112, you can change that port in the web UI settings later.' 6 30
+			dialog --backtitle "ArchLinux Installation" --title "Deluge Installation" \
+					--msgbox "Deluge Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip:8112\nPassword: deluge" 0 0
 		;;
 
 		"L2TP")
