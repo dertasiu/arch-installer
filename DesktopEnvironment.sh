@@ -195,33 +195,24 @@ done
 
 dm=$(dialog --backtitle "ArchLinux Installation" --clear --title "Display Manager selection: " \
 		--menu "Select the Display Manager:" 0 0 0 \
-		Entrance "Enlightenment's Display manager (Experimental)" \
 		GDM "GNOME Display manager" \
-		LightDM "Cross-desktop display manager" \
+		SDDM "KDE4 Display manager" \
 		LXDM "LXDE Display manager" \
 		MDM "Linux Mint's Display manager" \
-		SDDM "KDE4 Display manager" \
+		Entrance "Enlightenment's Display manager (Experimental)" \
+		LightDM "Cross-desktop display manager" \
 		SLiM "Lightweight and elegant graphical" 2>&1 > /dev/tty)
 for choice in $dm
 do
 	case $choice in
-		"Entrance")
-			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
-			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-			sudo -u $user yaourt -A -S --noconfirm entrance-git
-			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
-			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-			systemctl enable entrance
-		;;
-
 		"GDM")
 			pacman -S --noconfirm gdm
 			systemctl enable gdm
 		;;
 
-		"LightDM")
-			pacman -S --noconfirm lightdm
-			systemctl enable lightdm
+		"SDDM")
+			pacman -S --noconfirm sddm
+			systemctl enable sddm
 		;;
 
 		"LXDM")
@@ -238,9 +229,18 @@ do
 			systemctl enable mdm
 		;;
 
-		"SDDM")
-			pacman -S --noconfirm sddm
-			systemctl enable sddm
+		"Entrance")
+			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			sudo -u $user yaourt -A -S --noconfirm entrance-git
+			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+			systemctl enable entrance
+		;;
+
+		"LightDM")
+			pacman -S --noconfirm lightdm
+			systemctl enable lightdm
 		;;
 
 		"SLiM")
