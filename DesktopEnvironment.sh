@@ -23,25 +23,45 @@ for choice in $desktop #For each line that is on the variable $desktop, grab one
 do
 	case $choice in #In the case that the $choice variable is..., do... Ex: $choice=KDE5; case $choice in. This will select the KDE5 option
 		"KDE4")
-			pacman -S --noconfirm kde kde-meta
+			dialog --backtitle "ArchLinux Installation" --title "KDE4 Instalation" \
+					--yesno "Do you want to install KDE4's extra software? (kde-meta)"
+			if [[ $? = 0 ]];then
+				kdemeta=kde-meta
+			fi
+			pacman -S --noconfirm kde $kdemeta
 			#Enable NetworkManager
 			systemctl enable NetworkManager
 		;;
 
 		"KDE5")
-			pacman -S --noconfirm plasma plasma-meta
+			dialog --backtitle "ArchLinux Installation" --title "KDE5 Instalation" \
+					--yesno "Do you want to install KDE5's extra software? (plasma-meta)"
+			if [[ $? = 0 ]];then
+				plasmameta=plasma-meta
+			fi
+			pacman -S --noconfirm plasma $plasmameta
 			#Enable NetworkManager
 			systemctl enable NetworkManager
 		;;
 
 		"Gnome")
-			pacman -S --noconfirm gnome gnome-extra
+			dialog --backtitle "ArchLinux Installation" --title "GNOME Instalation" \
+					--yesno "Do you want to install GNOME's extra software? (gnome-extra)"
+			if [[ $? = 0 ]];then
+				gnomeextra=gnome-extra
+			fi
+			pacman -S --noconfirm gnome $gnomeextra
 			#Enable NetworkManager
 			systemctl enable NetworkManager
 		;;
 
 		"MATE")
-			pacman -S --noconfirm mate mate-extra
+			dialog --backtitle "ArchLinux Installation" --title "MATE Instalation" \
+					--yesno "Do you want to install MATE's extra software? (mate-extra)"
+			if [[ $? = 0 ]];then
+				mateextra=mate-extra
+			fi
+			pacman -S --noconfirm mate $mateextra
 			#Enable NetworkManager
 			systemctl enable NetworkManager
 		;;
@@ -59,13 +79,23 @@ do
 		;;
 
 		"XFCE")
-			pacman -S --noconfirm xfce4 xfce4-goodies
+			dialog --backtitle "ArchLinux Installation" --title "XFCE4 Instalation" \
+					--yesno "Do you want to install XFCE's extra software? (xfce4-goodies)"
+			if [[ $? = 0 ]];then
+				xfce4goodies=xfce4-goodies
+			fi
+			pacman -S --noconfirm xfce4 $xfce4goodies
 			#Enable NetworkManager
 			systemctl enable NetworkManager
 		;;
 
 		"LXDE")
-			pacman -S --noconfirm lxde lxde-common
+			dialog --backtitle "ArchLinux Installation" --title "LXDE Instalation" \
+					--yesno "Do you want to install LXDE's extra software? (lxde-common)"
+			if [[ $? = 0 ]];then
+				lxdecommon=lxde-common
+			fi
+			pacman -S --noconfirm lxde $lxdecommon
 			#Enable NetworkManager
 			systemctl enable NetworkManager
 		;;
@@ -117,8 +147,13 @@ do
 		;;
 
 		"DDE")
+			dialog --backtitle "ArchLinux Installation" --title "Deepin Instalation" \
+					--yesno "Do you want to install Deepin's extra software? (deepin-extra)"
+			if [[ $? = 0 ]];then
+				deepinextra=deepin-extra
+			fi
 			printf "\n[home_metakcahura_arch-deepin_Arch_Extra]\nServer = http://download.opensuse.org/repositories/home:/metakcahura:/arch-deepin/Arch_Extra/\x24arch\nSigLevel = Never\n" >> /etc/pacman.conf
-			pacman -Syy --noconfirm deepin deepin-extra
+			pacman -Syy --noconfirm deepin $deepinextra
 			#Enable NetworkManager
 			systemctl enable NetworkManager
 		;;
@@ -130,7 +165,7 @@ do
 		;;
 
 		"i3")
-			pacman -S --noconfirm i3
+			pacman -S --noconfirm i3-wm i3status i3lock
 			#Enable NetworkManager
 			systemctl enable NetworkManager
 		;;
