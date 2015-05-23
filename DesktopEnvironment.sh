@@ -193,17 +193,15 @@ do
 esac
 done
 
-dialog --backtitle "ArchLinux Installation" --clear --title "Display Manager selection: " \
-		--menu "Select the Display Manager:" 22 76 16 \
-		Entrance " " \
-		GDM " " \
-		LightDM " " \
-		LXDM " " \
-		MDM " " \
-		SDDM " " \
-		SLiM " " 2> temp
-clear
-dm=$(cat temp)
+dm=$(dialog --backtitle "ArchLinux Installation" --clear --title "Display Manager selection: " \
+		--menu "Select the Display Manager:" 0 0 0 \
+		Entrance "Enlightenment's Display manager (Experimental)" \
+		GDM "GNOME Display manager" \
+		LightDM "Cross-desktop display manager" \
+		LXDM "LXDE Display manager" \
+		MDM "Linux Mint's Display manager" \
+		SDDM "KDE4 Display manager" \
+		SLiM "Lightweight and elegant graphical" 2>&1 > /dev/tty)
 for choice in $dm
 do
 	case $choice in
