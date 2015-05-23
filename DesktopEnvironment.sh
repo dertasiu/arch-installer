@@ -1,20 +1,20 @@
 user=$(cat /etc/passwd | grep 1000 | awk -F':' '{ print $1}' | head -1)
-cmd=(dialog --backtitle "ArchLinux Installation" --separate-output --checklist "Select the Desktop Environment:" 22 76 16)
-options=(KDE4 " "	off
-		KDE5 " "	off
-		Gnome " "	off
-		MATE " "	off
-		Pantheon " "	off
-		XFCE " "	off
-		LXDE " "	off
-		LXQT " "	off
-		Unity " "	off
-		DDE " "	off
-		OpenBox " "	off
-		i3 " "	off
-		Cinnamon " "	off
-		Budgie " "	off
-		Enlightenment " " off
+cmd=(dialog --backtitle "ArchLinux Installation" --separate-output --checklist "Select the Desktop Environment:" 0 0 0)
+options=(KDE4 "KDE desktop environment v4"	off
+		KDE5 "KDE desktop environment v4"	off
+		Gnome "GNOME Desktop environment"	off
+		MATE "A mantained fork of GNOME v2"	off
+		Pantheon "Elementary OS' Desktop environment"	off
+		XFCE "XFCE desktop environment"	off
+		LXDE "Light Desktop environment"	off
+		LXQT "Light Desktop environment with QT"	off
+		Unity "Ubuntu's Desktop environment"	off
+		DDE "Deepin's Desktop environment"	off
+		OpenBox "Simple and minimalistic DE"	off
+		i3 "Tiled Window manager"	off
+		Cinnamon "Linux Mint's desktop environment"	off
+		Budgie "Solus' desktop environment"	off
+		Enlightenment "Enlightenment desktop environment" off
 		)
 desktop=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 pacman -Syy
