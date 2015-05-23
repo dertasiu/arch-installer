@@ -185,7 +185,7 @@ do
 			;;
 		"swap")
 			dialog --backtitle "ArchLinux Installation" --title "Partition Selection" --textbox /tmp/partitions 0 0
-			part$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
+			part=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
 				--menu "Choose the partition that you want to use for: swap" 0 0 0 ${p} 2>&1 > /dev/tty)
 			mkswap $part
 			swapon $part
