@@ -250,20 +250,18 @@ do
 esac
 done
 
-dialog --backtitle "ArchLinux Installation" --clear --title "Default Shell selection: " \
-		--menu "Select the Default Shell:" 22 76 16 \
-		BASH " " \
-		SH " " \
-		ZSH " " \
-		FISH " " \
-		CShell " " \
-		DASH " " \
-		KornShell " " \
-		Oh " " \
-		rc " " 2> temp
-clear
-dm=$(cat temp)
-for choice in $dm
+sh=$(dialog --backtitle "ArchLinux Installation" --clear --title "Default Shell selection: " \
+		--menu "Select the Default Shell:" 0 0 0 \
+		BASH "Default Shell" \
+		SH "SH Shell" \
+		ZSH "ZSH Shell" \
+		FISH "FISH Shell" \
+		CShell "C Shell" \
+		DASH "DASH Shell" \
+		KornShell "Korn Shell" \
+		Oh "Oh Shell written in GO" \
+		rc "RC Shell" 2>&1 > /dev/tty)
+for choice in $sh
 do
 	case $choice in
 		"BASH")
