@@ -273,7 +273,7 @@ username=$(dialog --backtitle "Archlinux Installation" --title "User creation" \
 						"Username :" 1 1 "user" 1 12 25 30 \
 						"Real name:" 2 1 "Nicolas Cage" 2 12 25 30 2>&1 > /dev/tty)
 user=$(echo "$username" | sed -n 1p)
-realname=$(echo "$realname" | sed -n 2p | sed 's/^/"/' | sed 's/$/"/')
+realname=$(echo "$username" | sed -n 2p | sed 's/^/"/' | sed 's/$/"/')
 arch-chroot /mnt /bin/sh -c "useradd -c $realname -m -g users -G video,audio,lp,optical,games,power,wheel,storage -s /bin/bash $user" #Add the user to the following groups and it create the home directory
 userpasswd=$(dialog --backtitle "Archlinux Installation" --title "User creation" --passwordbox "Please, enter the user password" 8 36 2>&1 > /dev/tty)
 arch-chroot /mnt /bin/bash -c "echo $user:$userpasswd | chpasswd"
