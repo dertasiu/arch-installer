@@ -311,7 +311,7 @@ do
 						sed -i "s/ZSH_THEME=\x22robbyrussell\x22/ZSH_THEME=\x22$theme\x22/" /root/.zshrc
 					;;
 
-					"None") none
+					"None")
 						echo "Pure ZSH!"
 					;;
 				esac
