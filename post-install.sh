@@ -279,14 +279,12 @@ do
 
 		"ZSH")
 			pacman -S --noconfirm zsh
-			dialog --backtitle "ArchLinux Installation" --clear --title "ZSH selection: " \
-					--menu "Select the ZSH theme:" 22 76 16 \
+			zsh=$(dialog --backtitle "ArchLinux Installation" --clear --title "ZSH selection: " \
+					--menu "Select the ZSH theme:" 0 0 0 \
 					grml "grml zsh config" \
 					oh-my-zsh "oh my zsh" \
-					None "Pure ZSH!" 2> temp
-			clear
-			dm=$(cat temp)
-			for choice in $dm
+					None "Pure ZSH!" 2>&1 > /dev/tty)
+			for choice in $zsh
 			do
 				case $choice in
 					"grml")
@@ -302,10 +300,8 @@ do
 						cp /usr/share/oh-my-zsh/zshrc /home/$user/.zshrc
 						cp /usr/share/oh-my-zsh/zshrc /root/.zshrc
 						themes=$(ls /usr/share/oh-my-zsh/themes | awk -F "." '{print $1}' | sed -e 's/$/ theme/')
-						dialog --backtitle "ArchLinux Installation" --clear --title "Oh my ZSH theme selection: " \
-								--menu "Select the Oh my ZSH theme:" 22 76 16 ${themes} 2> temp
-						theme=$(cat temp)
-						rm temp
+						theme=$(dialog --backtitle "ArchLinux Installation" --clear --title "Oh my ZSH theme selection: " \
+								--menu "Select the Oh my ZSH theme:" 0 0 0 ${themes} 2>&1 > /dev/tty)
 						sed -i "s/ZSH_THEME=\x22robbyrussell\x22/ZSH_THEME=\x22$theme\x22/" /home/$user/.zshrc
 						sed -i "s/ZSH_THEME=\x22robbyrussell\x22/ZSH_THEME=\x22$theme\x22/" /root/.zshrc
 					;;
