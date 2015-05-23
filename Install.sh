@@ -59,7 +59,7 @@ p=$(echo "$p" | grep -v $part)
 #Format the main partition
 fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}')"
 format=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
-	--menu "Choose the filesystem type that you want to use" 0 0 0 ${fs})
+	--menu "Choose the filesystem type that you want to use" 0 0 0 ${fs} 2>&1 > /dev/tty)
 mkfs.$format $part
 
 #View the available partitions and select the main partition
