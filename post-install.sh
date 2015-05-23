@@ -27,7 +27,7 @@ if [[ $? == 0 ]];then
 		case $choice in #In the case that the $choice variable is..., do... Ex: $choice=KDE5; case $choice in. This will select the KDE5 option
 			"KDE4")
 				dialog --backtitle "ArchLinux Installation" --title "KDE4 Instalation" \
-						--yesno "Do you want to install KDE4's extra software? (kde-meta)"
+						--yesno "Do you want to install KDE4's extra software? (kde-meta)" 0 0
 				if [[ $? = 0 ]];then
 					kdemeta=kde-meta
 				fi
@@ -38,7 +38,7 @@ if [[ $? == 0 ]];then
 
 			"KDE5")
 				dialog --backtitle "ArchLinux Installation" --title "KDE5 Instalation" \
-						--yesno "Do you want to install KDE5's extra software? (plasma-meta)"
+						--yesno "Do you want to install KDE5's extra software? (plasma-meta)" 0 0
 				if [[ $? = 0 ]];then
 					plasmameta=plasma-meta
 				fi
@@ -49,7 +49,7 @@ if [[ $? == 0 ]];then
 
 			"Gnome")
 				dialog --backtitle "ArchLinux Installation" --title "GNOME Instalation" \
-						--yesno "Do you want to install GNOME's extra software? (gnome-extra)"
+						--yesno "Do you want to install GNOME's extra software? (gnome-extra)" 0 0
 				if [[ $? = 0 ]];then
 					gnomeextra=gnome-extra
 				fi
@@ -60,7 +60,7 @@ if [[ $? == 0 ]];then
 
 			"XFCE")
 				dialog --backtitle "ArchLinux Installation" --title "XFCE4 Instalation" \
-						--yesno "Do you want to install XFCE's extra software? (xfce4-goodies)"
+						--yesno "Do you want to install XFCE's extra software? (xfce4-goodies)" 0 0
 				if [[ $? = 0 ]];then
 					xfce4goodies=xfce4-goodies
 				fi
@@ -71,7 +71,7 @@ if [[ $? == 0 ]];then
 
 			"LXDE")
 				dialog --backtitle "ArchLinux Installation" --title "LXDE Instalation" \
-						--yesno "Do you want to install LXDE's extra software? (lxde-common)"
+						--yesno "Do you want to install LXDE's extra software? (lxde-common)" 0 0
 				if [[ $? = 0 ]];then
 					lxdecommon=lxde-common
 				fi
@@ -82,7 +82,7 @@ if [[ $? == 0 ]];then
 
 			"MATE")
 				dialog --backtitle "ArchLinux Installation" --title "MATE Instalation" \
-						--yesno "Do you want to install MATE's extra software? (mate-extra)"
+						--yesno "Do you want to install MATE's extra software? (mate-extra)" 0 0
 				if [[ $? = 0 ]];then
 					mateextra=mate-extra
 				fi
@@ -151,7 +151,7 @@ if [[ $? == 0 ]];then
 
 			"DDE")
 				dialog --backtitle "ArchLinux Installation" --title "Deepin Instalation" \
-						--yesno "Do you want to install Deepin's extra software? (deepin-extra)"
+						--yesno "Do you want to install Deepin's extra software? (deepin-extra)" 0 0
 				if [[ $? = 0 ]];then
 					deepinextra=deepin-extra
 				fi
