@@ -4,7 +4,7 @@ dialog --backtitle "ArchLinux Installation" --title "Desktop Environment instala
 if [[ $? == 0 ]];then
 	cmd=(dialog --backtitle "ArchLinux Installation" --separate-output --checklist "Select the Desktop Environment:" 0 0 0)
 	options=(KDE4 "KDE desktop environment v4"	off
-			KDE5 "KDE desktop environment v4"	off
+			KDE5 "KDE desktop environment v5"	off
 			Gnome "GNOME Desktop environment"	off
 			XFCE "XFCE desktop environment"	off
 			LXDE "Light Desktop environment"	off
@@ -116,13 +116,10 @@ if [[ $? == 0 ]];then
 				sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 				#Enable NetworkManager
 				systemctl enable NetworkManager
-				dialog --backtitle "ArchLinux Installation" --clear --title "Window Manager Selecion: " \
-						--menu "LXQt requieres an Window Manger to work, select it:" 22 76 16 \
-						Openbox " " \
-						Kwin " " 2> temp
-				clear
-				wm=$(cat temp)
-				rm temp
+				wm=$(dialog --backtitle "ArchLinux Installation" --clear --title "Window Manager Selecion: " \
+						--menu "LXQt requires an Window Manger to work, select it:" 0 0 0 \
+						Openbox "Simple Window manager" \
+						Kwin "KDE Window Manager" 2>&1 > /dev/tty)
 				for choice in $wm
 				do
 					case $choice in
