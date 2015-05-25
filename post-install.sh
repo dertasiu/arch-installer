@@ -569,9 +569,9 @@ do
 
 				#Add the main user of mysql
 				dialog --backtitle "Archlinux Installation" --title "Mysql user creation" \
-						--form "\nPlease, enter the mysql user configuration" 25 60 16 \
-						"Username :" 1 1 "user" 1 25 25 30 \
-						"Password :" 2 1 "passw0rd" 2 25 25 30 2>temp
+						--form "\nPlease, enter the mysql user configuration" 0 0 0 \
+						"Username :" 1 1 "user" 1 12 25 30 \
+						"Password :" 2 1 "passw0rd" 2 12 25 30 2>temp
 				dbuser=$(cat temp | sed -n 1p)
 				dbpass=$(cat temp | sed -n 2p)
 				rm temp
