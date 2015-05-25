@@ -738,8 +738,7 @@ do
 			interfaces=$(ip a | grep -E "$patterns" | grep -v inet | grep -v loop | grep -v link | grep -v DOWN | awk -F " " '{print $2}' | sed 's/://g' | sed 's/$/ net/')
 			interface=$(dialog --backtitle "ArchLinux Installation" --clear --title "Interface: " \
 					--menu "In what interface do you want to run NTOP?" 0 0 0 ${interfaces} 2>&1 > /dev/tty)
-
-			sed -i "s/-i eth0/-i $interface" /lib/systemd/system/ntop.service
+			sed -i "s/-i eth0/-i $interface/g" /lib/systemd/system/ntop.service
 			dialog --backtitle "ArchLinux Installation" --title "NTOP Installation" \
 					--msgbox "NTOP Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip:3000\nUser: admin\nPassword: $ntoppass" 0 0
 			systemctl enable ntop
