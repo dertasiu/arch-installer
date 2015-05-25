@@ -371,15 +371,15 @@ case $response in
 	1) graphics=$(lspci -k | grep -A 2 -E "(VGA|3D)")
 		if [[ $graphics  = *Intel* || $graphics = *intel* || $graphics = *INTEL* ]]
 		then
-		        pacman -S xf86-video-intel mesa-libgl
+		        pacman -S --noconfirm xf86-video-intel mesa-libgl
 		fi
 		if [[ $graphics = *NVIDIA* || $graphics = *nvidia* || $graphics = *Nvidia* ]]
 		then
-		        pacman -S nvidia
+		        pacman -S --noconfirm nvidia
 		fi
 		if [[ $graphics  = *ATI* || $graphics = *ati* || $graphics = *Ati* || $graphics = *AMD* || $graphics = *amd* || $graphics = *amd* ]]
 		then
-		        pacman -S xf86-video-ati mesa-libgl mesa-vdpau lib32-mesa-vdpau
+		        pacman -S --noconfirm xf86-video-ati mesa-libgl mesa-vdpau lib32-mesa-vdpau
 		fi
 ;;
 esac
