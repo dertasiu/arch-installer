@@ -705,7 +705,7 @@ do
 					rm temp
 					if [ "$?" = "0" ]
 					then
-						sed -i "s/MADSONIC_PORT=4040/MADSONIC_PORT=$port/g" /lib/madsonic/madsonic.sh
+						sed -i "s/MADSONIC_PORT=4040/MADSONIC_PORT=$port/g" /var/madsonic/madsonic.sh
 					fi;;
 				1) echo "HTTP port not changed";;
 			esac
@@ -720,7 +720,7 @@ do
 					rm temp
 					if [ "$?" = "0" ]
 					then
-						sed -i "s/MADSONIC_HTTPS_PORT=0/MADSONIC_HTTPS_PORT=$port/g" /lib/madsonic/madsonic.sh
+						sed -i "s/MADSONIC_HTTPS_PORT=0/MADSONIC_HTTPS_PORT=$port/g" /var/madsonic/madsonic.sh
 					fi;;
 				1) echo "HTTPS port not configured";;
 			esac
