@@ -27,7 +27,7 @@ if [[ $? == 0 ]];then
 		case $choice in #In the case that the $choice variable is..., do... Ex: $choice=KDE5; case $choice in. This will select the KDE5 option
 			"KDE4")
 				dialog --backtitle "ArchLinux Installation" --title "KDE4 Instalation" \
-						--yesno "Do you want to install KDE4's extra software? (kde-meta)" 0 0
+						--yesno "Do you want to install KDE4's extra software? (kde-meta)" 6 60
 				if [[ $? = 0 ]];then
 					kdemeta=kde-meta
 				fi
@@ -38,7 +38,7 @@ if [[ $? == 0 ]];then
 
 			"KDE5")
 				dialog --backtitle "ArchLinux Installation" --title "KDE5 Instalation" \
-						--yesno "Do you want to install KDE5's extra software? (plasma-meta)" 0 0
+						--yesno "Do you want to install KDE5's extra software? (plasma-meta)" 6 63
 				if [[ $? = 0 ]];then
 					plasmameta=plasma-meta
 				fi
@@ -49,7 +49,7 @@ if [[ $? == 0 ]];then
 
 			"Gnome")
 				dialog --backtitle "ArchLinux Installation" --title "GNOME Instalation" \
-						--yesno "Do you want to install GNOME's extra software? (gnome-extra)" 0 0
+						--yesno "Do you want to install GNOME's extra software? (gnome-extra)" 6 64
 				if [[ $? = 0 ]];then
 					gnomeextra=gnome-extra
 				fi
@@ -60,7 +60,7 @@ if [[ $? == 0 ]];then
 
 			"XFCE")
 				dialog --backtitle "ArchLinux Installation" --title "XFCE4 Instalation" \
-						--yesno "Do you want to install XFCE's extra software? (xfce4-goodies)" 0 0
+						--yesno "Do you want to install XFCE's extra software? (xfce4-goodies)" 6 65
 				if [[ $? = 0 ]];then
 					xfce4goodies=xfce4-goodies
 				fi
@@ -71,7 +71,7 @@ if [[ $? == 0 ]];then
 
 			"LXDE")
 				dialog --backtitle "ArchLinux Installation" --title "LXDE Instalation" \
-						--yesno "Do you want to install LXDE's extra software? (lxde-common)" 0 0
+						--yesno "Do you want to install LXDE's extra software? (lxde-common)" 6 63
 				if [[ $? = 0 ]];then
 					lxdecommon=lxde-common
 				fi
@@ -741,6 +741,7 @@ do
 			sed -i "s/-i eth0/-i $interface/g" /lib/systemd/system/ntop.service
 			dialog --backtitle "ArchLinux Installation" --title "NTOP Installation" \
 					--msgbox "NTOP Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip:3000\nUser: admin\nPassword: $ntoppass" 0 0
+			systemctl daemon-reload
 			systemctl enable ntop
 			systemctl start ntop
 		;;
@@ -838,6 +839,6 @@ esac
 done
 
 #Disable root automatic login tn tty1
-rm /etc/systemd/system/getty@tty1.service.d/override.conf
+rm -R /etc/systemd/system/getty@tty1.service.d
 sed -i 's/sh post-install.sh//g' /root/.bashrc
 rm /root/.bash_profile
