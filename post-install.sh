@@ -1,6 +1,6 @@
 user=$(cat /etc/passwd | grep 1000 | awk -F':' '{ print $1}' | head -1)
 dialog --backtitle "ArchLinux Installation" --title "Desktop Environment instalation" \
-		--yesno "Do you want to install any desktop environment?" 6 32
+		--yesno "Do you want to install any desktop environment?" 6 51
 if [[ $? == 0 ]];then
 	cmd=(dialog --backtitle "ArchLinux Installation" --separate-output --checklist "Select the Desktop Environment:" 0 0 0)
 	options=(KDE4 "KDE desktop environment v4"	off
