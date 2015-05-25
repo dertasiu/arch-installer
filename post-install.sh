@@ -741,7 +741,7 @@ do
 
 			sed -i "s/-i eth0/-i $interface" /lib/systemd/system/ntop.service
 			dialog --backtitle "ArchLinux Installation" --title "NTOP Installation" \
-					--msgbox "NTOP Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip:3000\User: admin\nPassword: $ntoppass" 0 0
+					--msgbox "NTOP Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip:3000\nUser: admin\nPassword: $ntoppass" 0 0
 			systemctl enable ntop
 			systemctl start ntop
 		;;
