@@ -82,7 +82,7 @@ if [[ $? == 0 ]];then
 
 			"MATE")
 				dialog --backtitle "ArchLinux Installation" --title "MATE Instalation" \
-						--yesno "Do you want to install MATE's extra software? (mate-extra)" 0 0
+						--yesno "Do you want to install MATE's extra software? (mate-extra)" 6 62
 				if [[ $? = 0 ]];then
 					mateextra=mate-extra
 				fi
@@ -148,7 +148,7 @@ if [[ $? == 0 ]];then
 
 			"DDE")
 				dialog --backtitle "ArchLinux Installation" --title "Deepin Instalation" \
-						--yesno "Do you want to install Deepin's extra software? (deepin-extra)" 0 0
+						--yesno "Do you want to install Deepin's extra software? (deepin-extra)" 6 66
 				if [[ $? = 0 ]];then
 					deepinextra=deepin-extra
 				fi
@@ -361,8 +361,8 @@ do
 done
 
 #Install the compatibility layer for virtualbox or the graphics card driver
-dialog --backtitle "ArchLinux Installation" --title "Grub instalation" \
-		--yesno "Are you on a VirtualBox machine?" 7 60 
+dialog --backtitle "ArchLinux Installation" --title "Graphics Drivers installation" \
+		--yesno "Are you on a VirtualBox machine?" 6 36
 response=$?
 case $response in
 	0) pacman -S --noconfirm  virtualbox-guest-utils virtualbox-guest-modules
