@@ -732,16 +732,13 @@ do
 
 		"NTOP")
 			pacman -S --noconfirm ntop
-			dialog --backtitle "Archlinux Installation" --passwordbox "Enter NTOP's admin password:" 8 40 2>temp
-			ntoppass=$(cat temp)
-			rm temp
+			ntoppass=$(dialog --backtitle "Archlinux Installation" --passwordbox "Enter NTOP's admin password:" 8 40 2>&1 > /dev/tty)
 			ntop --set-admin-password=$ntoppass
 			patterns=$(echo -e "en\nwl")
 			interfaces=$(ip a | grep -E "$patterns" | grep -v inet | grep -v loop | grep -v link | grep -v DOWN | awk -F " " '{print $2}' | sed 's/://g' | sed 's/$/ net/')
-			dialog --backtitle "ArchLinux Installation" --clear --title "Interface: " \
-					--menu "In what interface do you want to setup the VPN Server?" 20 30 7 ${interfaces} 2> temp
-			interface=$(cat temp)
-			rm temp
+			interface=$(dialog --backtitle "ArchLinux Installation" --clear --title "Interface: " \
+					--menu "In what interface do you want to run NTOP?" 0 0 0 ${interfaces} 2>&1 > /dev/tty)
+
 			sed -i "s/-i eth0/-i $interface" /lib/systemd/system/ntop.service
 			dialog --backtitle "ArchLinux Installation" --title "NTOP Installation" \
 					--msgbox "NTOP Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip:3000\User: admin\nPassword: $ntoppass" 0 0
