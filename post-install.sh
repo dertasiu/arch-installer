@@ -411,20 +411,39 @@ case $response in
 ;;
 esac
 LAMP=0
-cmd=(dialog --backtitle "ArchLinux Installation" --separate-output --checklist "Select the Services that you want to install:" 0 0 0)
-options=(SSH "Remote console"	off
-		Web "Apache + PHP5 + MariaDB(Mysql) A complete Web Server"	off
-		Owncloud "Self-hosted cloud"	off
-		Wordpress "Self-hosted blog"	off
-		Subsonic "Music Server"	off
-		Madsonic "Music Server"	off
-		NTOP "Traffic monitoring tool"	off
-		TightVNC "Remote screen server"	off
-		Deluge "Torrent server with web UI"	off
-		L2TP "VirtualPrivateNetwork Server L2TP, IPSEC"	off
-		Prosody "XMPP Chat Server"	off
-		)
-desktop=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+
+noConflict=0
+until [[ $noConflict == "1" ]];do
+	dialog --backtitle "ArchLinux Installation" --title "Be careful" --msgbox 'These are the some incompatibilities between servers\n
+        Subsonic ── Madsonic' 0 0
+
+	cmd=(dialog --backtitle "ArchLinux Installation" --separate-output --checklist "Select the Services that you want to install:" 0 0 0)
+	options=(SSH "Remote console"	off
+			Web "Apache + PHP5 + MariaDB(Mysql) A complete Web Server"	off
+			Owncloud "Self-hosted cloud"	off
+			Wordpress "Self-hosted blog"	off
+			Subsonic "Music Server"	off
+			Madsonic "Music Server"	off
+			NTOP "Traffic monitoring tool"	off
+			TightVNC "Remote screen server"	off
+			Deluge "Torrent server with web UI"	off
+			L2TP "VirtualPrivateNetwork Server L2TP, IPSEC"	off
+			Prosody "XMPP Chat Server"	off
+			)
+	desktop=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+
+	Subtrue=$(echo "$desktop" | grep "Subsonic")
+	Madtrue=$(echo "$desktop" | grep "Madsonic")
+
+	if [[ $Subtrue == "Subsonic" ]] && [[ $Madtrue == "Madsonic" ]]
+	then
+		dialog --backtitle "ArchLinux Installation" --title "Incompatibility detected" --msgbox 'Subsonic and Madsonic are not compatible. Choose only one' 6 61
+		noConflict=0
+	else
+		noConflict=1
+	fi
+done
+
 pacman -Syy
 clear
 for choice in $desktop
