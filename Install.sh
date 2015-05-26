@@ -302,13 +302,9 @@ case $? in
 		for disk in $disks
 		do
 			echo "$disk Disk" >> temp
-			fdisk -l $disk | grep sd | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}' >> temp
+			partitions=$(fdisk -l $disk | grep sd | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')
 		done
-		partitions=$(cat temp)
-		rm temp
-
 		grubpart=$(dialog --backtitle "ArchLinux Installation" --clear --title "Grub partition/disk selection: " --menu "Choose the disk/partition to install grub in it (The disk that contains base system is $originaldisk): " 0 0 0 ${partitions} 2>&1 > /dev/tty)
-
 		arch-chroot /mnt /bin/bash -c "grub-install $grubpart && grub-mkconfig -o /boot/grub/grub.cfg";;
 esac
 
