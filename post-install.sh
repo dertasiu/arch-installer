@@ -4,6 +4,11 @@ dialog --backtitle "ArchLinux Installation" --title "Desktop Environment instala
 noConflict="0"
 if [[ $? == 0 ]];then
 	until [[ $noConflict == "1" ]];do
+		dialog --backtitle "ArchLinux Installation" --title "Be careful" --msgbox 'These are the some incompatibilities between desktops\n
+		      ┌─Gnome \n
+		Unity─┼─Deepin \n
+		      └─Pantheon\n
+		\nKDE4 ── KDE5      ' 0 0
 		cmd=(dialog --backtitle "ArchLinux Installation" --separate-output --checklist "Select the Desktop Environment:" 0 0 0)
 		options=(KDE4 "KDE desktop environment v4 (Conflict with KDE5)"	off
 				KDE5 "KDE desktop environment v5 (Conflict with KDE4)"	off
@@ -25,9 +30,18 @@ if [[ $? == 0 ]];then
 
 		KDE4true=$(echo "$desktop" | grep "KDE4")
 		KDE5true=$(echo "$desktop" | grep "KDE5")
+		Unitytrue=$(echo "$desktop" | grep "Unity")
+		Gnometrue=$(echo "$desktop" | grep "Gnome")
+		DDEtrue=$(echo "$desktop" | grep "DDE")
+		Pantheontrue=$(echo "$desktop" | grep "Pantheon")
 
 		if [[ $KDE4true == "KDE4" ]] && [[ $KDE5true == "KDE5" ]]
 		then
+			dialog --backtitle "ArchLinux Installation" --title "Incompatibility detected" --msgbox 'KDE4 and KDE5 are not compatible. Choose only one KDE' 6 57
+			noConflict=0
+		elif [[ $Unitytrue == "Unity" ]] && [[ $Gnometrue == "Gnome" || $DDEtrue == "DDE" || $Pantheontrue == "Pantheon" ]]
+		then
+			dialog --backtitle "ArchLinux Installation" --title "Incompatibility detected" --msgbox 'Unity cannot be installed at the same time that: Gnome, Deepin or Pantheon' 6 78
 			noConflict=0
 		else
 			noConflict=1
