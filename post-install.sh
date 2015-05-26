@@ -457,15 +457,13 @@ do
 					--yesno "Do you want to change the default port(22) of SSHD?" 7 60 
 			response=$?
 			case $response in
-				0) dialog --backtitle "Archlinux Installation" --title "SSH Configuration" \
-							--inputbox "Enter the port that you want to use:" 8 40 2>temp
-					port=$(cat temp)
-					rm temp
+				0)  port=$(dialog --backtitle "Archlinux Installation" --title "SSH Configuration" \
+							--inputbox "Enter the port that you want to use:" 8 40 2>&1 > /dev/tty)
 					if [ "$?" = "0" ]
 					then
 						sed -i -e "s/#Port 22/Port $(echo $port)/g" /etc/ssh/sshd_config
 					fi;;
-				1) echo "Port not changed";;
+				1)  echo "Port not changed";;
 			esac
 			systemctl start sshd
 			systemctl enable sshd
@@ -481,8 +479,7 @@ do
 			systemctl start mysqld
 
 			#Ask for the password of the root's database username
-			dialog --backtitle "Archlinux Installation" --passwordbox "Enter the root's password for MySQL/MariaDB:" 8 40 2>temp
-			rpassword=$(cat temp)
+			rpassword=$(dialog --backtitle "Archlinux Installation" --passwordbox "Enter the root's password for MySQL/MariaDB:" 8 40 2>&1 > /dev/tty)
 			rm temp
 			if [ "$?" = "0" ]
 			then
@@ -490,13 +487,12 @@ do
 			fi
 
 			#Add the main user of mysql
-			dialog --backtitle "Archlinux Installation" --title "Mysql user creation" \
+			db=$(dialog --backtitle "Archlinux Installation" --title "Mysql user creation" \
 					--form "\nPlease, enter the mysql user configuration" 25 60 16 \
 					"Username :" 1 1 "user" 1 25 25 30 \
-					"Password :" 2 1 "passw0rd" 2 25 25 30 2>temp
-			dbuser=$(cat temp | sed -n 1p)
-			dbpass=$(cat temp | sed -n 2p)
-			rm temp
+					"Password :" 2 1 "passw0rd" 2 25 25 30 2>&1 > /dev/tty)
+			dbuser=$(echo "$db" temp | sed -n 1p)
+			dbpass=$(echo "$db" temp | sed -n 2p)
 			if [ "$?" = "0" ]
 			then
 				DB1="CREATE USER '$dbuser'@'localhost' IDENTIFIED BY '$dbpass';"
@@ -529,22 +525,19 @@ do
 				systemctl start mysqld
 
 				#Ask for the password of the root's database username
-				dialog --backtitle "Archlinux Installation" --passwordbox "Enter the root's password for MySQL/MariaDB:" 8 40 2>temp
-				rpassword=$(cat temp)
-				rm temp
+				rpassword=$(dialog --backtitle "Archlinux Installation" --passwordbox "Enter the root's password for MySQL/MariaDB:" 8 40 2>&1 > /dev/tty)
 				if [ "$?" = "0" ]
 				then
 					/usr/bin/mysqladmin -u root password $rpassword
 				fi
 
 				#Add the main user of mysql
-				dialog --backtitle "Archlinux Installation" --title "Mysql user creation" \
+				db=$(dialog --backtitle "Archlinux Installation" --title "Mysql user creation" \
 						--form "\nPlease, enter the mysql user configuration" 25 60 16 \
 						"Username :" 1 1 "user" 1 25 25 30 \
-						"Password :" 2 1 "passw0rd" 2 25 25 30 2>temp
-				dbuser=$(cat temp | sed -n 1p)
-				dbpass=$(cat temp | sed -n 2p)
-				rm temp
+						"Password :" 2 1 "passw0rd" 2 25 25 30 2>&1 > /dev/tty)
+				dbuser=$(echo "$db" temp | sed -n 1p)
+				dbpass=$(echo "$db" temp | sed -n 2p)
 				if [ "$?" = "0" ]
 				then
 					DB1="CREATE USER '$dbuser'@'localhost' IDENTIFIED BY '$dbpass';"
@@ -583,9 +576,7 @@ do
 			echo -e "Include conf/extra/owncloud.conf" >> /etc/httpd/conf/httpd.conf
 			chown http:http -R /usr/share/webapps/owncloud/
 			#Enter the database's password
-			dialog --backtitle "Archlinux Installation" --passwordbox "Enter owncloud's database password:" 8 40 2>temp
-			ownpass=$(cat temp)
-			rm temp
+			ownpass=$(dialog --backtitle "Archlinux Installation" --passwordbox "Enter owncloud's database password:" 8 40 2>&1 > /dev/tty)
 			DB1="CREATE USER 'owncloud'@'localhost' IDENTIFIED BY '$ownpass';"
 			DB2=" CREATE DATABASE owncloud;"
 			DB3=" GRANT ALL PRIVILEGES ON owncloud.* TO 'owncloud'@'localhost' WITH GRANT OPTION;"
@@ -605,22 +596,19 @@ do
 				systemctl start mysqld
 
 				#Ask for the password of the root's database username
-				dialog --backtitle "Archlinux Installation" --passwordbox "Enter the root's password for MySQL/MariaDB:" 8 40 2>temp
-				rpassword=$(cat temp)
-				rm temp
+				rpassword=$(dialog --backtitle "Archlinux Installation" --passwordbox "Enter the root's password for MySQL/MariaDB:" 8 40 2>&1 > /dev/tty)
 				if [ "$?" = "0" ]
 				then
 					/usr/bin/mysqladmin -u root password $rpassword
 				fi
 
 				#Add the main user of mysql
-				dialog --backtitle "Archlinux Installation" --title "Mysql user creation" \
-						--form "\nPlease, enter the mysql user configuration" 0 0 0 \
-						"Username :" 1 1 "user" 1 12 25 30 \
-						"Password :" 2 1 "passw0rd" 2 12 25 30 2>temp
-				dbuser=$(cat temp | sed -n 1p)
-				dbpass=$(cat temp | sed -n 2p)
-				rm temp
+				db=$(dialog --backtitle "Archlinux Installation" --title "Mysql user creation" \
+						--form "\nPlease, enter the mysql user configuration" 25 60 16 \
+						"Username :" 1 1 "user" 1 25 25 30 \
+						"Password :" 2 1 "passw0rd" 2 25 25 30 2>&1 > /dev/tty)
+				dbuser=$(echo "$db" temp | sed -n 1p)
+				dbpass=$(echo "$db" temp | sed -n 2p)
 				if [ "$?" = "0" ]
 				then
 					DB1="CREATE USER '$dbuser'@'localhost' IDENTIFIED BY '$dbpass';"
@@ -658,9 +646,7 @@ do
 			echo -e "\nInclude conf/extra/httpd-wordpress.conf\n" >> /etc/httpd/conf/httpd.conf
 			chown http:http -R /usr/share/webapps/wordpress/
 			#Enter the database's password
-			dialog --backtitle "Archlinux Installation" --passwordbox "Enter WordPress' database password:" 8 40 2>temp
-			wordpass=$(cat temp)
-			rm temp
+			wordpass=$(dialog --backtitle "Archlinux Installation" --passwordbox "Enter WordPress' database password:" 8 40 2>&1 > /dev/tty)
 			DB1="CREATE USER 'wordpress'@'localhost' IDENTIFIED BY '$wordpass';"
 			DB2=" CREATE DATABASE wordpress;"
 			DB3=" GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress'@'localhost' WITH GRANT OPTION;"
@@ -694,10 +680,8 @@ do
 					--yesno "Do you want to change the default HTTP port(4040) of Subsonic?" 7 60
 			response=$?
 			case $response in
-				0) dialog --backtitle "Archlinux Installation" --title "Subsonic Configuration" \
-							--inputbox "Enter the port that you want to use:" 8 40 2>temp
-					port=$(cat temp)
-					rm temp
+				0)  port=$(dialog --backtitle "Archlinux Installation" --title "Subsonic Configuration" \
+							--inputbox "Enter the port that you want to use:" 8 40 2>&1 > /dev/tty)
 					if [ "$?" = "0" ]
 					then
 						sed -i "s/SUBSONIC_PORT=4040/SUBSONIC_PORT=$port/g" /var/lib/subsonic/subsonic.sh
@@ -709,10 +693,8 @@ do
 					--yesno "Do you want to add a HTTPS port to Subsonic?" 7 60
 			response=$?
 			case $response in
-				0) dialog --backtitle "Archlinux Installation" --title "Subsonic Configuration" \
-							--inputbox "Enter the port that you want to use:" 8 40 2>temp
-					port=$(cat temp)
-					rm temp
+				0)  port=$(dialog --backtitle "Archlinux Installation" --title "Subsonic Configuration" \
+							--inputbox "Enter the port that you want to use:" 8 40 2>&1 > /dev/tty)
 					if [ "$?" = "0" ]
 					then
 						sed -i "s/SUBSONIC_HTTPS_PORT=0/SUBSONIC_HTTPS_PORT=$port/g" /var/lib/subsonic/subsonic.sh
@@ -745,10 +727,8 @@ do
 					--yesno "Do you want to change the default HTTP port(4040) of Madsonic?" 7 60
 			response=$?
 			case $response in
-				0) dialog --backtitle "Archlinux Installation" --title "Madsonic Configuration" \
-							--inputbox "Enter the port that you want to use:" 8 40 2>temp
-					port=$(cat temp)
-					rm temp
+				0)  port=$(dialog --backtitle "Archlinux Installation" --title "Madsonic Configuration" \
+							--inputbox "Enter the port that you want to use:" 8 40 2>&1 > /dev/tty)
 					if [ "$?" = "0" ]
 					then
 						sed -i "s/MADSONIC_PORT=4040/MADSONIC_PORT=$port/g" /var/madsonic/madsonic.sh
@@ -760,10 +740,8 @@ do
 					--yesno "Do you want to add a HTTPS port to Madsonic?" 7 60
 			response=$?
 			case $response in
-				0) dialog --backtitle "Archlinux Installation" --title "Madsonic Configuration" \
-							--inputbox "Enter the port that you want to use:" 8 40 2>temp
-					port=$(cat temp)
-					rm temp
+				0)  port=$(dialog --backtitle "Archlinux Installation" --title "Madsonic Configuration" \
+							--inputbox "Enter the port that you want to use:" 8 40 2>&1 > /dev/tty)
 					if [ "$?" = "0" ]
 					then
 						sed -i "s/MADSONIC_HTTPS_PORT=0/MADSONIC_HTTPS_PORT=$port/g" /var/madsonic/madsonic.sh
@@ -815,10 +793,8 @@ do
 			patterns=$(echo -e "en\nwl")
 			interfaces=$(ip a | grep -E "$patterns" | grep -v inet | grep -v loop | grep -v link | grep -v DOWN | awk -F " " '{print $2}' | sed 's/://g' | sed 's/$/ net/')
 
-			dialog --backtitle "ArchLinux Installation" --clear --title "Interface: " \
-					--menu "In what interface do you want to setup the VPN Server?" 20 30 7 ${interfaces} 2> temp
-			iface=$(cat temp)
-			rm temp
+			iface=$(dialog --backtitle "ArchLinux Installation" --clear --title "Interface: " \
+					--menu "In what interface do you want to setup the VPN Server?" 20 30 7 ${interfaces} 2>&1 > /dev/tty)
 
 			net=$(ip addr show dev $iface | grep "inet " | awk -F ' ' '{print $4}' | sed 's/255/0/g')
 			ip=$(ip addr show dev $iface | grep "inet " | awk -F ' ' '{print $2}' | sed 's/\x2F24//g')
