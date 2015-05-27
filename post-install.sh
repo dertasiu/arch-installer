@@ -1,7 +1,7 @@
 user=$(cat /etc/passwd | grep 1000 | awk -F':' '{ print $1}' | head -1)
+noConflict="0"
 dialog --backtitle "ArchLinux Installation" --title "Desktop Environment instalation" \
 		--yesno "Do you want to install any desktop environment?" 6 51
-noConflict="0"
 if [[ $? == 0 ]];then
 	until [[ $noConflict == "1" ]];do
 		dialog --backtitle "ArchLinux Installation" --title "Be careful" --msgbox 'These are the some incompatibilities between desktops\n
@@ -491,8 +491,8 @@ do
 					--form "\nPlease, enter the mysql user configuration" 25 60 16 \
 					"Username :" 1 1 "user" 1 25 25 30 \
 					"Password :" 2 1 "passw0rd" 2 25 25 30 2>&1 > /dev/tty)
-			dbuser=$(echo "$db" temp | sed -n 1p)
-			dbpass=$(echo "$db" temp | sed -n 2p)
+			dbuser=$(echo "$db" | sed -n 1p)
+			dbpass=$(echo "$db" | sed -n 2p)
 			if [ "$?" = "0" ]
 			then
 				DB1="CREATE USER '$dbuser'@'localhost' IDENTIFIED BY '$dbpass';"
@@ -536,8 +536,8 @@ do
 						--form "\nPlease, enter the mysql user configuration" 25 60 16 \
 						"Username :" 1 1 "user" 1 25 25 30 \
 						"Password :" 2 1 "passw0rd" 2 25 25 30 2>&1 > /dev/tty)
-				dbuser=$(echo "$db" temp | sed -n 1p)
-				dbpass=$(echo "$db" temp | sed -n 2p)
+				dbuser=$(echo "$db" | sed -n 1p)
+				dbpass=$(echo "$db" | sed -n 2p)
 				if [ "$?" = "0" ]
 				then
 					DB1="CREATE USER '$dbuser'@'localhost' IDENTIFIED BY '$dbpass';"
@@ -607,8 +607,8 @@ do
 						--form "\nPlease, enter the mysql user configuration" 25 60 16 \
 						"Username :" 1 1 "user" 1 25 25 30 \
 						"Password :" 2 1 "passw0rd" 2 25 25 30 2>&1 > /dev/tty)
-				dbuser=$(echo "$db" temp | sed -n 1p)
-				dbpass=$(echo "$db" temp | sed -n 2p)
+				dbuser=$(echo "$db" | sed -n 1p)
+				dbpass=$(echo "$db" | sed -n 2p)
 				if [ "$?" = "0" ]
 				then
 					DB1="CREATE USER '$dbuser'@'localhost' IDENTIFIED BY '$dbpass';"
