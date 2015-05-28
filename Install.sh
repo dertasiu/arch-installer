@@ -285,8 +285,8 @@ sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /mnt/etc/sudoers
 #Enable dhcpcd
 arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd"
 if [[ ! -z $wifinet ]];then
-	cp /etc/netctl/$wifinet /etc/netctl/$wifinet
-	arch-chroot /mnt /bin/bash -c "systemctl enable $wifinet"
+	cp /etc/netctl/$wifinet /mnt/etc/netctl/$wifinet
+	arch-chroot /mnt /bin/bash -c "netctl enable $wifinet"
 fi
 ##Aur helpers
 #Install Yaourt
