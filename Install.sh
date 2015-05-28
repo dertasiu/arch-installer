@@ -20,7 +20,8 @@ done
 ##Activate WiFi if it needed
 dialog --backtitle "ArchLinux Installation" --title "WiFi Connection" --yesno "Do you want to connect to a wifi network?" 6 45 #Ask the user if wants to connect to a wifi network
 case $? in #In the case that...
-	0) wifi-menu;; #0(Accept) is pressed: open the wifi-menu
+	0) wifi-menu #0(Accept) is pressed: open the wifi-menu
+		wifinet=$(netctl list | sed 's/^  //g');;
 	1) echo "Continuing!";; #1(Cancel) is pressed: Do nothing
 esac
 
@@ -283,7 +284,10 @@ sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /mnt/etc/sudoers
 
 #Enable dhcpcd
 arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd"
-
+if [[ ! -z $wifinet ]];then
+	cp /etc/netctl/$wifinet /etc/netctl/$wifinet
+	arch-chroot /mnt /bin/bash -c "systemctl enable $wifinet"
+fi
 ##Aur helpers
 #Install Yaourt
 printf "\n[archlinuxfr]\nServer = http://repo.archlinux.fr/\x24arch\nSigLevel = Optional TrustAll" >>/mnt/etc/pacman.conf
