@@ -318,6 +318,7 @@ esac
 
 #Copy the post-insall script to the hard drive
 cp post-install.sh /mnt/root && chmod +x /mnt/root/post-install.sh
+sed -i "s/selectedkeymap/${keymap}/g" /mnt/root/post-install.sh
 
 #Prepare the system to boot directly to root and run the post-insall script
 mkdir /mnt/etc/systemd/system/getty@tty1.service.d

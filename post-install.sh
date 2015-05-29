@@ -1,3 +1,6 @@
+#Load the X11 keymap
+localectl --no-convert set-x11-keymap selectedkeymap
+
 user=$(cat /etc/passwd | grep 1000 | awk -F':' '{ print $1}' | head -1)
 noConflict="0"
 dialog --backtitle "ArchLinux Installation" --title "Desktop Environment instalation" \
@@ -864,3 +867,7 @@ done
 rm -R /etc/systemd/system/getty@tty1.service.d
 sed -i 's/sh post-install.sh//g' /root/.bashrc
 rm /root/.bash_profile
+
+#Delete the scripts and reboot
+rm post-install.sh
+reboot
