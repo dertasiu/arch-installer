@@ -21,7 +21,7 @@ done
 dialog --backtitle "ArchLinux Installation" --title "WiFi Connection" --yesno "Do you want to connect to a wifi network?" 6 45 #Ask the user if wants to connect to a wifi network
 case $? in #In the case that...
 	0) wifi-menu #0(Accept) is pressed: open the wifi-menu
-		wifinet=$(netctl list | sed 's/^  //g');;
+		wifinet=$(netctl list | awk -F " " '{print $2}');;
 	1) echo "Continuing!";; #1(Cancel) is pressed: Do nothing
 esac
 
@@ -230,6 +230,7 @@ arch-chroot /mnt /bin/bash -c "locale-gen"
 
 #Keyboard type configuration
 echo "KEYMAP=$keymap" > /mnt/etc/vconsole.conf
+arch-chroot /mnt /bin/bash -c "localectl --no-convert set-x11-keymap $keymap"
 
 #Select the timezone
 selected=0 #Define the variable $selected to 0, this will be used to scape from the while
