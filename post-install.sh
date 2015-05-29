@@ -528,10 +528,9 @@ do
 			sed -i '/Include conf\x2Fextra\x2Fhttpd-default.conf/a \\n\x23PHP5\nInclude conf\x2Fextra\x2Fphp5_module.conf' /etc/httpd/conf/httpd.conf #Append the second string after the first one
 			systemctl enable httpd
 			systemctl start httpd
+			LAMP=1
 			dialog --backtitle "ArchLinux Installation" --title "Apache Installation" \
 					--msgbox "Apache Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip" 0 0
-
-			LAMP=1
 		;;
 
 		"Owncloud")
@@ -573,10 +572,9 @@ do
 				sed -i '/Include conf\x2Fextra\x2Fhttpd-default.conf/a \\n\x23PHP5\nInclude conf\x2Fextra\x2Fphp5_module.conf' /etc/httpd/conf/httpd.conf #Append the second string after the first one
 				systemctl enable httpd
 				systemctl start httpd
+				LAMP=1
 				dialog --backtitle "ArchLinux Installation" --title "Apache Installation" \
 						--msgbox "Apache Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip" 0 0
-
-				LAMP=1
 			fi
 			pacman -S --noconfirm owncloud php-intl php-mcrypt
 			sed -i '/extension=gd.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
@@ -592,6 +590,19 @@ do
 			sed -i '/extension=mysql.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
 			cp /etc/webapps/owncloud/apache.example.conf /etc/httpd/conf/extra/owncloud.conf
 			echo -e "Include conf/extra/owncloud.conf" >> /etc/httpd/conf/httpd.conf
+			dialog --backtitle "ArchLinux Installation" --title "Owncloud Instalation" --yesno "Do you want to change the default address for owncloud?\n(Default http://domain.com/owncloud/)" 8 45
+			if [[ $? == "0" ]];then
+				owncloudname=$(dialog --backtitle "ArchLinux Installation" --title "Owncloud Instalation" --inputbox "Enter the address that you want to use:\n(Ej: acloud = http://domain.com/acloud)" 9 50 2>&1 > /dev/tty)
+				sed -i "s/Alias \x2Fowncloud/Alias \x2F$owncloudname/g" /etc/httpd/conf/extra/owncloud.conf
+			fi
+			dialog --backtitle "ArchLinux Installation" --title "Owncloud Instalation" --yesno "Do you want to change the default port for owncloud?\n(Default: 80)" 8 45
+			if [[ $? == "0" ]];then
+				owncloudport=$(dialog --backtitle "ArchLinux Installation" --title "Owncloud Instalation" --inputbox "Enter the port that you want to use: (Ej: 5297 = http://domain.com:5297)" 8 40 2>&1 > /dev/tty)
+				sed -i "s/*:80/*:$owncloudport/g" /etc/httpd/conf/extra/owncloud.conf
+				sed -i "s/Listen 80/Listen 80\nListen $owncloudport/g" /etc/httpd/conf/httpd.conf
+
+				definedport=1
+			fi
 			chown http:http -R /usr/share/webapps/owncloud/
 			#Enter the database's password
 			ownpass=$(dialog --backtitle "Archlinux Installation" --passwordbox "Enter owncloud's database password:" 8 40 2>&1 > /dev/tty)
@@ -600,9 +611,12 @@ do
 			DB3=" GRANT ALL PRIVILEGES ON owncloud.* TO 'owncloud'@'localhost' WITH GRANT OPTION;"
 			DB="${DB1}${DB2}${DB3}"
 			mysql -uroot -p$rpassword -e "$DB"
-			dialog --backtitle "ArchLinux Installation" --title "Owncloud Installation" \
-					--msgbox "Owncloud Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip/owncloud" 0 0
+			if [[ defined == "1" ]];then
+				definedport="\nOr you can acces through $ip:$owncloudport"
+			fi
 			systemctl restart httpd
+			dialog --backtitle "ArchLinux Installation" --title "Owncloud Installation" \
+					--msgbox "Owncloud Instalation is now completed. You can use this settings to connect to the server:\nAddress: $ip/$owncloudname$definedport" 0 0
 		;;
 
 		"Wordpress")
@@ -644,10 +658,9 @@ do
 				sed -i '/Include conf\x2Fextra\x2Fhttpd-default.conf/a \\n\x23PHP5\nInclude conf\x2Fextra\x2Fphp5_module.conf' /etc/httpd/conf/httpd.conf #Append the second string after the first one
 				systemctl enable httpd
 				systemctl start httpd
+				LAMP=1
 				dialog --backtitle "ArchLinux Installation" --title "Apache Installation" \
 						--msgbox "Apache Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip" 0 0
-
-				LAMP=1
 			fi
 			pacman -S --noconfirm wordpress
 			sed -i '/extension=ftp.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
@@ -662,6 +675,11 @@ do
 			sed -i '/extension=pspell.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
 			printf "Alias /wordpress \x22/usr/share/webapps/wordpress\x22\n<Directory \x22/usr/share/webapps/wordpress\x22>\n\tAllowOverride All\n\tOptions FollowSymlinks\n\tRequire all granted\n\tphp_admin_value open_basedir \x22/srv/:/tmp/:/usr/share/webapps/:/etc/webapps:\x24\x22\n</Directory>" > /etc/httpd/conf/extra/httpd-wordpress.conf
 			echo -e "\nInclude conf/extra/httpd-wordpress.conf\n" >> /etc/httpd/conf/httpd.conf
+			dialog --backtitle "ArchLinux Installation" --title "Wordpress Instalation" --yesno "Do you want to change the default address for Wordpress?\n(Default http://domain.com/wordpress/)" 8 45
+			if [[ $? == "0" ]];then
+				wordpressname=$(dialog --backtitle "ArchLinux Installation" --title "Wordpress Instalation" --inputbox "Enter the address that you want to use\n(Ej: myblog = http://domain.com/myblog)" 9 50 2>&1 > /dev/tty)
+				sed -i "s/Alias \x2Fwordpress/Alias \x2F$wordpressname/g" /etc/httpd/conf/extra/httpd-wordpress.conf
+			fi
 			chown http:http -R /usr/share/webapps/wordpress/
 			#Enter the database's password
 			wordpass=$(dialog --backtitle "Archlinux Installation" --passwordbox "Enter WordPress' database password:" 8 40 2>&1 > /dev/tty)
@@ -670,9 +688,9 @@ do
 			DB3=" GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress'@'localhost' WITH GRANT OPTION;"
 			DB="${DB1}${DB2}${DB3}"
 			mysql -uroot -p$rpassword -e "$DB"
-			dialog --backtitle "ArchLinux Installation" --title "Wordpress Installation" \
-					--msgbox "Wordpress Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip/wordpress" 0 0
 			systemctl restart httpd
+			dialog --backtitle "ArchLinux Installation" --title "Wordpress Installation" \
+					--msgbox "Wordpress Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip/$wordpressname" 0 0
 		;;
 
 		"Subsonic")
@@ -719,10 +737,10 @@ do
 					fi;;
 				1) echo "HTTPS port not configured";;
 			esac
-			dialog --backtitle "ArchLinux Installation" --title "Subsonic Installation" \
-					--msgbox "Subsonic Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip:$port\nUser: admin\nPassword: admin" 0 0
 			systemctl enable subsonic
 			systemctl start subsonic
+			dialog --backtitle "ArchLinux Installation" --title "Subsonic Installation" \
+					--msgbox "Subsonic Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip:$port\nUser: admin\nPassword: admin" 0 0
 		;;
 
 		"Madsonic")
@@ -766,10 +784,10 @@ do
 					fi;;
 				1) echo "HTTPS port not configured";;
 			esac
-			dialog --backtitle "ArchLinux Installation" --title "Madsonic Installation" \
-					--msgbox "Madsonic Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip:$port\nUser: admin\nPassword: admin" 0 0
 			systemctl enable madsonic
 			systemctl start madsonic
+			dialog --backtitle "ArchLinux Installation" --title "Madsonic Installation" \
+					--msgbox "Madsonic Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip:$port\nUser: admin\nPassword: admin" 0 0
 		;;
 
 		"NTOP")
@@ -781,11 +799,17 @@ do
 			interface=$(dialog --backtitle "ArchLinux Installation" --clear --title "Interface: " \
 					--menu "In what interface do you want to run NTOP?" 0 0 0 ${interfaces} 2>&1 > /dev/tty)
 			sed -i "s/-i eth0/-i $interface/g" /lib/systemd/system/ntop.service
-			dialog --backtitle "ArchLinux Installation" --title "NTOP Installation" \
-					--msgbox "NTOP Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip:3000\nUser: admin\nPassword: $ntoppass" 0 0
+			ntopport=3000
+			dialog --backtitle "ArchLinux Installation" --title "NTOP Instalation" --yesno "Do you want to change the default port for NTOP?\n(Default: 3000)" 8 45
+			if [[ $? == "0" ]];then
+				ntopport=$(dialog --backtitle "ArchLinux Installation" --title "NTOP Instalation" --inputbox "Enter the port that you want to use: " 8 40 2>&1 > /dev/tty)
+				sed -i "s/-w 3000/-w $ntopport/g" /lib/systemd/system/ntop.service
+			fi
 			systemctl daemon-reload
 			systemctl enable ntop
 			systemctl start ntop
+			dialog --backtitle "ArchLinux Installation" --title "NTOP Installation" \
+					--msgbox "NTOP Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip:$ntopport\nUser: admin\nPassword: $ntoppass" 0 0
 		;;
 
 		"TightVNC")
@@ -799,12 +823,18 @@ do
 		"Deluge")
 			pacman -S --noconfirm deluge python2-pip python2-mako
 			pip2.7 install service-identity
+			delugeport=8112
+			dialog --backtitle "ArchLinux Installation" --title "Deluge Instalation" --yesno "Do you want to change the default port for Deluge?\n(Default: 8112)" 8 45
+			if [[ $? == "0" ]];then
+				delugeport=$(dialog --backtitle "ArchLinux Installation" --title "NTOP Instalation" --inputbox "Enter the port that you want to use: " 8 40 2>&1 > /dev/tty)
+				sed -i "s/8112/$delugeport/g" /srv/deluge/.config/deluge/web.conf
+			fi
 			systemctl start deluged
 			systemctl enable deluged
 			systemctl start deluge-web
 			systemctl enable deluge-web
 			dialog --backtitle "ArchLinux Installation" --title "Deluge Installation" \
-					--msgbox "Deluge Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip:8112\nPassword: deluge" 0 0
+					--msgbox "Deluge Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip:$delugeport\nPassword: deluge" 0 0
 		;;
 
 		"L2TP")
@@ -865,6 +895,9 @@ do
 			systemctl restart openswan
 			systemctl restart xl2tpd
 			systemctl enable xl2tpd
+			externalip=$(dig +short myip.opendns.com @resolver1.opendns.com)
+			dialog --backtitle "ArchLinux Installation" --title "L2TP Installation" \
+					--msgbox "L2TP + IPSEC + PAM Instalation is now completed. You can use this settings to connect to the server:\nExternal IP: $externalip\nUser: Your system username\nPassword: Your system password according to the user" 0 0
 		;;
 
 		"Prosody")
