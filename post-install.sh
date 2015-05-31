@@ -445,6 +445,7 @@ if [[ $? == 0 ]];then
 				Wordpress "Self-hosted blog"	off
 				Subsonic "Music Server"	off
 				Madsonic "Music Server"	off
+				GitLab "GIT Code server" off
 				NTOP "Traffic monitoring tool"	off
 				TightVNC "Remote screen server"	off
 				Deluge "Torrent server with web UI"	off
@@ -792,6 +793,73 @@ if [[ $? == 0 ]];then
 				dialog --backtitle "ArchLinux Installation" --title "Madsonic Installation" \
 						--msgbox "Madsonic Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip:$port\nUser: admin\nPassword: admin" 0 0
 			;;
+
+			"GitLab")
+				ip=$(ip a | grep inet | grep -v inet6 | grep -v host | awk -F " " '{print $2}' | awk -F "/" '{print $1}')
+				gitport=8080
+				gitdomain=$ip
+				if [[ $LAMP != 1 ]];then
+					pacman -S --noconfirm mariadb
+					##MariaDB
+					mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
+					systemctl start mysqld
+
+					#Ask for the password of the root's database username
+					rpassword=$(dialog --backtitle "Archlinux Installation" --passwordbox "Enter the root's password for MySQL/MariaDB:" 8 40 2>&1 > /dev/tty)
+					rm temp
+					if [ "$?" = "0" ]
+					then
+						/usr/bin/mysqladmin -u root password $rpassword
+					fi
+				fi
+
+				sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+				sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+				sudo -u $user yaourt -S -A --noconfirm ruby-2.1
+				sudo -u $user yaourt -S -A --noconfirm gitlab
+				sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+				sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+
+				gitsqlpass=$(dialog --backtitle "Archlinux Installation" --passwordbox "Enter gitlabs's database password:" 0 0 2>&1 > /dev/tty)
+				gitsqlusernumber=$(cat -n /etc/webapps/gitlab/database.yml | grep "username: gitlab" | awk -F " " '{print $1}')
+				gitsqlusernumber=$[$gitsqlusernumber+1]
+				sed -i "${gitsqlusernumber}s/.*/  password: \x22$gitsqlpass\x22/g" /etc/webapps/gitlab/database.yml
+				gitsqlrootnumber=$(cat -n /etc/webapps/gitlab/database.yml | grep "username: root" | awk -F " " '{print $1}')
+				gitsqlrootnumber=$[$gitsqlrootnumber+1]
+				sed -i "${gitsqlrootnumber}s/.*/  password: \x22$rpassword\x22/g" /etc/webapps/gitlab/database.yml
+
+				sed -i 's/listen "127.0.0.1:8080"/listen "*:8080"' /etc/webapps/gitlab/unicorn.rb
+				dialog --backtitle "ArchLinux Installation" --title "GitLab Installation" \
+						--yesno "Do you want to change the listening port?\nDefault=8080" 7 45
+				if [[ $? == 0 ]];then
+					gitport=$(dialog --backtitle "Archlinux Installation" --inputbox "Enter the port that you want to use:" 0 0 2>&1 > /dev/tty)
+					sed -i "s/:8080/:$gitport/g" /etc/webapps/gitlab/unicorn.rb
+				fi
+
+				dialog --backtitle "ArchLinux Installation" --title "GitLab Installation" \
+						--yesno "Do you want to configure a domain?" 7 38
+				if [[ $? == 0 ]];then
+					gitdomain=$(dialog --backtitle "Archlinux Installation" --inputbox "Enter the domain that you want to use:" 0 0 2>&1 > /dev/tty)
+					gitdomainline=$(cat /usr/share/webapps/gitlab/config/gitlab.yml -n | grep "Web server settings")
+					gitdomainline=$[$gitdomainline+1]
+					sed -i "${gitsqlrootnumber}s/.*/    host: $gitdomain/g"
+					sed -i "s/port: 80/port: $gitport/g" /etc/webapps/gitlab/gitlab.yml
+				else
+					gitdomainline=$(cat /usr/share/webapps/gitlab/config/gitlab.yml -n | grep "Web server settings")
+					gitdomainline=$[$gitdomainline+1]
+					sed -i "${gitsqlrootnumber}s/.*/    host: $ip/g"
+					sed -i "s/port: 80/port: $gitport/g" /etc/webapps/gitlab/gitlab.yml
+				fi
+
+				sed -i "s/gitlab_url: \x22http:\x2F\x2Flocalhost:8080\x2F\x22/gitlab_url: \x22http:\x2F\x2F$gitdomain:$gitport\x2F\x22/"
+
+				su - gitlab -s /bin/sh -c "cd '/usr/share/webapps/gitlab'; bundle exec rake gitlab:setup RAILS_ENV=production"
+				su - gitlab -s /bin/sh -c "cd '/usr/share/webapps/gitlab'; bundle exec rake assets:precompile RAILS_ENV=production"
+				systemctl start gitlab-sidekiq.service gitlab-unicorn
+				systemctl enable gitlab-sidekiq.service gitlab-unicorn
+				dialog --backtitle "ArchLinux Installation" --title "GitLab Installation" \
+						--msgbox "GitLab Instalation is now completed. You can use this settings to connect to the server:\nIP: $gitdomain\nPort: $gitport\nUser: root\nPassword: 5iveL!fe" 0 0
+				;;
 
 			"NTOP")
 				pacman -S --noconfirm ntop
