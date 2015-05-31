@@ -830,7 +830,7 @@ if [[ $? == 0 ]];then
 
 				sed -i 's/listen "127.0.0.1:8080"/listen "*:8080"' /etc/webapps/gitlab/unicorn.rb
 				dialog --backtitle "ArchLinux Installation" --title "GitLab Installation" \
-						--yesno "Do you want to change the listening port?\nDefault=8080" 7 45
+						--yesno "Do you want to change the listening port?\nDefault: 8080" 7 45
 				if [[ $? == 0 ]];then
 					gitport=$(dialog --backtitle "Archlinux Installation" --inputbox "Enter the port that you want to use:" 0 0 2>&1 > /dev/tty)
 					sed -i "s/:8080/:$gitport/g" /etc/webapps/gitlab/unicorn.rb
@@ -843,15 +843,13 @@ if [[ $? == 0 ]];then
 					gitdomainline=$(cat /usr/share/webapps/gitlab/config/gitlab.yml -n | grep "Web server settings")
 					gitdomainline=$[$gitdomainline+1]
 					sed -i "${gitsqlrootnumber}s/.*/    host: $gitdomain/g"
-					sed -i "s/port: 80/port: $gitport/g" /etc/webapps/gitlab/gitlab.yml
 				else
 					gitdomainline=$(cat /usr/share/webapps/gitlab/config/gitlab.yml -n | grep "Web server settings")
 					gitdomainline=$[$gitdomainline+1]
 					sed -i "${gitsqlrootnumber}s/.*/    host: $ip/g"
-					sed -i "s/port: 80/port: $gitport/g" /etc/webapps/gitlab/gitlab.yml
 				fi
-
-				sed -i "s/gitlab_url: \x22http:\x2F\x2Flocalhost:8080\x2F\x22/gitlab_url: \x22http:\x2F\x2F$gitdomain:$gitport\x2F\x22/"
+				sed -i "s/port: 80/port: $gitport/g" /etc/webapps/gitlab/gitlab.yml
+				sed -i "s/:8080\x2F\x22/:$gitport\x2F\x22/" /etc/webapps/gitlab-shell/config.yml
 
 				su - gitlab -s /bin/sh -c "cd '/usr/share/webapps/gitlab'; bundle exec rake gitlab:setup RAILS_ENV=production"
 				su - gitlab -s /bin/sh -c "cd '/usr/share/webapps/gitlab'; bundle exec rake assets:precompile RAILS_ENV=production"
