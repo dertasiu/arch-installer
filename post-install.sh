@@ -185,7 +185,7 @@ if [[ $? == 0 ]];then
 				ubuntu=$(pacman -Slq Unity-for-Arch | grep -v upower-compat | grep -v gsettings-desktop-schemas)
 				ubuntuextra=$(pacman -Slq Unity-for-Arch-Extra)
 				pacman -R --noconfirm gsettings-desktop-schemas glib-networking libsoup networkmanager
-				pacman -S --noconfirm ${ubuntu}
+				pacman -S --noconfirm ${ubuntu} ${ubuntuextra}
 				pacman -S --noconfirm networkmanager
 				#Enable NetworkManager
 				systemctl enable NetworkManager
