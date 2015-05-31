@@ -502,7 +502,6 @@ if [[ $? == 0 ]];then
 
 				#Ask for the password of the root's database username
 				rpassword=$(dialog --backtitle "Archlinux Installation" --passwordbox "Enter the root's password for MySQL/MariaDB:" 8 40 2>&1 > /dev/tty)
-				rm temp
 				if [ "$?" = "0" ]
 				then
 					/usr/bin/mysqladmin -u root password $rpassword
@@ -806,7 +805,6 @@ if [[ $? == 0 ]];then
 
 					#Ask for the password of the root's database username
 					rpassword=$(dialog --backtitle "Archlinux Installation" --passwordbox "Enter the root's password for MySQL/MariaDB:" 8 40 2>&1 > /dev/tty)
-					rm temp
 					if [ "$?" = "0" ]
 					then
 						/usr/bin/mysqladmin -u root password $rpassword
@@ -821,10 +819,10 @@ if [[ $? == 0 ]];then
 				sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 
 				gitsqlpass=$(dialog --backtitle "Archlinux Installation" --passwordbox "Enter gitlabs's database password:" 0 0 2>&1 > /dev/tty)
-				gitsqlusernumber=$(cat -n /etc/webapps/gitlab/database.yml | grep "username: gitlab" | awk -F " " '{print $1}')
+				gitsqlusernumber=$(cat -n /etc/webapps/gitlab/database.yml | grep "username: gitlab" | awk -F " " '{print $1}' | head -1)
 				gitsqlusernumber=$[$gitsqlusernumber+1]
 				sed -i "${gitsqlusernumber}s/.*/  password: \x22$gitsqlpass\x22/g" /etc/webapps/gitlab/database.yml
-				gitsqlrootnumber=$(cat -n /etc/webapps/gitlab/database.yml | grep "username: root" | awk -F " " '{print $1}')
+				gitsqlrootnumber=$(cat -n /etc/webapps/gitlab/database.yml | grep "username: root" | awk -F " " '{print $1}' | head -1)
 				gitsqlrootnumber=$[$gitsqlrootnumber+1]
 				sed -i "${gitsqlrootnumber}s/.*/  password: \x22$rpassword\x22/g" /etc/webapps/gitlab/database.yml
 
@@ -840,11 +838,11 @@ if [[ $? == 0 ]];then
 						--yesno "Do you want to configure a domain?" 7 38
 				if [[ $? == 0 ]];then
 					gitdomain=$(dialog --backtitle "Archlinux Installation" --inputbox "Enter the domain that you want to use:" 0 0 2>&1 > /dev/tty)
-					gitdomainline=$(cat /usr/share/webapps/gitlab/config/gitlab.yml -n | grep "Web server settings")
+					gitdomainline=$(cat /usr/share/webapps/gitlab/config/gitlab.yml -n | grep "Web server settings" | awk -F " " '{print $1}' | head -1)
 					gitdomainline=$[$gitdomainline+1]
 					sed -i "${gitsqlrootnumber}s/.*/    host: $gitdomain/g"
 				else
-					gitdomainline=$(cat /usr/share/webapps/gitlab/config/gitlab.yml -n | grep "Web server settings")
+					gitdomainline=$(cat /usr/share/webapps/gitlab/config/gitlab.yml -n | grep "Web server settings" | awk -F " " '{print $1}' | head -1)
 					gitdomainline=$[$gitdomainline+1]
 					sed -i "${gitsqlrootnumber}s/.*/    host: $ip/g"
 				fi
