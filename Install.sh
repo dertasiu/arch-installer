@@ -259,7 +259,6 @@ arch-chroot /mnt /bin/bash -c "locale-gen"
 
 #Keyboard type configuration
 echo "KEYMAP=$keymap" > /mnt/etc/vconsole.conf
-arch-chroot /mnt /bin/bash -c "localectl --no-convert set-x11-keymap $keymap"
 
 #Select the timezone
 selected=0 #Define the variable $selected to 0, this will be used to scape from the while
