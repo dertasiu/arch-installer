@@ -78,14 +78,14 @@ partitioning(){
 	format=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
 					--menu "Choose the filesystem type that you want to use" 0 0 0 ${fs} 2>&1 > /dev/tty)
 	case $format in
-			ext2) mkfs.ext2 -F $part;;
+		ext2) mkfs.ext2 -F $part;;
 		ext3) mkfs.ext3 -F $part;;
 		ext4) mkfs.ext4 -F $part;;
 		ext4dev) mkfs.ext4dev -F $part;;
 		f2fs) modprobe f2fs
 				mkfs.f2fs $part;;
 		jfs) mkfs.jfs -q $part;;
-			nilfs2) mkfs.nilfs2 -f $part;;
+		nilfs2) mkfs.nilfs2 -f $part;;
 		ntfs) mkfs.ntfs -q $part;;
 		reiserfs) mkfs.reiserfs -f -f $part;;
 		vfat) mkfs.vfat -F32 $part;;
