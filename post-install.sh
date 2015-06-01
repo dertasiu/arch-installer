@@ -881,13 +881,27 @@ if [[ $? == 0 ]];then
 				dialog --backtitle "ArchLinux Installation" --title "NTOP Installation" \
 						--msgbox "NTOP Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip:$ntopport\nUser: admin\nPassword: $ntoppass" 0 0
 			;;
-
+#π
 			"TightVNC")
-				pacman -S --noconfirm tigervnc
+				sessions=$(ls /usr/share/xsessions | awk -F "." '{print $1" "$2}')
+				sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+				sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+				sudo -u $user yaourt -S -A --noconfirm tightvnc
+				sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+				sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+
 				cp /lib/systemd/system/vncserver.service /lib/systemd/system/vncserver@:1.service
+				sudo -u $user vncpasswd
+				interface=$(dialog --backtitle "ArchLinux Installation" --clear --title "TightVNC Installation" \
+									--menu "What desktop would you like to setup the VNC?" 0 0 0 ${sessions} 2>&1 > /dev/tty)
+				mv /home/$user/.vnc/xstartup /home/$user/.vnc/xstartup.bak
+				cat /usr/share/xsessions/$interface.desktop | grep Exec | grep -v Try | awk -F "=" '{print $2}' > /home/$user/.vnc/xstartup
 				sed -i "s/User=/User=$user/g" /lib/systemd/system/vncserver@:1.service
-				systemctl enable vncserver
-				systemctl start vncserver
+				systemctl enable vncserver@:1
+				systemctl start vncserver@:1
+				dialog --backtitle "ArchLinux Installation" --title "TightVNC Installation" \
+						--msgbox "TightVNC Instalation is now completed. You can use this settings to connect to the server:\nIP: $ip:5901\nPassword: The one you entered at the VNC configuration" 0 0
+
 			;;
 
 			"Deluge")
