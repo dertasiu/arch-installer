@@ -499,6 +499,7 @@ if [[ $? == 0 ]];then
 				##MariaDB
 				mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
 				systemctl start mysqld
+				systemctl enable mysqld
 
 				#Ask for the password of the root's database username
 				rpassword=$(dialog --backtitle "Archlinux Installation" --passwordbox "Enter the root's password for MySQL/MariaDB:" 8 40 2>&1 > /dev/tty)
@@ -543,6 +544,7 @@ if [[ $? == 0 ]];then
 					##MariaDB
 					mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
 					systemctl start mysqld
+					systemctl enable mysqld
 
 					#Ask for the password of the root's database username
 					rpassword=$(dialog --backtitle "Archlinux Installation" --passwordbox "Enter the root's password for MySQL/MariaDB:" 8 40 2>&1 > /dev/tty)
@@ -629,6 +631,7 @@ if [[ $? == 0 ]];then
 					##MariaDB
 					mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
 					systemctl start mysqld
+					systemctl enable mysqld
 
 					#Ask for the password of the root's database username
 					rpassword=$(dialog --backtitle "Archlinux Installation" --passwordbox "Enter the root's password for MySQL/MariaDB:" 8 40 2>&1 > /dev/tty)
