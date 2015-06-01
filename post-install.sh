@@ -802,6 +802,7 @@ if [[ $? == 0 ]];then
 					##MariaDB
 					mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
 					systemctl start mysqld
+					systemctl enable mysqld
 
 					#Ask for the password of the root's database username
 					rpassword=$(dialog --backtitle "Archlinux Installation" --passwordbox "Enter the root's password for MySQL/MariaDB:" 8 40 2>&1 > /dev/tty)
@@ -848,8 +849,7 @@ if [[ $? == 0 ]];then
 				fi
 				sed -i "s/port: 80/port: $gitport/g" /etc/webapps/gitlab/gitlab.yml
 				sed -i "s/:8080\x2F\x22/:$gitport\x2F\x22/g" /etc/webapps/gitlab-shell/config.yml
-
-				su - gitlab -s /bin/sh -c "cd '/usr/share/webapps/gitlab'; bundle exec rake gitlab:setup RAILS_ENV=production"
+				cd /usr/share/webapps/gitlab ; printf "yes\n$rpassword" | bundle exec rake gitlab:setup RAILS_ENV=production
 				su - gitlab -s /bin/sh -c "cd '/usr/share/webapps/gitlab'; bundle exec rake assets:precompile RAILS_ENV=production"
 				systemctl start gitlab-sidekiq.service gitlab-unicorn
 				systemctl enable gitlab-sidekiq.service gitlab-unicorn
