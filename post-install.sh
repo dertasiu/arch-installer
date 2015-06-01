@@ -238,14 +238,23 @@ if [[ $? == 0 ]];then
 	esac
 	done
 
-	dm=$(dialog --backtitle "ArchLinux Installation" --clear --title "Display Manager selection: " \
-			--menu "Select the Display Manager:" 0 0 0 \
-			GDM "GNOME Display manager" \
-			SDDM "KDE4 Display manager" \
-			LXDM "LXDE Display manager" \
-			MDM "Linux Mint's Display manager" \
-			Entrance "Enlightenment's Display manager (Experimental)" \
-			LightDM "Cross-desktop display manager" 2>&1 > /dev/tty)
+	until [[ noDmConflict == "1" ]];do
+		dm=$(dialog --backtitle "ArchLinux Installation" --clear --title "Display Manager selection: " \
+				--menu "Select the Display Manager:" 0 0 0 \
+				GDM "GNOME Display manager" \
+				SDDM "KDE4 Display manager" \
+				LXDM "LXDE Display manager" \
+				MDM "Linux Mint's Display manager" \
+				Entrance "Enlightenment's Display manager (Experimental)" \
+				LightDM "Cross-desktop display manager" 2>&1 > /dev/tty)
+
+		GDMtrue=$(echo "$dm" | grep "GDM")
+		if [[ $Unitytrue == "Unity" ]] && [[ $GDMtrue == "GDM" ]]
+		then
+			dialog --backtitle "ArchLinux Installation" --title "Incompatibility detected" --msgbox 'Unity and GDM are not compatible. Please, choose other desktop manager than GDM' 6 83
+			noDmConflict=0
+		fi
+	done
 	for choice in $dm
 	do
 		case $choice in
@@ -858,7 +867,7 @@ if [[ $? == 0 ]];then
 				interface=$(dialog --backtitle "ArchLinux Installation" --clear --title "TightVNC Installation" \
 									--menu "What desktop would you like to setup the VNC?" 0 0 0 ${sessions} 2>&1 > /dev/tty)
 				mv /home/$user/.vnc/xstartup /home/$user/.vnc/xstartup.bak
-				cat /usr/share/xsessions/$interface.desktop | grep Exec | grep -v Try | awk -F "=" '{print $2}' > /home/$user/.vnc/xstartup
+				cat /usr/share/xsessions/$interface.desktop | grep Exec | grep -v Try | sed 's/^Exec=//g' > /home/$user/.vnc/xstartup
 				sed -i "s/User=/User=$user/g" /lib/systemd/system/vncserver@:1.service
 				systemctl enable vncserver@:1
 				systemctl start vncserver@:1
