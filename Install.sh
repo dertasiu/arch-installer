@@ -358,5 +358,8 @@ echo -e "if [ -f ~/.bashrc ]; then\n\tsource ~/.bashrc\nfi" >> /mnt/root/.bash_p
 umount {$rootfs,$bootfs,$homefs,$tmpfs,$usrfs,$varfs,$srvfs,$optfs}
 swapoff $swap 2> /dev/null
 
+#Warn the user that the computer is going to reboot
+dialog --backtitle "ArchLinux Installation" --title "Attention" --msgbox 'The computer is going to reboot to finish the installation' 6 62
+
 #Reboot the computer
 reboot
