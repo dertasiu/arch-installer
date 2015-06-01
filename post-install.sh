@@ -414,7 +414,6 @@ if [[ $? == 0 ]];then
 				TightVNC "Remote screen server"	off
 				Deluge "Torrent server with web UI"	off
 				L2TP "VirtualPrivateNetwork Server L2TP, IPSEC"	off
-				Prosody "XMPP Chat Server"	off
 				)
 		desktop=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
@@ -946,15 +945,6 @@ if [[ $? == 0 ]];then
 				externalip=$(dig +short myip.opendns.com @resolver1.opendns.com)
 				dialog --backtitle "ArchLinux Installation" --title "L2TP Installation" \
 						--msgbox "L2TP + IPSEC + PAM Instalation is now completed. You can use this settings to connect to the server:\nExternal IP: $externalip\nUser: Your system username\nPassword: Your system password according to the user" 0 0
-			;;
-
-			"Prosody")
-				pacman -S --noconfirm prosody lua51-sec lua51-zlib
-				sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
-				sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-				sudo -u $user yaourt -S -A --noconfirm lua51-event lua-cyrussasl
-				sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
-				sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 			;;
 	esac
 	done
