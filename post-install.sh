@@ -298,8 +298,7 @@ sh=$(dialog --backtitle "ArchLinux Installation" --clear --title "Default Shell 
 		CShell "C Shell" \
 		DASH "DASH Shell" \
 		KornShell "Korn Shell" \
-		Oh "Oh Shell written in GO" \
-		rc "RC Shell" 2>&1 > /dev/tty)
+		Oh "Oh Shell written in GO" 2>&1 > /dev/tty)
 for choice in $sh
 do
 	case $choice in
@@ -388,13 +387,6 @@ do
 			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 			usermod -s /usr/bin/oh root
 			usermod -s /usr/bin/oh $user
-		;;
-
-		"rc")
-			pacman -S --noconfirm 9base
-			ln -s /opt/plan9/bin/rc /bin/rc
-			usermod -s /bin/rc root
-			usermod -s /bin/rc $user
 		;;
 	esac
 done
