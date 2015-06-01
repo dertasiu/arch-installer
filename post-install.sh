@@ -296,9 +296,7 @@ sh=$(dialog --backtitle "ArchLinux Installation" --clear --title "Default Shell 
 		ZSH "ZSH Shell" \
 		FISH "FISH Shell" \
 		CShell "C Shell" \
-		DASH "DASH Shell" \
-		KornShell "Korn Shell" \
-		Oh "Oh Shell written in GO" 2>&1 > /dev/tty)
+		DASH "DASH Shell" 2>&1 > /dev/tty)
 for choice in $sh
 do
 	case $choice in
@@ -367,26 +365,6 @@ do
 			pacman -S --noconfirm dash
 			usermod -s /bin/dash root
 			usermod -s /bin/dash $user
-		;;
-
-		"KornShell")
-			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
-			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-			sudo -u $user yaourt -S -A --noconfirm ksh
-			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
-			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-			usermod -s /bin/ksh root
-			usermod -s /bin/ksh $user
-		;;
-
-		"Oh")
-			sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
-			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-			sudo -u $user yaourt -S -A --noconfirm oh
-			sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
-			sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
-			usermod -s /usr/bin/oh root
-			usermod -s /usr/bin/oh $user
 		;;
 	esac
 done
