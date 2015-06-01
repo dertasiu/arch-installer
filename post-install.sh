@@ -821,10 +821,10 @@ if [[ $? == 0 ]];then
 				gitsqlpass=$(dialog --backtitle "Archlinux Installation" --passwordbox "Enter gitlabs's database password:" 0 0 2>&1 > /dev/tty)
 				gitsqlusernumber=$(cat -n /etc/webapps/gitlab/database.yml | grep "username: gitlab" | awk -F " " '{print $1}' | head -1)
 				gitsqlusernumber=$[$gitsqlusernumber+1]
-				sed -i "${gitsqlusernumber}s/.*/  password: \x22$gitsqlpass\x22/g" /etc/webapps/gitlab/database.yml
+				sed -i "${gitsqlusernumber}s/.*/  password: $gitsqlpass/g" /etc/webapps/gitlab/database.yml
 				gitsqlrootnumber=$(cat -n /etc/webapps/gitlab/database.yml | grep "username: root" | awk -F " " '{print $1}' | head -1)
 				gitsqlrootnumber=$[$gitsqlrootnumber+1]
-				sed -i "${gitsqlrootnumber}s/.*/  password: \x22$rpassword\x22/g" /etc/webapps/gitlab/database.yml
+				sed -i "${gitsqlrootnumber}s/.*/  password: $rpassword/g" /etc/webapps/gitlab/database.yml
 
 				sed -i 's/listen "127.0.0.1:8080"/listen "*:8080"/g' /etc/webapps/gitlab/unicorn.rb
 				dialog --backtitle "ArchLinux Installation" --title "GitLab Installation" \
