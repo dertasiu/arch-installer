@@ -72,25 +72,30 @@ part=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition se
 rootfs=$part
 p=$(echo "$p" | grep -v $part)
 
+#Declare the function that will format the partitions
+partitioning(){
+	fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}' | grep -v cramfs | grep -v hfsplus | grep -v  bfs | grep -v msdos | grep -v minix)"
+	format=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
+					--menu "Choose the filesystem type that you want to use" 0 0 0 ${fs} 2>&1 > /dev/tty)
+	case $format in
+			ext2) mkfs.ext2 -F $part;;
+		ext3) mkfs.ext3 -F $part;;
+		ext4) mkfs.ext4 -F $part;;
+		ext4dev) mkfs.ext4dev -F $part;;
+		f2fs) modprobe f2fs
+				mkfs.f2fs $part;;
+		jfs) mkfs.jfs -q $part;;
+			nilfs2) mkfs.nilfs2 -f $part;;
+		ntfs) mkfs.ntfs -q $part;;
+		reiserfs) mkfs.reiserfs -f -f $part;;
+		vfat) mkfs.vfat -F32 $part;;
+		xfs) mkfs.xfs -f $part;;
+		brtfs) mkfs.brtfs $part;;
+	esac
+}
+
 #Format the main partition
-fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}' | grep -v cramfs | grep -v hfsplus | grep -v  bfs | grep -v msdos | grep -v minix)"
-format=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
-	--menu "Choose the filesystem type that you want to use" 0 0 0 ${fs} 2>&1 > /dev/tty)
-case $format in
-	ext2) mkfs.ext2 -F $part;;
-	ext3) mkfs.ext3 -F $part;;
-	ext4) mkfs.ext4 -F $part;;
-	ext4dev) mkfs.ext4dev -F $part;;
-	f2fs) modprobe f2fs
-			mkfs.f2fs $part;;
-	jfs) mkfs.jfs -q $part;;
-	nilfs2) mkfs.nilfs2 -f $part;;
-	ntfs) mkfs.ntfs -q $part;;
-	reiserfs) mkfs.reiserfs -f -f $part;;
-	vfat) mkfs.vfat -F32 $part;;
-	xfs) mkfs.xfs -f $part;;
-	brtfs) mkfs.brtfs $part;;
-esac
+partitioning
 
 #View the available partitions and select the main partition
 cmd=(dialog --backtitle "ArchLinux Installation" --separate-output --checklist "Select options:" 0 0 0)
@@ -115,11 +120,7 @@ do
 				--menu "Choose the partition that you want to use for: boot" 0 0 0 ${p} 2>&1 > /dev/tty )
 			bootfs=$part
 			#Select the format 
-			fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}')"
-			filesystem=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
-				--menu "Choose the filesystem type that you want to use" 0 0 0 ${fs} 2>&1 > /dev/tty )
-			#Format it!
-			mkfs.$filesystem $part
+			partitioning
 			bootdir="boot"
 			p=$(echo "$p" | grep -v $part)
 			;;
@@ -130,11 +131,7 @@ do
 				--menu "Choose the partition that you want to use for: home" 0 0 0 ${p} 2>&1 > /dev/tty )
 			homefs=$part
 			#Select the format 
-			fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}')"
-			filesystem=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
-				--menu "Choose the filesystem type that you want to use" 0 0 0 ${fs} 2>&1 > /dev/tty )
-			#Format it!
-			mkfs.$filesystem $part
+			partitioning
 			homedir="home"
 			p=$(echo "$p" | grep -v $part)
 			;;
@@ -145,11 +142,7 @@ do
 				--menu "Choose the partition that you want to use for: tmp" 0 0 0 ${p} 2>&1 > /dev/tty )
 			tmpfs=$part
 			#Select the format 
-			fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}')"
-			filesystem=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
-				--menu "Choose the filesystem type that you want to use" 0 0 0 ${fs} 2>&1 > /dev/tty )
-			#Format it!
-			mkfs.$filesystem $part
+			partitioning
 			tmpdir="tmp"
 			p=$(echo "$p" | grep -v $part)
 			;;
@@ -160,11 +153,7 @@ do
 				--menu "Choose the partition that you want to use for: usr" 0 0 0 ${p} 2>&1 > /dev/tty )
 			usrfs=$part
 			#Select the format 
-			fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}')"
-			filesystem=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
-				--menu "Choose the filesystem type that you want to use" 0 0 0 ${fs} 2>&1 > /dev/tty )
-			#Format it!
-			mkfs.$filesystem $part
+			partitioning
 			usrdir="usr"
 			p=$(echo "$p" | grep -v $part)
 			;;
@@ -175,11 +164,7 @@ do
 				--menu "Choose the partition that you want to use for: var" 0 0 0 ${p} 2>&1 > /dev/tty )
 			varfs=$part
 			#Select the format 
-			fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}')"
-			filesystem=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
-				--menu "Choose the filesystem type that you want to use" 0 0 0 ${fs} 2>&1 > /dev/tty )
-			#Format it!
-			mkfs.$filesystem $part
+			partitioning
 			vardir="var"
 			p=$(echo "$p" | grep -v $part)
 			;;
@@ -190,11 +175,7 @@ do
 				--menu "Choose the partition that you want to use for: srv" 0 0 0 ${p} 2>&1 > /dev/tty )
 			srvfs=$part
 			#Select the format 
-			fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}')"
-			filesystem=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
-				--menu "Choose the filesystem type that you want to use" 0 0 0 ${fs} 2>&1 > /dev/tty )
-			#Format it!
-			mkfs.$filesystem $part
+			partitioning
 			srvdir="srv"
 			p=$(echo "$p" | grep -v $part)
 			;;
@@ -205,11 +186,7 @@ do
 				--menu "Choose the partition that you want to use for: opt" 0 0 0 ${p} 2>&1 > /dev/tty )
 			optfs=$part
 			#Select the format 
-			fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}')"
-			filesystem=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
-				--menu "Choose the filesystem type that you want to use" 0 0 0 ${fs} 2>&1 > /dev/tty )
-			#Format it!
-			mkfs.$filesystem $part
+			partitioning
 			optdir="opt"
 			p=$(echo "$p" | grep -v $part)
 			;;
