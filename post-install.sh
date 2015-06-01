@@ -183,7 +183,7 @@ if [[ $? == 0 ]];then
 				printf "\n[Unity-for-Arch]\nServer = http://dl.dropbox.com/u/486665/Repos/\x24repo/\x24arch\nSigLevel = Optional TrustAll\n\n[Unity-for-Arch-Extra]\nServer = http://dl.dropbox.com/u/486665/Repos/\x24repo/\x24arch\nSigLevel = Optional TrustAll\n" >> /etc/pacman.conf
 				pacman -Syy
 				ubuntu=$(pacman -Slq Unity-for-Arch | grep -v upower-compat | grep -v gsettings-desktop-schemas)
-				ubuntuextra=$(pacman -Slq Unity-for-Arch-Extra)
+				ubuntuextra=$(pacman -Slq Unity-for-Arch-Extra | grep -v pidgin-libnotify-ubuntu)
 				pacman -R --noconfirm gsettings-desktop-schemas glib-networking libsoup networkmanager
 				pacman -S --noconfirm ${ubuntu} ${ubuntuextra}
 				pacman -S --noconfirm networkmanager
@@ -946,7 +946,7 @@ if [[ $? == 0 ]];then
 				dialog --backtitle "ArchLinux Installation" --title "L2TP Installation" \
 						--msgbox "L2TP + IPSEC + PAM Instalation is now completed. You can use this settings to connect to the server:\nExternal IP: $externalip\nUser: Your system username\nPassword: Your system password according to the user" 0 0
 			;;
-	esac
+		esac
 	done
 fi
 
