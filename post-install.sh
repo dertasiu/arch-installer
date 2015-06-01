@@ -245,8 +245,7 @@ if [[ $? == 0 ]];then
 			LXDM "LXDE Display manager" \
 			MDM "Linux Mint's Display manager" \
 			Entrance "Enlightenment's Display manager (Experimental)" \
-			LightDM "Cross-desktop display manager" \
-			SLiM "Lightweight and elegant graphical" 2>&1 > /dev/tty)
+			LightDM "Cross-desktop display manager" 2>&1 > /dev/tty)
 	for choice in $dm
 	do
 		case $choice in
@@ -286,11 +285,6 @@ if [[ $? == 0 ]];then
 			"LightDM")
 				pacman -S --noconfirm lightdm
 				systemctl enable lightdm
-			;;
-
-			"SLiM")
-				pacman -S --noconfirm slim
-				systemctl enable slim
 			;;
 	esac
 	done
