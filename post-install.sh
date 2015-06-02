@@ -252,7 +252,7 @@ if [[ $? == 0 ]];then
 	esac
 	done
 
-	until [[ noDmConflict == "1" ]];do
+	until [[ $noDmConflict == "1" ]];do
 		dm=$(dialog --backtitle "ArchLinux Installation" --clear --title "Display Manager selection: " \
 				--menu "Select the Display Manager:" 0 0 0 \
 				GDM "GNOME Display manager" \
@@ -267,6 +267,8 @@ if [[ $? == 0 ]];then
 		then
 			dialog --backtitle "ArchLinux Installation" --title "Incompatibility detected" --msgbox 'Unity and GDM are not compatible. Please, choose other desktop manager than GDM' 6 83
 			noDmConflict=0
+		else
+			noDmConflict=1
 		fi
 	done
 	for choice in $dm
