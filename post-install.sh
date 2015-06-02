@@ -43,6 +43,7 @@ if [[ $? == 0 ]];then
 				Cinnamon "Linux Mint's desktop environment"	off
 				Budgie "Solus' desktop environment"	off
 				Enlightenment "Enlightenment desktop environment" off
+				bspwm "Minimalistic tiled window manager" off
 				)
 		desktop=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
@@ -230,10 +231,23 @@ if [[ $? == 0 ]];then
 				#Enable NetworkManager
 				systemctl enable NetworkManager
 			;;
+
 			"Enlightenment")
 				pacman -S --noconfirm enlightenment
 				#Enable NetworkManager
 				systemctl enable NetworkManager
+			;;
+
+			"bspwm")
+				pacman -S --noconfirm bspwm sxhkd
+				sudo -u $user "mkdir /home/$user/.config/{bspwm,sxhkd}"
+				cp /usr/share/doc/bspwm/examples/bspwmrc /home/$user/.config/bspwm
+				echo "sxhkd &" >> /home/$user/.config/bspwm/bspwmrc
+				chmod +x /home/$user/.config/bspwm
+				chown -R $user:users /home/$user/.config/bspwm
+				cp /usr/share/doc/bspwm/examples/sxhkdrc /home/$user/.config/sxhkd
+				chmod +x /home/$user/.config/sxhkdrc
+				chown -R $user:users /home/$user/.config/sxhkd
 			;;
 	esac
 	done
