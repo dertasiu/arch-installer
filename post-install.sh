@@ -240,12 +240,13 @@ if [[ $? == 0 ]];then
 
 			"bspwm")
 				pacman -S --noconfirm bspwm sxhkd rxvt-unicode
-				sudo -u $user "mkdir -p /home/$user/.config/{bspwm,sxhkd}"
-				cp /usr/share/doc/bspwm/examples/bspwmrc /home/$user/.config/bspwm
+				sudo -u $user "mkdir -p /home/$user/.config/bspwm"
+				sudo -u $user "mkdir -p /home/$user/.config/sxhkd"
+				cp /usr/share/doc/bspwm/examples/bspwmrc /home/$user/.config/bspwm/bspwmrc
 				echo "sxhkd &" >> /home/$user/.config/bspwm/bspwmrc
-				chmod +x /home/$user/.config/bspwm
+				chmod +x /home/$user/.config/bspwmrc
 				chown -R $user:users /home/$user/.config/bspwm
-				cp /usr/share/doc/bspwm/examples/sxhkdrc /home/$user/.config/sxhkd
+				cp /usr/share/doc/bspwm/examples/sxhkdrc /home/$user/.config/sxhkd/sxhkdrc
 				chmod +x /home/$user/.config/sxhkdrc
 				chown -R $user:users /home/$user/.config/sxhkd
 			;;
