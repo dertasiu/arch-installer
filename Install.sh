@@ -91,7 +91,7 @@ partitioning(){
 		reiserfs) mkfs.reiserfs -f -f $part;;
 		vfat) mkfs.vfat -F32 $part;;
 		xfs) mkfs.xfs -f $part;;
-		brtfs) mkfs.brtfs $part;;
+		btrfs) mkfs.btrfs $part;;
 	esac
 }
 
