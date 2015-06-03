@@ -1,3 +1,4 @@
+#!/bin/sh
 : 'Copyright (C) 2015 Andrés Quiceno Hernández, Mario Gordillo Ortiz
 
 This program is free software: you can redistribute it and/or modify
