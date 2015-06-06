@@ -313,7 +313,6 @@ case $? in
 		for disk in $disks
 		do
 			echo "$disk Disk" >> temp
-			sleep 2
 			fdisk -l $disk | grep sd | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}' >> temp
 		done
 		partitions=$(cat temp) && rm temp
