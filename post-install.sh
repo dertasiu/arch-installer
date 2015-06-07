@@ -212,7 +212,7 @@ if [[ $? == 0 ]];then
 			;;
 
 			"i3")
-				pacman -S --noconfirm i3-wm i3status i3lock
+				pacman -S --noconfirm i3-wm i3status i3lock rxvt-unicode
 				#Enable NetworkManager
 				systemctl enable NetworkManager
 			;;
@@ -585,6 +585,7 @@ if [[ $? == 0 ]];then
 				sed -i '/extension=mysql.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
 				cp /etc/webapps/owncloud/apache.example.conf /etc/httpd/conf/extra/owncloud.conf
 				echo -e "Include conf/extra/owncloud.conf" >> /etc/httpd/conf/httpd.conf
+				owncloudname=wordpress
 				dialog --backtitle "ArchLinux Installation" --title "Owncloud Instalation" --yesno "Do you want to change the default address for owncloud?\n(Default http://domain.com/owncloud/)" 8 45
 				if [[ $? == "0" ]];then
 					owncloudname=$(dialog --backtitle "ArchLinux Installation" --title "Owncloud Instalation" --inputbox "Enter the address that you want to use:\n(Ej: acloud = http://domain.com/acloud)" 9 50 2>&1 > /dev/tty)
@@ -670,6 +671,7 @@ if [[ $? == 0 ]];then
 				sed -i '/extension=xmlrpc.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
 				sed -i '/extension=pspell.so/s/^;//g' /etc/php/php.ini #Uncomment the line matching that string
 				printf "Alias /wordpress \x22/usr/share/webapps/wordpress\x22\n<Directory \x22/usr/share/webapps/wordpress\x22>\n\tAllowOverride All\n\tOptions FollowSymlinks\n\tRequire all granted\n\tphp_admin_value open_basedir \x22/srv/:/tmp/:/usr/share/webapps/:/etc/webapps:\x24\x22\n</Directory>" > /etc/httpd/conf/extra/httpd-wordpress.conf
+				wordpressname=wordpress
 				echo -e "\nInclude conf/extra/httpd-wordpress.conf\n" >> /etc/httpd/conf/httpd.conf
 				dialog --backtitle "ArchLinux Installation" --title "Wordpress Instalation" --yesno "Do you want to change the default address for Wordpress?\n(Default http://domain.com/wordpress/)" 8 45
 				if [[ $? == "0" ]];then
