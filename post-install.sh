@@ -436,7 +436,8 @@ if [[ $? == 0 ]];then
 				Wordpress "Self-hosted blog"	off
 				Subsonic "Music Server"	off
 				Madsonic "Music Server"	off
-				GitLab "GIT Code server" off
+				GitLab "Git Code server" off
+				Gogs "Simple Git code server" off
 				NTOP "Traffic monitoring tool"	off
 				TightVNC "Remote screen server"	off
 				Deluge "Torrent server with web UI"	off
@@ -850,7 +851,17 @@ if [[ $? == 0 ]];then
 				systemctl enable gitlab-sidekiq.service gitlab-unicorn
 				dialog --backtitle "ArchLinux Installation" --title "GitLab Installation" \
 						--msgbox "GitLab Instalation is now completed. You can use this settings to connect to the server:\nIP: $gitdomain\nPort: $gitport\nUser: root\nPassword: 5iveL!fe" 0 0
-				;;
+			;;
+
+			"Gogs")
+				sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+				sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+				sudo -u $user yaourt -S -A --noconfirm gogs
+				sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
+				sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
+				systemctl start gogs
+				systemctl enable gogs
+			;;
 
 			"NTOP")
 				pacman -S --noconfirm ntop
