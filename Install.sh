@@ -204,7 +204,7 @@ done
 
 ##Mounts
 #First mount the root partition because later we are going to create the folders to mount the partitions there
-mount "$rootf"s /mnt
+mount "$rootfs" /mnt
 mkdir -p /mnt/{"$bootdir","$homedir","$tmpdir","$usrdir","$vardir","$srvdir","$optdir"}
 mount "$bootfs" /mnt/boot 2> /dev/zero
 mount "$homefs" /mnt/home 2> /dev/zero
