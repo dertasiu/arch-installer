@@ -79,19 +79,19 @@ partitioning(){
 	format=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition type: " \
 					--menu "Choose the filesystem type that you want to use" 0 0 0 ${fs} 2>&1 > /dev/tty)
 	case $format in
-		ext2) mkfs.ext2 -F $part;;
-		ext3) mkfs.ext3 -F $part;;
-		ext4) mkfs.ext4 -F $part;;
-		ext4dev) mkfs.ext4dev -F $part;;
+		ext2) mkfs.ext2 -F "$part";;
+		ext3) mkfs.ext3 -F "$part";;
+		ext4) mkfs.ext4 -F "$part";;
+		ext4dev) mkfs.ext4dev -F "$part";;
 		f2fs) modprobe f2fs
-				mkfs.f2fs $part;;
-		jfs) mkfs.jfs -q $part;;
-		nilfs2) mkfs.nilfs2 -f $part;;
-		ntfs) mkfs.ntfs -q $part;;
-		reiserfs) mkfs.reiserfs -f -f $part;;
-		vfat) mkfs.vfat -F32 $part;;
-		xfs) mkfs.xfs -f $part;;
-		btrfs) mkfs.btrfs -f $part;;
+				mkfs.f2fs "$part";;
+		jfs) mkfs.jfs -q "$part";;
+		nilfs2) mkfs.nilfs2 -f "$part";;
+		ntfs) mkfs.ntfs -q "$part";;
+		reiserfs) mkfs.reiserfs -f -f "$part";;
+		vfat) mkfs.vfat -F32 "$part";;
+		xfs) mkfs.xfs -f "$part";;
+		btrfs) mkfs.btrfs -f "$part";;
 	esac
 }
 
@@ -119,100 +119,100 @@ do
 			dialog --backtitle "ArchLinux Installation" --title "Partition Selection" --textbox /tmp/partitions 0 0
 			part=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
 				--menu "Choose the partition that you want to use for: boot" 0 0 0 ${p} 2>&1 > /dev/tty )
-			bootfs=$part
+			bootfs="$part"
 			#Select the format 
 			partitioning
 			bootdir="boot"
-			p=$(echo "$p" | grep -v $part)
+			p=$(echo "$p" | grep -v "$part")
 			;;
 		"/home")
 			#Select the partition
 			dialog --backtitle "ArchLinux Installation" --title "Partition Selection" --textbox /tmp/partitions 0 0
 			part=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
 				--menu "Choose the partition that you want to use for: home" 0 0 0 ${p} 2>&1 > /dev/tty )
-			homefs=$part
+			homefs="$part"
 			#Select the format 
 			partitioning
 			homedir="home"
-			p=$(echo "$p" | grep -v $part)
+			p=$(echo "$p" | grep -v "$part")
 			;;
 		"/tmp")
 			#Select the partition
 			dialog --backtitle "ArchLinux Installation" --title "Partition Selection" --textbox /tmp/partitions 0 0
 			part=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
 				--menu "Choose the partition that you want to use for: tmp" 0 0 0 ${p} 2>&1 > /dev/tty )
-			tmpfs=$part
+			tmpfs="$part"
 			#Select the format 
 			partitioning
 			tmpdir="tmp"
-			p=$(echo "$p" | grep -v $part)
+			p=$(echo "$p" | grep -v "$part")
 			;;
 		"/usr")
 			#Select the partition
 			dialog --backtitle "ArchLinux Installation" --title "Partition Selection" --textbox /tmp/partitions 0 0
 			part=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
 				--menu "Choose the partition that you want to use for: usr" 0 0 0 ${p} 2>&1 > /dev/tty )
-			usrfs=$part
+			usrfs="$part"
 			#Select the format 
 			partitioning
 			usrdir="usr"
-			p=$(echo "$p" | grep -v $part)
+			p=$(echo "$p" | grep -v "$part")
 			;;
 		"/var")
 			#Select the partition
 			dialog --backtitle "ArchLinux Installation" --title "Partition Selection" --textbox /tmp/partitions 0 0
 			part=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
 				--menu "Choose the partition that you want to use for: var" 0 0 0 ${p} 2>&1 > /dev/tty )
-			varfs=$part
+			varfs="$part"
 			#Select the format 
 			partitioning
 			vardir="var"
-			p=$(echo "$p" | grep -v $part)
+			p=$(echo "$p" | grep -v "$part")
 			;;
 		"/srv")
 			#Select the partition
 			dialog --backtitle "ArchLinux Installation" --title "Partition Selection" --textbox /tmp/partitions 0 0
 			part=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
 				--menu "Choose the partition that you want to use for: srv" 0 0 0 ${p} 2>&1 > /dev/tty )
-			srvfs=$part
+			srvfs="$part"
 			#Select the format 
 			partitioning
 			srvdir="srv"
-			p=$(echo "$p" | grep -v $part)
+			p=$(echo "$p" | grep -v "$part")
 			;;
 		"/opt")
 			#Select the partition
 			dialog --backtitle "ArchLinux Installation" --title "Partition Selection" --textbox /tmp/partitions 0 0
 			part=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
 				--menu "Choose the partition that you want to use for: opt" 0 0 0 ${p} 2>&1 > /dev/tty )
-			optfs=$part
+			optfs="$part"
 			#Select the format 
 			partitioning
 			optdir="opt"
-			p=$(echo "$p" | grep -v $part)
+			p=$(echo "$p" | grep -v "$part")
 			;;
 		"swap")
 			dialog --backtitle "ArchLinux Installation" --title "Partition Selection" --textbox /tmp/partitions 0 0
 			part=$(dialog --backtitle "ArchLinux Installation" --clear --title "Partition selection: " \
 				--menu "Choose the partition that you want to use for: swap" 0 0 0 ${p} 2>&1 > /dev/tty)
-			mkswap $part
-			swapon $part
-			swap=$part
-			p=$(echo "$p" | grep -v $part)
+			mkswap "$part"
+			swapon "$part"
+			swap="$part"
+			p=$(echo "$p" | grep -v "$part")
 	esac
 done
 
 ##Mounts
 #First mount the root partition because later we are going to create the folders to mount the partitions there
-mount $rootfs /mnt
-mkdir -p /mnt/{$bootdir,$homedir,$tmpdir,$usrdir,$vardir,$srvdir,$optdir}
-mount $bootfs /mnt/boot 2> /dev/zero
-mount $homefs /mnt/home 2> /dev/zero
-mount $tmpfs /mnt/tmp 2> /dev/zero
-mount $usrfs /mnt/usr 2> /dev/zero
-mount $varfs /mnt/var 2> /dev/zero
-mount $srvfs /mnt/srv 2> /dev/zero
-mount $optfs /mnt/opt 2> /dev/zero
+mount "$rootf"s /mnt
+mkdir -p /mnt/{"$bootdir","$homedir","$tmpdir","$usrdir","$vardir","$srvdir","$optdir"}
+mount "$bootfs" /mnt/boot 2> /dev/zero
+mount "$homefs" /mnt/home 2> /dev/zero
+mount "$tmpfs" /mnt/tmp 2> /dev/zero
+mount "$usrfs" /mnt/usr 2> /dev/zero
+mount "$varfs" /mnt/var 2> /dev/zero
+mount "$srvfs" /mnt/srv 2> /dev/zero
+mount "$optfs" /mnt/opt 2> /dev/zero
 
 ##Install basic system with: The base and the development system (We will want this to compile the majority of packets from AUR), grub, networkmanager and a packet that is useful if we use another OS' grub: os-prober
 pacstrap /mnt base base-devel grub-bios networkmanager os-prober sudo dialog wget
