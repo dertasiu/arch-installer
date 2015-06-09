@@ -1,9 +1,0 @@
-[X] BASH
-[X] SH
-[X] ZSH
-[X] FISH
-[X] CShell
-[X] DASH
-[X] KornShell 
-[ ] Oh (No encuentra dependencias)
-[ ] rc (No esta bien cambiada la shell, hay que encontrar el ejecutable)

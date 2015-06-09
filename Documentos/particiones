@@ -1,6 +1,0 @@
-#!/bin/bash
-partitioner=$(dialog --backtitle "ArchLinux Installation" --clear --title "Choose partition maker program: " --menu "Choose  your favorite partitioner:" 0 0 0\
-		"cfdisk" " " \
-		"fdisk" " " \
-		"parted" " " 2>&1 > /dev/tty)
-$partitioner
