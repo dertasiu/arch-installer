@@ -218,6 +218,8 @@ pacstrap /mnt base base-devel grub-bios networkmanager os-prober sudo dialog wge
 ##Generate the fstab file
 genfstab /mnt > /mnt/etc/fstab
 
+arch-chroot /mnt /bin/bash -c "mkinitcpio -p linux"
+
 ###Second phase: Configure the operating system
 ##Languages and keymaps
 #Select the locale
