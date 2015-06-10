@@ -243,9 +243,9 @@ selected=0 #Define the variable $selected to 0, this will be used to scape from 
 timezonedir=/usr/share/zoneinfo #Define the starting directory
 while [ "$selected" = "0" ] #While the selection in unselected do...
 do
-	#This command should output "Africa", it will make an ls to the timezones dir, stored in the variable $timezonedir. This will be used in the case that you were on the main timezone dir.
+	#This command should output "America", it will make an ls to the timezones dir, stored in the variable $timezonedir. This will be used in the case that you were on the main timezone dir.
 	check=$(ls -l $timezonedir | grep -v .tab | awk '/drwx/' | awk -F " " '{print $9}' | awk '{if (NR!=1) {print}}' | head -1)
-	if [[ $check != Africa ]]; then #In the case that you wouldn't be in the root of the timezones dir
+	if [[ $check != America ]]; then #In the case that you wouldn't be in the root of the timezones dir
 		echo "../ UP" >timezones #Set an option to go up a dir in the menu
 	fi
 	#Get a list of folders in the timezone dir and save it to the temporal file: timezones
