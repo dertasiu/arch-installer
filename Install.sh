@@ -49,9 +49,7 @@ dialog --backtitle "ArchLinux Installation" --title "Disk Selection" --textbox /
 rm /tmp/partitions
 
 #Display a little devices list, selected disk will be saved to the variable $disk 
-echo "print devices" > /tmp/parted.p #Save available disks in a temporary file
-part="$(parted < /tmp/parted.p | grep sd | awk '{if (NR!=1) {print}}')" #Process the temporary file, display only the line that have "sd" and exclude the first line
-rm /tmp/parted.p
+part="$(echo "print devices" | parted | grep sd | awk '{if (NR!=1) {print}}')" #Process the temporary file, display only the line that have "sd" and exclude the first line
 disk=$(dialog --backtitle "ArchLinux Installation" --clear --title "Disk Select: "  --menu "Choose the Hard Drive that you want to use" 0 0 0 ${part} 2>&1 >/dev/tty)
 
 #Selection of the partition program
