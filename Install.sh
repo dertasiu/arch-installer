@@ -204,13 +204,13 @@ done
 #First mount the root partition because later we are going to create the folders to mount the partitions there
 mount "$rootfs" /mnt
 mkdir -p /mnt/{"$bootdir","$homedir","$tmpdir","$usrdir","$vardir","$srvdir","$optdir"}
-mount "$bootfs" /mnt/boot 2> /dev/zero
-mount "$homefs" /mnt/home 2> /dev/zero
-mount "$tmpfs" /mnt/tmp 2> /dev/zero
-mount "$usrfs" /mnt/usr 2> /dev/zero
-mount "$varfs" /mnt/var 2> /dev/zero
-mount "$srvfs" /mnt/srv 2> /dev/zero
-mount "$optfs" /mnt/opt 2> /dev/zero
+mount "$bootfs" /mnt/boot
+mount "$homefs" /mnt/home
+mount "$tmpfs" /mnt/tmp
+mount "$usrfs" /mnt/usr
+mount "$varfs" /mnt/var
+mount "$srvfs" /mnt/srv
+mount "$optfs" /mnt/opt
 
 ##Install basic system with: The base and the development system (We will want this to compile the majority of packets from AUR), grub, networkmanager and a packet that is useful if we use another OS' grub: os-prober
 pacstrap /mnt base base-devel grub-bios networkmanager os-prober sudo dialog wget
@@ -331,7 +331,7 @@ echo -e "if [ -f ~/.bashrc ]; then\n\tsource ~/.bashrc\nfi" >> /mnt/root/.bash_p
 
 #Umount all the partitions
 umount {$rootfs,$bootfs,$homefs,$tmpfs,$usrfs,$varfs,$srvfs,$optfs}
-swapoff $swap 2> /dev/null
+swapoff $swap
 
 #Warn the user that the computer is going to reboot
 dialog --backtitle "ArchLinux Installation" --title "Attention" --msgbox 'The computer is going to reboot to finish the installation' 6 62
