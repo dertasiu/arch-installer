@@ -67,7 +67,7 @@ if [[ $? == 0 ]];then
 			noConflict=1
 		fi
 	done
-	pacman -Syy
+	pacman -Sy
 	clear
 	for choice in $desktop #For each line that is on the variable $desktop, grab one line and fit it on the $choice variable
 	do
@@ -140,7 +140,7 @@ if [[ $? == 0 ]];then
 
 			"Pantheon")
 				printf "\n[pantheon]\nServer = http://pkgbuild.com/~alucryd/\x24repo/\x24arch\nSigLevel = Optional TrustAll\n" >> /etc/pacman.conf
-				pacman -Syy --noconfirm pantheon-session-bzr audience-bzr contractor-bzr eidete-bzr elementary-icon-theme-bzr elementary-icon-theme-bzr elementary-wallpapers-bzr gtk-theme-elementary-bzr footnote-bzr geary lightdm-pantheon-greeter-bzr maya-calendar-bzr midori-granite-bzr noise-bzr pantheon-backgrounds-bzr pantheon-calculator-bzr pantheon-default-settings-bzr pantheon-files-bzr pantheon-print-bzr pantheon-terminal-bzr plank-theme-pantheon-bzr scratch-text-editor-bzr snap-photobooth-bzr switchboard-bzr ttf-dejavu ttf-droid ttf-freefont ttf-liberation indicator-session indicator-sound
+				pacman -Sy --noconfirm pantheon-session-bzr audience-bzr contractor-bzr eidete-bzr elementary-icon-theme-bzr elementary-icon-theme-bzr elementary-wallpapers-bzr gtk-theme-elementary-bzr footnote-bzr geary lightdm-pantheon-greeter-bzr maya-calendar-bzr midori-granite-bzr noise-bzr pantheon-backgrounds-bzr pantheon-calculator-bzr pantheon-default-settings-bzr pantheon-files-bzr pantheon-print-bzr pantheon-terminal-bzr plank-theme-pantheon-bzr scratch-text-editor-bzr snap-photobooth-bzr switchboard-bzr ttf-dejavu ttf-droid ttf-freefont ttf-liberation indicator-session indicator-sound
 				sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 				sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 				sudo -u $user yaourt -A -S --noconfirm ttf-opensans pantheon-notify-bzr
@@ -155,7 +155,7 @@ if [[ $? == 0 ]];then
 				pacman-key --init
 				pacman-key --populate archlinux
 				#Install LXQt
-				pacman -Syy --noconfirm lxqt oxygen-icons qtcurve
+				pacman -Sy --noconfirm lxqt oxygen-icons qtcurve
 				sed -i '/%wheel ALL=(ALL) ALL/s/^/#/g' /etc/sudoers #Comment the line matching that string
 				sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//g' /etc/sudoers #Uncomment the line matching that string
 				sudo -u $user yaourt -A -S --noconfirm qterminal-git obconf-qt-git
@@ -183,7 +183,7 @@ if [[ $? == 0 ]];then
 
 			"Unity")
 				printf "\n[Unity-for-Arch]\nServer = http://dl.dropbox.com/u/486665/Repos/\x24repo/\x24arch\nSigLevel = Optional TrustAll\n\n[Unity-for-Arch-Extra]\nServer = http://dl.dropbox.com/u/486665/Repos/\x24repo/\x24arch\nSigLevel = Optional TrustAll\n" >> /etc/pacman.conf
-				pacman -Syy
+				pacman -Sy
 				ubuntu=$(pacman -Slq Unity-for-Arch | grep -v upower-compat | grep -v gsettings-desktop-schemas)
 				ubuntuextra=$(pacman -Slq Unity-for-Arch-Extra | grep -v pidgin-libnotify-ubuntu)
 				pacman -R --noconfirm gsettings-desktop-schemas glib-networking libsoup networkmanager
@@ -200,7 +200,7 @@ if [[ $? == 0 ]];then
 					deepinextra=deepin-extra
 				fi
 				printf "\n[home_metakcahura_arch-deepin_Arch_Extra]\nServer = http://download.opensuse.org/repositories/home:/metakcahura:/arch-deepin/Arch_Extra/\x24arch\nSigLevel = Never\n" >> /etc/pacman.conf
-				pacman -Syy --noconfirm deepin $deepinextra
+				pacman -Sy --noconfirm deepin $deepinextra
 				#Enable NetworkManager
 				systemctl enable NetworkManager
 			;;
@@ -457,7 +457,6 @@ if [[ $? == 0 ]];then
 		fi
 	done
 
-	pacman -Syy
 	clear
 	for choice in $desktop
 	do

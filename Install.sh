@@ -296,10 +296,10 @@ fi
 ##Aur helpers
 #Install Yaourt
 printf "\n[archlinuxfr]\nServer = http://repo.archlinux.fr/\x24arch\nSigLevel = Optional TrustAll" >>/mnt/etc/pacman.conf
-arch-chroot /mnt /bin/bash -c "pacman -Syy"
+arch-chroot /mnt /bin/bash -c "pacman -Sy"
 arch-chroot /mnt /bin/bash -c "pacman -S --noconfirm yaourt"
 #Update yaourt's database
-arch-chroot /mnt /bin/bash -c "yaourt -Syy"
+arch-chroot /mnt /bin/bash -c "yaourt -Sy"
 
 #Grub instalation question, It will install grub to the previously selected disk stored in the variable $disk 
 dialog --backtitle "ArchLinux Installation" --title "Grub instalation" \
