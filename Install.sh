@@ -216,7 +216,7 @@ mount "$optfs" /mnt/opt
 pacstrap /mnt base base-devel grub-bios networkmanager os-prober sudo dialog wget
 
 ##Generate the fstab file
-genfstab /mnt > /mnt/etc/fstab
+genfstab -U -p /mnt > /mnt/etc/fstab
 
 arch-chroot /mnt /bin/bash -c "mkinitcpio -p linux"
 
